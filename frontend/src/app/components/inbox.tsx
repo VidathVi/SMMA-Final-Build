@@ -7,17 +7,26 @@ const initialChats = [
   {
     id: 1,
     name: "Thilina",
-    messages: ["Hello there!", "Are you available today?"],
+    messages: [
+      { from: "them", text: "Hello there!" },
+      { from: "them", text: "Are you available today?" },
+    ],
   },
   {
     id: 2,
     name: "Nadeesha",
-    messages: ["Can we discuss?", "About the project update."],
+    messages: [
+      { from: "them", text: "Can we discuss?" },
+      { from: "them", text: "About the project update." },
+    ],
   },
   {
     id: 3,
     name: "Kasun",
-    messages: ["Review updated.", "Please check GitHub."],
+    messages: [
+      { from: "them", text: "Review updated." },
+      { from: "them", text: "Please check GitHub." },
+    ],
   },
 ];
 
@@ -38,7 +47,10 @@ const sendMessage = () => {
       chat.id === selectedChatId
         ? {
             ...chat,
-            messages: [...chat.messages, inputValue.trim()],
+            messages: [
+              ...chat.messages,
+              { from: "me", text: inputValue.trim() },
+            ],
           }
         : chat
     )
@@ -70,7 +82,7 @@ const sendMessage = () => {
           onClick={() => setSelectedChatId(chat.id)}
         >
           <h4>{chat.name}</h4>
-          <p>{chat.messages[chat.messages.length - 1]}</p>
+          <p>{chat.messages[chat.messages.length - 1].text}</p>
         </div>
 
           ))}
@@ -89,9 +101,16 @@ const sendMessage = () => {
 
         <div className="messages">
           {selectedChat ? (
-            selectedChat.messages.map((msg: string, index: number) => (
-              <p key={index}>{msg}</p>
-            ))
+            selectedChat.messages.map(
+              (msg: { from: string; text: string }, index: number) => (
+                <div
+                  key={index}
+                  className={`message-bubble ${msg.from === "me" ? "sent" : "received"}`}
+                >
+                  {msg.text}
+                </div>
+              )
+            )
           ) : (
             <p>Select a chat to view messages.</p>
           )}
