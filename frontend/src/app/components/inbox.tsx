@@ -7,6 +7,7 @@ const initialChats = [
   {
     id: 1,
     name: "Thilina",
+    type: "private",
     messages: [
       { from: "them", text: "Hello there!" },
       { from: "them", text: "Are you available today?" },
@@ -15,6 +16,7 @@ const initialChats = [
   {
     id: 2,
     name: "Nadeesha",
+    type: "comment",
     messages: [
       { from: "them", text: "Can we discuss?" },
       { from: "them", text: "About the project update." },
@@ -23,6 +25,7 @@ const initialChats = [
   {
     id: 3,
     name: "Kasun",
+    type: "review",
     messages: [
       { from: "them", text: "Review updated." },
       { from: "them", text: "Please check GitHub." },
@@ -34,9 +37,15 @@ export default function Inbox() {
 const [chats, setChats] = useState(initialChats);
 const [inputValue, setInputValue] = useState("");
 const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+const [activeTab, setActiveTab] = useState("all");
 
 const selectedChat =
   chats.find((chat) => chat.id === selectedChatId) || null;
+
+const filteredChats =
+  activeTab === "all"
+    ? chats
+    : chats.filter((chat) => chat.type === activeTab);
 
 const sendMessage = () => {
   if (!selectedChatId) return;
@@ -67,27 +76,50 @@ const sendMessage = () => {
 
         <input type="text" placeholder="Search..." className="search" />
 
-        <div className="tabs">
-          <button>All</button>
-          <button>Private Chats</button>
-          <button>Post Comments</button>
-          <button>Reviews</button>
-        </div>
-
-        <div className="chat-list">
-          {chats.map((chat) => (
-            <div
-          key={chat.id}
-          className={`chat-item ${selectedChatId === chat.id ? "active" : ""}`}
-          onClick={() => setSelectedChatId(chat.id)}
+      <div className="tabs">
+        <button
+          className={activeTab === "all" ? "active-tab" : ""}
+          onClick={() => setActiveTab("all")}
         >
-          <h4>{chat.name}</h4>
-          <p>{chat.messages[chat.messages.length - 1].text}</p>
-        </div>
+          All
+        </button>
 
-          ))}
-        </div>
+        <button
+          className={activeTab === "private" ? "active-tab" : ""}
+          onClick={() => setActiveTab("private")}
+        >
+          Private Chats
+        </button>
+
+        <button
+          className={activeTab === "comment" ? "active-tab" : ""}
+          onClick={() => setActiveTab("comment")}
+        >
+          Post Comments
+        </button>
+
+        <button
+          className={activeTab === "review" ? "active-tab" : ""}
+          onClick={() => setActiveTab("review")}
+        >
+          Reviews
+        </button>
       </div>
+
+              <div className="chat-list">
+                {filteredChats.map((chat) => (
+                  <div
+                key={chat.id}
+                className={`chat-item ${selectedChatId === chat.id ? "active" : ""}`}
+                onClick={() => setSelectedChatId(chat.id)}
+              >
+                <h4>{chat.name}</h4>
+                <p>{chat.messages[chat.messages.length - 1].text}</p>
+              </div>
+
+                ))}
+              </div>
+            </div>
 
       {/* Chat Area */}
       <div className="chat-area">

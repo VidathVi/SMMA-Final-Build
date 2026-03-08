@@ -141,3 +141,8 @@
 .message-input input::placeholder {
   color: #999;
 }
+
+.tabs button.active-tab {
+  background-color: #F5EFE7;
+  color: #213555;
+}
