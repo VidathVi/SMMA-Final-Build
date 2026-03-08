@@ -18,19 +18,21 @@ const initialChats = [
     name: "Nadeesha",
     type: "comment",
     messages: [
-      { from: "them", text: "Can we discuss?" },
-      { from: "them", text: "About the project update." },
+    { from: "them", text: "The design looks amazing! How can I order this?" },
+    { from: "me", text: "Thank you! You can place your order through our website or send us a DM." }
     ],
   },
+  
   {
-    id: 3,
-    name: "Kasun",
-    type: "review",
-    messages: [
-      { from: "them", text: "Review updated." },
-      { from: "them", text: "Please check GitHub." },
-    ],
-  },
+  id: 3,
+  name: "Kasun",
+  type: "review",
+  messages: [
+    { from: "them", text: "⭐️⭐️⭐️⭐️⭐️ The product quality is excellent. Highly recommended!" },
+    { from: "me", text: "Thank you so much for your feedback! We appreciate your support." }
+  ],
+}
+    
 ];
 
 export default function Inbox() {
