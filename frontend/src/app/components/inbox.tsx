@@ -7,57 +7,49 @@ const initialChats = [
   {
     id: 1,
     name: "Thilina",
-    messages: [
-      { from: "them", text: "Hello there!" },
-      { from: "them", text: "Are you available today?" },
-    ],
+    messages: ["Hello there!", "Are you available today?"],
   },
   {
     id: 2,
     name: "Nadeesha",
-    messages: [
-      { from: "them", text: "Can we discuss?" },
-      { from: "them", text: "About the project update." },
-    ],
+    messages: ["Can we discuss?", "About the project update."],
   },
   {
     id: 3,
     name: "Kasun",
-    messages: [
-      { from: "them", text: "Review updated." },
-      { from: "them", text: "Please check GitHub." },
-    ],
+    messages: ["Review updated.", "Please check GitHub."],
   },
 ];
 
 export default function Inbox() {
-  const [chats, setChats] = useState(initialChats);
-  const [inputValue, setInputValue] = useState("");
-  const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+const [chats, setChats] = useState(initialChats);
+const [inputValue, setInputValue] = useState("");
+const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
 
-  const selectedChat =
-    chats.find((chat) => chat.id === selectedChatId) || null;
+const selectedChat =
+  chats.find((chat) => chat.id === selectedChatId) || null;
 
-  const sendMessage = () => {
-    if (!selectedChatId) return;
-    if (inputValue.trim() === "") return;
+const sendMessage = () => {
+  if (!selectedChatId) return;
+  if (inputValue.trim() === "") return;
 
-    setChats((prev) =>
-      prev.map((chat) =>
-        chat.id === selectedChatId
-          ? {
-              ...chat,
-              messages: [...chat.messages, { from: "me", text: inputValue.trim() }],
-            }
-          : chat
-      )
-    );
+  setChats((prev) =>
+    prev.map((chat) =>
+      chat.id === selectedChatId
+        ? {
+            ...chat,
+            messages: [...chat.messages, inputValue.trim()],
+          }
+        : chat
+    )
+  );
 
-    setInputValue("");
-  };
+  setInputValue("");
+};
 
   return (
     <div className="inbox-container">
+      {/* Sidebar */}
       <div className="sidebar">
         <div className="logo">Logo</div>
 
@@ -73,17 +65,19 @@ export default function Inbox() {
         <div className="chat-list">
           {chats.map((chat) => (
             <div
-              key={chat.id}
-              className={`chat-item ${selectedChatId === chat.id ? "active" : ""}`}
-              onClick={() => setSelectedChatId(chat.id)}
-            >
-              <h4>{chat.name}</h4>
-              <p>{chat.messages[chat.messages.length - 1].text}</p>
-            </div>
+          key={chat.id}
+          className={`chat-item ${selectedChatId === chat.id ? "active" : ""}`}
+          onClick={() => setSelectedChatId(chat.id)}
+        >
+          <h4>{chat.name}</h4>
+          <p>{chat.messages[chat.messages.length - 1]}</p>
+        </div>
+
           ))}
         </div>
       </div>
 
+      {/* Chat Area */}
       <div className="chat-area">
         <div className="chat-header">
           <h3>{selectedChat ? selectedChat.name : "Select a chat"}</h3>
@@ -95,18 +89,11 @@ export default function Inbox() {
 
         <div className="messages">
           {selectedChat ? (
-            selectedChat.messages.map(
-              (msg: { from: string; text: string }, index: number) => (
-                <div
-                  key={index}
-                  className={`message-bubble ${msg.from === "me" ? "sent" : "received"}`}
-                >
-                  {msg.text}
-                </div>
-              )
-            )
+            selectedChat.messages.map((msg: string, index: number) => (
+              <p key={index}>{msg}</p>
+            ))
           ) : (
-            <div className="empty-state">Select a chat to view messages.</div>
+            <p>Select a chat to view messages.</p>
           )}
         </div>
 
@@ -117,9 +104,7 @@ export default function Inbox() {
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type your message here..."
           />
-          <button onClick={sendMessage} disabled={!selectedChatId}>
-            Send
-          </button>
+          <button onClick={sendMessage} disabled={!selectedChatId}>Send</button>
         </div>
       </div>
     </div>
