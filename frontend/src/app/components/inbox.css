@@ -114,6 +114,8 @@
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
+   background-color: #ffffff;
+  color: #213555;
 }
 
 .message-input button {
@@ -134,4 +136,8 @@
 .chat-item.active {
   background-color: #4A6FA5;
   outline: 2px solid #F5EFE7;
+}
+
+.message-input input::placeholder {
+  color: #999;
 }
