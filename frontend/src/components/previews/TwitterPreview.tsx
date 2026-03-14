@@ -3,9 +3,10 @@ interface PreviewProps {
     displayName?: string;
     caption?: string;
     imageUrl?: string;
+    mediaType?: 'image' | 'video';
 }
 
-export default function TwitterPreview({ username = 'itlife', displayName = 'IT Life', caption = '', imageUrl }: PreviewProps) {
+export default function TwitterPreview({ username = 'itlife', displayName = 'IT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-black rounded-lg overflow-hidden border border-gray-800">
             <div className="p-4">
@@ -32,7 +33,11 @@ export default function TwitterPreview({ username = 'itlife', displayName = 'IT 
                         {/* Tweet Image */}
                         {imageUrl ? (
                             <div className="mt-3 rounded-2xl overflow-hidden border border-gray-800">
-                                <img src={imageUrl} alt="Tweet" className="w-full max-h-96 object-cover" />
+                                {mediaType === 'video' ? (
+                                    <video src={imageUrl} controls className="w-full max-h-96 object-cover" />
+                                ) : (
+                                    <img src={imageUrl} alt="Tweet" className="w-full max-h-96 object-cover" />
+                                )}
                             </div>
                         ) : (
                             <div className="mt-3 aspect-video bg-gradient-to-br from-blue-900 to-cyan-900 rounded-2xl overflow-hidden border border-gray-800 flex items-center justify-center">

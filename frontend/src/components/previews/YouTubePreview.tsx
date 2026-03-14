@@ -3,16 +3,21 @@ interface PreviewProps {
     title?: string;
     caption?: string;
     imageUrl?: string;
+    mediaType?: 'image' | 'video';
 }
 
-export default function YouTubePreview({ channelName = 'IT Life', title = '', caption = '', imageUrl }: PreviewProps) {
+export default function YouTubePreview({ channelName = 'IT Life', title = '', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#0f0f0f] rounded-lg overflow-hidden border border-gray-800">
             {/* Video Thumbnail */}
             <div className="relative">
                 {imageUrl ? (
                     <div className="aspect-video relative">
-                        <img src={imageUrl} alt="YouTube" className="w-full h-full object-cover" />
+                        {mediaType === 'video' ? (
+                            <video src={imageUrl} controls className="w-full h-full object-cover" />
+                        ) : (
+                            <img src={imageUrl} alt="YouTube" className="w-full h-full object-cover" />
+                        )}
                         <div className="absolute bottom-2 right-2 bg-black/90 text-white text-xs px-1 py-0.5 rounded">
                             10:24
                         </div>

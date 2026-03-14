@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import PlatformSelector, { Platform } from '@/components/PlatformSelector';
 import InstagramPreview from '@/components/previews/InstagramPreview';
 import FacebookPreview from '@/components/previews/FacebookPreview';
@@ -9,15 +9,52 @@ import TikTokPreview from '@/components/previews/TikTokPreview';
 import YouTubePreview from '@/components/previews/YouTubePreview';
 import WhatsAppPreview from '@/components/previews/WhatsAppPreview';
 import TelegramPreview from '@/components/previews/TelegramPreview';
+import { FaFacebookF, FaInstagram, FaTiktok, FaTwitter, FaWhatsapp, FaYoutube, FaTelegramPlane } from 'react-icons/fa';
 
 export default function Home() {
-  const [selectedPlatform, setSelectedPlatform] = useState<Platform>('instagram');
-  const [postCaption, setPostCaption] = useState("When the magic can't fit into one night... we make another\nSky Light Fest : The Original - DAY 02 22nd February | Rock House, Piliyandala.\n\nTickets available now !!!\nVisit www.tickets.lk to get your tickets.");
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform>('facebook');
+  const [postCaption, setPostCaption] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sit amet quam convallis sem volutpat fringilla.");
+
+  const [mediaFiles, setMediaFiles] = useState<{ file: File, url: string, type: 'image' | 'video' }[]>([]);
+  const MAX_MEDIA_LIMIT = 6;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const newFiles = Array.from(e.target.files);
+
+      const remainingSlots = MAX_MEDIA_LIMIT - mediaFiles.length;
+      const filesToAdd = newFiles.slice(0, remainingSlots);
+
+      const newMediaObjects = filesToAdd.map(file => ({
+        file,
+        url: URL.createObjectURL(file),
+        type: file.type.startsWith('video/') ? 'video' as const : 'image' as const
+      }));
+
+      setMediaFiles(prev => [...prev, ...newMediaObjects]);
+    }
+    // Reset input so the same file could be selected again if removed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const removeMedia = (indexToRemove: number) => {
+    setMediaFiles(prev => {
+      const newMedia = [...prev];
+      URL.revokeObjectURL(newMedia[indexToRemove].url); // Clean up memory
+      newMedia.splice(indexToRemove, 1);
+      return newMedia;
+    });
+  };
 
   const renderPreview = () => {
     const props = {
       caption: postCaption,
-      imageUrl: undefined,
+      // Pass the first media file to the preview
+      imageUrl: mediaFiles.length > 0 ? mediaFiles[0].url : undefined,
+      mediaType: mediaFiles.length > 0 ? mediaFiles[0].type : undefined,
     };
 
     switch (selectedPlatform) {
@@ -81,47 +118,51 @@ export default function Home() {
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-gray-400 ml-4">
                   <span>Sharing to:</span>
-                  {/* insert social media icons later */}
                   <div className="flex items-center gap-2">
                     <label className="cursor-pointer relative group">
                       <input type="checkbox" name="facebook" className="peer sr-only " />
-                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100">F</div>
+                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100 peer-checked:bg-[#1877F2] peer-checked:border-[#1877F2]">
+                        <FaFacebookF className="w-4 h-4 text-white" />
+                      </div>
                     </label>
                     <label className="cursor-pointer relative group">
                       <input type="checkbox" name="instagram" className="peer sr-only" defaultChecked />
-                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100">I</div>
+                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100 peer-checked:bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] peer-checked:border-transparent">
+                        <FaInstagram className="w-4 h-4 text-white" />
+                      </div>
                     </label>
                     <label className="cursor-pointer relative group">
                       <input type="checkbox" name="tiktok" className="peer sr-only" />
-                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100">T</div>
+                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100 peer-checked:bg-black peer-checked:border-white">
+                        <FaTiktok className="w-4 h-4 text-white" />
+                      </div>
                     </label>
                     <label className="cursor-pointer relative group">
                       <input type="checkbox" name="twitter" className="peer sr-only" defaultChecked />
-                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100">T</div>
+                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100 peer-checked:bg-[#1DA1F2] peer-checked:border-[#1DA1F2]">
+                        <FaTwitter className="w-4 h-4 text-white" />
+                      </div>
                     </label>
                     <label className="cursor-pointer relative group">
                       <input type="checkbox" name="whatsapp" className="peer sr-only" defaultChecked />
-                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100">W</div>
+                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100 peer-checked:bg-[#25D366] peer-checked:border-[#25D366]">
+                        <FaWhatsapp className="w-4 h-4 text-white" />
+                      </div>
                     </label>
                     <label className="cursor-pointer relative group">
                       <input type="checkbox" name="youtube" className="peer sr-only" defaultChecked />
-                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100">Y</div>
+                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100 peer-checked:bg-[#FF0000] peer-checked:border-[#FF0000]">
+                        <FaYoutube className="w-4 h-4 text-white" />
+                      </div>
                     </label>
                     <label className="cursor-pointer relative group">
                       <input type="checkbox" name="telegram" className="peer sr-only" defaultChecked />
-                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100">T</div>
+                      <div className="w-8 h-8 rounded-full bg-black border border-gray-600 flex items-center justify-center peer-checked:ring-2 ring-white transition-all opacity-50 peer-checked:opacity-100 peer-checked:bg-[#0088cc] peer-checked:border-[#0088cc]">
+                        <FaTelegramPlane className="w-4 h-4 text-white" />
+                      </div>
                     </label>
                   </div>
                 </div>
-              </div>
-
-              <div className="relative">
-                <select name="project-type" id="project-type" className="appearance-none bg-[#1F2937] text-gray-300 text-sm px-4 py-2 pr-8 rounded-full focus:outline-none focus:ring-1 focus:ring-gray-500 border border-gray-700">
-                  <option value="1">Project Type</option>
-                  <option value="2">Project Type</option>
-                  <option value="3">Project Type</option>
-                </select>
-                <svg className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
               </div>
             </div>
 
@@ -134,32 +175,53 @@ export default function Home() {
             />
           </div>
 
-          {/* content uploader */}
-          <div className="bg-[#0B1221] border border-gray-800 rounded-2xl p-6 h-48 flex items-center gap-4">
-            {/* Image Placeholder */}
-            <div className="h-full aspect-square bg-[#1a1a1a] rounded-lg overflow-hidden relative group">
-              {/* Placeholder for uploaded image */}
-              <div className="absolute inset-0 flex items-center justify-center text-xs text-center text-gray-500 p-2 border border-gray-700 m-2 rounded border-dashed">
-                Image Preview
-              </div>
+          {/* Content Uploader */}
+          <div className="bg-[#0B1221] border border-gray-800 rounded-2xl p-6 min-h-48 flex flex-col justify-center">
+            <div className="flex flex-wrap gap-4 items-center">
+              {/* Media Previews */}
+              {mediaFiles.map((media, index) => (
+                <div key={media.url} className="h-32 w-32 bg-[#1a1a1a] rounded-lg overflow-hidden relative group border border-gray-700">
+                  {media.type === 'video' ? (
+                    <video src={media.url} className="w-full h-full object-cover" />
+                  ) : (
+                    <img src={media.url} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
+                  )}
+                  {/* Remove Button */}
+                  <button
+                    onClick={() => removeMedia(index)}
+                    className="absolute top-1 right-1 bg-black/60 hover:bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label="Remove media"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+
+              {/* Upload Button */}
+              {mediaFiles.length < MAX_MEDIA_LIMIT && (
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="h-32 w-32 rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-gray-700 text-gray-500 hover:border-gray-500 hover:text-gray-400 hover:bg-[#1a1a1a] transition-all cursor-pointer"
+                >
+                  <svg className="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span className="text-xs text-center px-2">Add Media<br />({mediaFiles.length}/{MAX_MEDIA_LIMIT})</span>
+                </div>
+              )}
             </div>
 
-            {/* Upload Placeholder */}
-            <button className="h-32 w-32 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-700 text-gray-500 hover:border-gray-600 hover:text-gray-400 transition-all cursor-pointer">
-              <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </button>
-
-          </div>
-
-          <div className="relative">
-            <select name="project-type" id="project-type" className="appearance-none bg-[#1F2937] text-gray-300 text-sm px-4 py-2 pr-8 rounded-full focus:outline-none focus:ring-1 focus:ring-gray-500 border border-gray-700">
-              <option value="1">Settings</option>
-              <option value="2">Settings</option>
-              <option value="3">Settings</option>
-            </select>
-            <svg className="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            {/* Hidden File Input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/*,video/*"
+              multiple
+              className="hidden"
+            />
           </div>
 
           {/* Posting Schedule */}
@@ -169,10 +231,6 @@ export default function Home() {
             </div>
 
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <span>When to post</span>
-                <span className="text-xs bg-gray-800 px-2 py-0.5 rounded text-gray-300">AI powered schedule</span>
-              </div>
 
               <div className="flex flex-col gap-3">
                 <label className="flex items-center gap-3 cursor-pointer">
@@ -194,12 +252,10 @@ export default function Home() {
                 </label>
               </div>
 
-              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-800">
-                <span className="text-gray-400 text-sm">Repeat Post</span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" className="sr-only peer" />
-                  <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-cyan-600"></div>
-                </label>
+              <div className="mt-6">
+                <button className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40">
+                  Publish Post
+                </button>
               </div>
             </div>
           </div>

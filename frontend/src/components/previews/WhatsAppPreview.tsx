@@ -1,9 +1,10 @@
 interface PreviewProps {
     caption?: string;
     imageUrl?: string;
+    mediaType?: 'image' | 'video';
 }
 
-export default function WhatsAppPreview({ caption = '', imageUrl }: PreviewProps) {
+export default function WhatsAppPreview({ caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#0b141a] rounded-lg overflow-hidden border border-gray-800 p-4">
             {/* Chat Header */}
@@ -22,7 +23,11 @@ export default function WhatsAppPreview({ caption = '', imageUrl }: PreviewProps
                     <div className="bg-[#005c4b] rounded-lg rounded-tr-none overflow-hidden">
                         {/* Image in message */}
                         {imageUrl ? (
-                            <img src={imageUrl} alt="WhatsApp" className="w-full max-h-64 object-cover" />
+                            mediaType === 'video' ? (
+                                <video src={imageUrl} controls className="w-full max-h-64 object-cover" />
+                            ) : (
+                                <img src={imageUrl} alt="WhatsApp" className="w-full max-h-64 object-cover" />
+                            )
                         ) : (
                             <div className="aspect-square bg-gradient-to-br from-green-900 to-teal-900 flex items-center justify-center max-h-64">
                                 <div className="text-center text-white p-8">

@@ -2,9 +2,10 @@ interface PreviewProps {
     channelName?: string;
     caption?: string;
     imageUrl?: string;
+    mediaType?: 'image' | 'video';
 }
 
-export default function TelegramPreview({ channelName = 'IT Life', caption = '', imageUrl }: PreviewProps) {
+export default function TelegramPreview({ channelName = 'IT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#181818] rounded-lg overflow-hidden border border-gray-800">
             {/* Channel Header */}
@@ -32,7 +33,11 @@ export default function TelegramPreview({ channelName = 'IT Life', caption = '',
                 {/* Post Image */}
                 {imageUrl ? (
                     <div className="rounded-lg overflow-hidden mb-3">
-                        <img src={imageUrl} alt="Telegram" className="w-full max-h-80 object-cover" />
+                        {mediaType === 'video' ? (
+                            <video src={imageUrl} controls className="w-full max-h-80 object-cover" />
+                        ) : (
+                            <img src={imageUrl} alt="Telegram" className="w-full max-h-80 object-cover" />
+                        )}
                     </div>
                 ) : (
                     <div className="aspect-video bg-gradient-to-br from-blue-900 to-cyan-900 rounded-lg overflow-hidden mb-3 flex items-center justify-center">

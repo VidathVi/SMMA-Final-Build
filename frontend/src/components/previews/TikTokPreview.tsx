@@ -2,15 +2,20 @@ interface PreviewProps {
     username?: string;
     caption?: string;
     imageUrl?: string;
+    mediaType?: 'image' | 'video';
 }
 
-export default function TikTokPreview({ username = '@itlife', caption = '', imageUrl }: PreviewProps) {
+export default function TikTokPreview({ username = '@itlife', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-black rounded-lg overflow-hidden border border-gray-800 relative">
             {/* Vertical Video Container */}
             <div className="aspect-[9/16] bg-gradient-to-br from-pink-900 via-purple-900 to-blue-900 relative">
                 {imageUrl ? (
-                    <img src={imageUrl} alt="TikTok" className="w-full h-full object-cover" />
+                    mediaType === 'video' ? (
+                        <video src={imageUrl} controls className="w-full h-full object-cover" />
+                    ) : (
+                        <img src={imageUrl} alt="TikTok" className="w-full h-full object-cover" />
+                    )
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="text-center text-white p-8">

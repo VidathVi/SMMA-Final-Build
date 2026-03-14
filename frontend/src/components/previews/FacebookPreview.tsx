@@ -2,9 +2,10 @@ interface PreviewProps {
     username?: string;
     caption?: string;
     imageUrl?: string;
+    mediaType?: 'image' | 'video';
 }
 
-export default function FacebookPreview({ username = 'IT Life', caption = '', imageUrl }: PreviewProps) {
+export default function FacebookPreview({ username = 'IT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#242526] rounded-lg overflow-hidden border border-gray-700">
             {/* Profile Header */}
@@ -33,7 +34,11 @@ export default function FacebookPreview({ username = 'IT Life', caption = '', im
             {/* Post Image */}
             <div className="bg-black">
                 {imageUrl ? (
-                    <img src={imageUrl} alt="Post" className="w-full max-h-96 object-contain" />
+                    mediaType === 'video' ? (
+                        <video src={imageUrl} controls className="w-full max-h-96 object-contain" />
+                    ) : (
+                        <img src={imageUrl} alt="Post" className="w-full max-h-96 object-contain" />
+                    )
                 ) : (
                     <div className="aspect-video bg-gradient-to-br from-blue-900 to-purple-900 flex items-center justify-center">
                         <div className="text-center text-white p-8">

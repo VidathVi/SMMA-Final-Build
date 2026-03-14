@@ -2,9 +2,10 @@ interface PreviewProps {
     username?: string;
     caption?: string;
     imageUrl?: string;
+    mediaType?: 'image' | 'video';
 }
 
-export default function InstagramPreview({ username = 'itlife', caption = '', imageUrl }: PreviewProps) {
+export default function InstagramPreview({ username = 'itlife', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-700">
             {/* Preview Header */}
@@ -21,7 +22,11 @@ export default function InstagramPreview({ username = 'itlife', caption = '', im
             {/* Post Image */}
             <div className="aspect-square bg-gradient-to-br from-red-900 to-orange-800 relative flex items-center justify-center">
                 {imageUrl ? (
-                    <img src={imageUrl} alt="Post" className="w-full h-full object-cover" />
+                    mediaType === 'video' ? (
+                        <video src={imageUrl} controls className="w-full h-full object-cover" />
+                    ) : (
+                        <img src={imageUrl} alt="Post" className="w-full h-full object-cover" />
+                    )
                 ) : (
                     <div className="text-center text-white p-8">
                         <div className="text-6xl font-bold mb-2">22</div>
