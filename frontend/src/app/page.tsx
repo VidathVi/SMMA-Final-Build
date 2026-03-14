@@ -12,17 +12,29 @@ import TelegramPreview from '@/components/previews/TelegramPreview';
 import { FaFacebookF, FaInstagram, FaTiktok, FaTwitter, FaWhatsapp, FaYoutube, FaTelegramPlane } from 'react-icons/fa';
 
 export default function Home() {
+<<<<<<< HEAD
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>('facebook');
   const [postCaption, setPostCaption] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sit amet quam convallis sem volutpat fringilla.");
 
   const [mediaFiles, setMediaFiles] = useState<{ file: File, url: string, type: 'image' | 'video' }[]>([]);
   const MAX_MEDIA_LIMIT = 6;
+=======
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform>('instagram');
+  const [postCaption, setPostCaption] = useState("Placeholder textLorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sit amet quam convallis sem volutpat fringilla.");
+
+  const [mediaFiles, setMediaFiles] = useState<{file: File, url: string, type: 'image' | 'video'}[]>([]);
+  const MAX_MEDIA_LIMIT = 10;
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
       const remainingSlots = MAX_MEDIA_LIMIT - mediaFiles.length;
       const filesToAdd = newFiles.slice(0, remainingSlots);
 
@@ -36,7 +48,11 @@ export default function Home() {
     }
     // Reset input so the same file could be selected again if removed
     if (fileInputRef.current) {
+<<<<<<< HEAD
       fileInputRef.current.value = '';
+=======
+        fileInputRef.current.value = '';
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
     }
   };
 
@@ -52,9 +68,14 @@ export default function Home() {
   const renderPreview = () => {
     const props = {
       caption: postCaption,
+<<<<<<< HEAD
       // Pass the first media file to the preview
       imageUrl: mediaFiles.length > 0 ? mediaFiles[0].url : undefined,
       mediaType: mediaFiles.length > 0 ? mediaFiles[0].type : undefined,
+=======
+      // Pass the first media file to the preview if it exists
+      imageUrl: mediaFiles.length > 0 ? mediaFiles[0].url : undefined,
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
     };
 
     switch (selectedPlatform) {
@@ -175,10 +196,17 @@ export default function Home() {
             />
           </div>
 
+<<<<<<< HEAD
           {/* Content Uploader */}
           <div className="bg-[#0B1221] border border-gray-800 rounded-2xl p-6 min-h-48 flex flex-col justify-center">
             <div className="flex flex-wrap gap-4 items-center">
               {/* Media Previews */}
+=======
+          {/* content uploader */}
+          <div className="bg-[#0B1221] border border-gray-800 rounded-2xl p-6 min-h-48 flex flex-col justify-center">
+            <div className="flex flex-wrap gap-4 items-center">
+              {/* Render Uploaded Media Previews */}
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
               {mediaFiles.map((media, index) => (
                 <div key={media.url} className="h-32 w-32 bg-[#1a1a1a] rounded-lg overflow-hidden relative group border border-gray-700">
                   {media.type === 'video' ? (
@@ -187,7 +215,11 @@ export default function Home() {
                     <img src={media.url} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
                   )}
                   {/* Remove Button */}
+<<<<<<< HEAD
                   <button
+=======
+                  <button 
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
                     onClick={() => removeMedia(index)}
                     className="absolute top-1 right-1 bg-black/60 hover:bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                     aria-label="Remove media"
@@ -196,31 +228,57 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
+<<<<<<< HEAD
+=======
+                  {/* Type Badge */}
+                  {media.type === 'video' && (
+                    <div className="absolute bottom-1 right-1 bg-black/60 text-white text-[10px] px-1.5 py-0.5 rounded">
+                      Video
+                    </div>
+                  )}
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
                 </div>
               ))}
 
               {/* Upload Button */}
               {mediaFiles.length < MAX_MEDIA_LIMIT && (
+<<<<<<< HEAD
                 <div
+=======
+                <div 
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
                   onClick={() => fileInputRef.current?.click()}
                   className="h-32 w-32 rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-gray-700 text-gray-500 hover:border-gray-500 hover:text-gray-400 hover:bg-[#1a1a1a] transition-all cursor-pointer"
                 >
                   <svg className="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
                   </svg>
+<<<<<<< HEAD
                   <span className="text-xs text-center px-2">Add Media<br />({mediaFiles.length}/{MAX_MEDIA_LIMIT})</span>
+=======
+                  <span className="text-xs text-center px-2">Add Media<br/>({mediaFiles.length}/{MAX_MEDIA_LIMIT})</span>
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
                 </div>
               )}
             </div>
 
             {/* Hidden File Input */}
+<<<<<<< HEAD
             <input
               type="file"
+=======
+            <input 
+              type="file" 
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
               ref={fileInputRef}
               onChange={handleFileChange}
               accept="image/*,video/*"
               multiple
+<<<<<<< HEAD
               className="hidden"
+=======
+              className="hidden" 
+>>>>>>> 98dbbe00a1452d29052ad2906bbcedd9bf1209e7
             />
           </div>
 
