@@ -14,10 +14,33 @@ export default function Home() {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>('instagram');
   const [postCaption, setPostCaption] = useState("When the magic can't fit into one night... we make another\nSky Light Fest : The Original - DAY 02 22nd February | Rock House, Piliyandala.\n\nTickets available now !!!\nVisit www.tickets.lk to get your tickets.");
 
+  const [images, setImages] = useState<File[]>([]);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      const totalImages = images.length + filesArray.length;
+      
+      if (totalImages > 6) {
+        alert("You can only upload up to 6 images.");
+        const remainingSlots = 6 - images.length;
+        if (remainingSlots > 0) {
+          setImages((prev) => [...prev, ...filesArray.slice(0, remainingSlots)]);
+        }
+        return;
+      }
+      setImages((prev) => [...prev, ...filesArray]);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const renderPreview = () => {
     const props = {
       caption: postCaption,
-      imageUrl: undefined,
+      imageUrl: images.length > 0 ? URL.createObjectURL(images[0]) : undefined,
     };
 
     switch (selectedPlatform) {
@@ -135,22 +158,45 @@ export default function Home() {
           </div>
 
           {/* content uploader */}
-          <div className="bg-[#0B1221] border border-gray-800 rounded-2xl p-6 h-48 flex items-center gap-4">
-            {/* Image Placeholder */}
-            <div className="h-full aspect-square bg-[#1a1a1a] rounded-lg overflow-hidden relative group">
-              {/* Placeholder for uploaded image */}
-              <div className="absolute inset-0 flex items-center justify-center text-xs text-center text-gray-500 p-2 border border-gray-700 m-2 rounded border-dashed">
-                Image Preview
+          <div className="bg-[#0B1221] border border-gray-800 rounded-2xl p-6 min-h-[12rem] flex flex-wrap items-center gap-4">
+            
+            {/* Uploaded Images */}
+            {images.map((img, index) => (
+              <div key={index} className="h-32 w-32 bg-[#1a1a1a] rounded-lg overflow-hidden relative group shrink-0">
+                <img src={URL.createObjectURL(img)} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
+                <button
+                  onClick={() => removeImage(index)}
+                  className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Remove image"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-            </div>
+            ))}
 
-            {/* Upload Placeholder */}
-            <button className="h-32 w-32 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-700 text-gray-500 hover:border-gray-600 hover:text-gray-400 transition-all cursor-pointer">
-              <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </button>
+            {/* Upload Button */}
+            {images.length < 6 && (
+              <label className="h-32 w-32 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-700 text-gray-500 hover:border-gray-600 hover:text-gray-400 transition-all cursor-pointer shrink-0">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+                <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </label>
+            )}
 
+            {images.length === 0 && (
+              <div className="flex-1 text-sm text-gray-500 ml-4">
+                Click the + icon to upload up to 6 images.
+              </div>
+            )}
           </div>
 
           <div className="relative">
