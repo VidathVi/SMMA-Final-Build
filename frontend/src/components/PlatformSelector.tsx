@@ -1,5 +1,8 @@
 'use client';
 
+import { ReactNode } from 'react';
+import { FaFacebookF, FaInstagram, FaTiktok, FaTwitter, FaWhatsapp, FaYoutube, FaTelegramPlane } from 'react-icons/fa';
+
 export type Platform = 'instagram' | 'facebook' | 'twitter' | 'tiktok' | 'youtube' | 'whatsapp' | 'telegram';
 
 interface PlatformSelectorProps {
@@ -7,14 +10,14 @@ interface PlatformSelectorProps {
     onSelectPlatform: (platform: Platform) => void;
 }
 
-const platforms: { id: Platform; label: string; icon: string }[] = [
-    { id: 'instagram', label: 'Instagram', icon: 'I' },
-    { id: 'facebook', label: 'Facebook', icon: 'F' },
-    { id: 'twitter', label: 'Twitter', icon: 'X' },
-    { id: 'tiktok', label: 'TikTok', icon: 'T' },
-    { id: 'youtube', label: 'YouTube', icon: 'Y' },
-    { id: 'whatsapp', label: 'WhatsApp', icon: 'W' },
-    { id: 'telegram', label: 'Telegram', icon: 'T' },
+const platforms: { id: Platform; label: string; icon: ReactNode }[] = [
+    { id: 'instagram', label: 'Instagram', icon: <FaInstagram /> },
+    { id: 'facebook', label: 'Facebook', icon: <FaFacebookF /> },
+    { id: 'twitter', label: 'Twitter', icon: <FaTwitter /> },
+    { id: 'tiktok', label: 'TikTok', icon: <FaTiktok /> },
+    { id: 'youtube', label: 'YouTube', icon: <FaYoutube /> },
+    { id: 'whatsapp', label: 'WhatsApp', icon: <FaWhatsapp /> },
+    { id: 'telegram', label: 'Telegram', icon: <FaTelegramPlane /> },
 ];
 
 export default function PlatformSelector({ selectedPlatform, onSelectPlatform }: PlatformSelectorProps) {
