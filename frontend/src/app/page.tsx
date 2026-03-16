@@ -169,7 +169,7 @@ export default function Home() {
             {/* description area */}
             <textarea
               className="w-full h-32 bg-transparent border border-gray-800 rounded-lg p-4 text-gray-300 text-sm mb-4 resize-none focus:outline-none focus:ring-1 focus:ring-gray-600"
-              placeholder="Describe the post"
+              placeholder="Describe the post for optimization"
               value={postCaption}
               onChange={(e) => setPostCaption(e.target.value)}
             />
