@@ -22,12 +22,12 @@ const platforms: { id: Platform; label: string; icon: ReactNode }[] = [
 
 export default function PlatformSelector({ selectedPlatform, onSelectPlatform }: PlatformSelectorProps) {
     return (
-        <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-2">
+        <div className="flex items-center gap-2 mb-4 pb-2 flex-wrap">
             {platforms.map((platform) => (
                 <button
                     key={platform.id}
                     onClick={() => onSelectPlatform(platform.id)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${selectedPlatform === platform.id
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${selectedPlatform === platform.id
                             ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/30'
                             : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-gray-300'
                         }`}

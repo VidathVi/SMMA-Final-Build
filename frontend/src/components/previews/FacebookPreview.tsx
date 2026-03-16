@@ -27,7 +27,7 @@ export default function FacebookPreview({ username = 'IT Life', caption = '', im
             </div>
 
             {/* Post Text */}
-            <div className="p-3 text-sm text-gray-200 leading-relaxed max-h-24 overflow-y-auto">
+            <div className="p-3 text-sm text-gray-200 leading-relaxed">
                 {caption || 'No caption'}
             </div>
 

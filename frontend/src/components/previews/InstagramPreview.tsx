@@ -52,7 +52,7 @@ export default function InstagramPreview({ username = 'itlife', caption = '', im
             </div>
 
             {/* Caption */}
-            <div className="p-3 text-xs text-gray-300 leading-relaxed max-h-32 overflow-y-auto">
+            <div className="p-3 text-xs text-gray-300 leading-relaxed">
                 <span className="font-semibold text-white">{username}</span> {caption || 'No caption'}
             </div>
         </div>
