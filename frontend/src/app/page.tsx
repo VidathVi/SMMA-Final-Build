@@ -16,7 +16,7 @@ export default function Home() {
   const [postCaption, setPostCaption] = useState("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sit amet quam convallis sem volutpat fringilla.");
 
   const [mediaFiles, setMediaFiles] = useState<{ file: File, url: string, type: 'image' | 'video' }[]>([]);
-  const MAX_MEDIA_LIMIT = 12;
+  const MAX_MEDIA_LIMIT = 6;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
