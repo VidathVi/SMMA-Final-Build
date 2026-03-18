@@ -66,6 +66,7 @@ export default function SignupPage() {
                  
 
                     <form className="space-y-4 absolute top-15 w-[350px]">
+                    <form className="space-y-6 absolute top-15 w-[350px]">
                         <input 
                         type="email"
                         placeholder="Email Address"

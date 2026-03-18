@@ -1,0 +1,68 @@
+﻿
+> profile@0.0.0 build
+> vite build
+
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 24 modules transformed.
+node.exe : 
+[31mΓ£ù[39m Build 
+failed in 174ms
+At line:1 char:1
++ & "C:\Program File
+s\nodejs/node.exe" 
+"C:\Program Files\no
+dejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~
+    + CategoryInfo  
+            : NotS  
+  pecified: ([31   
+ mΓ£ù[39m Build    
+ failed in 174m    
+s:String) [], R    
+emoteException
+    + FullyQualifie 
+   dErrorId : Nati  
+  veCommandError
+ 
+[31merror during 
+build:
+[31mCould not 
+resolve 
+"../profile.css" 
+from "src/components
+/Header.jsx"[31m
+file: [36mC:/Users/
+ASUS/OneDrive/Deskto
+p/profile/src/compon
+ents/Header.jsx[31m
+    at 
+getRollupError (file
+:///C:/Users/ASUS/On
+eDrive/Desktop/profi
+le/node_modules/roll
+up/dist/es/shared/pa
+rseAst.js:402:41)
+    at error (file:/
+//C:/Users/ASUS/OneD
+rive/Desktop/profile
+/node_modules/rollup
+/dist/es/shared/pars
+eAst.js:398:42)
+    at ModuleLoader.
+handleInvalidResolve
+dId (file:///C:/User
+s/ASUS/OneDrive/Desk
+top/profile/node_mod
+ules/rollup/dist/es/
+shared/node-entry.js
+:21687:24)
+    at file:///C:/Us
+ers/ASUS/OneDrive/De
+sktop/profile/node_m
+odules/rollup/dist/e
+s/shared/node-entry.
+js:21647:26[39m
