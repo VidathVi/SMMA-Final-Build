@@ -1,3 +1,6 @@
+import LoadingScreen from "./components/LoadingScreen";
+
+export default function Home() {
 'use client';
 
 import { useState, useRef } from 'react';

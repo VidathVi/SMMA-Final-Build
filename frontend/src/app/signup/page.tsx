@@ -65,6 +65,7 @@ export default function SignupPage() {
                     <h1 className={`${inter.className} text-3xl font-bold`}>Create an Account</h1>
                  
 
+                    <form className="space-y-4 absolute top-15 w-[350px]">
                     <form className="space-y-6 absolute top-15 w-[350px]">
                         <input 
                         type="email"
@@ -79,6 +80,11 @@ export default function SignupPage() {
                         <input 
                         type="workplace name"
                         placeholder="Workplace Name"
+                        className="w-full rounded-full px-5 py-3 bg-[#243F6B] text-white placeholder-white/50 outline-none focus:ring-2 focus:ring-cyan-400  "
+                        />
+                        <input 
+                        type="Role"
+                        placeholder="Role"
                         className="w-full rounded-full px-5 py-3 bg-[#243F6B] text-white placeholder-white/50 outline-none focus:ring-2 focus:ring-cyan-400  "
                         />
                         <div className="flex items-center justify-center">
