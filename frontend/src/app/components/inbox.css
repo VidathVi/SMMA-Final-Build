@@ -1,0 +1,148 @@
+.inbox-container {
+  display: flex;
+  height: 100vh;
+  background-color: #F5EFE7;
+}
+
+.sidebar {
+  width: 30%;
+  background-color: #213555;
+  color: white;
+  padding: 20px;
+}
+
+.logo {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.search {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: none;
+}
+
+.tabs button {
+  margin-right: 5px;
+  padding: 6px 10px;
+  background-color: #3E5879;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chat-list {
+  margin-top: 20px;
+}
+
+.chat-item {
+  background-color: #3E5879;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.chat-item:hover {
+  background-color: #4A6FA5;
+}
+
+.chat-area {
+  width: 70%;
+  background-color: #FFFFFF;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3E5879;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.messages {
+  flex: 1;
+  margin-top: 20px;
+  background-color: #F5EFE7;
+  padding: 15px;
+  border-radius: 6px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+
+.message-bubble.received {
+  background-color: #ffffff;
+  color: #213555;
+  align-self: flex-start;
+  border: 1px solid #ddd;
+}
+
+.message-bubble.sent {
+  background-color: #3E5879;
+  color: white;
+  align-self: flex-end;
+}
+
+.message-input button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.message-input {
+  display: flex;
+  margin-top: 10px;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+   background-color: #ffffff;
+  color: #213555;
+}
+
+.message-input button {
+  background-color: #213555;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  margin-left: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-item.active {
+  background-color: #4A6FA5;
+  outline: 2px solid #F5EFE7;
+}
+
+.message-input input::placeholder {
+  color: #999;
+}
+
+.tabs button.active-tab {
+  background-color: #F5EFE7;
+  color: #213555;
+}
