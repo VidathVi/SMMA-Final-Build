@@ -1,10 +1,26 @@
 import express from "express";
-import { testAsset, uploadAsset } from "../controllers/asset";
+import { testAsset, uploadAsset, getAssets, addComment } from "../controllers/asset";
 import upload from "../middlewares/upload";
+import { testAsset, uploadAsset, getAssets } from "../controllers/asset";
+import upload from "../middleware/upload";
+import { authMiddleware } from "../middleware/authMiddleware";
+import { roleMiddleware } from "../middleware/roleMiddleware";
 
 const router = express.Router();
 
-router.get("/", testAsset);
-router.post("/upload", upload.single("file"), uploadAsset);
+// Protected test route
+router.get("/", authMiddleware, testAsset);
+
+// Restrict asset creation/upload to authorized roles
+router.post(
+  "/upload",
+  authMiddleware,
+  roleMiddleware(["admin", "manager", "designer"]),
+  upload.single("file"),
+  uploadAsset
+);
+
+// All authenticated users can view assets
+router.get("/list", authMiddleware, getAssets);
 
 export default router;

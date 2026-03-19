@@ -53,7 +53,6 @@ async function runSeed() {
     console.error("Seed error:", error);
   } finally {
     client.release();
-    pool.end();
   }
 }
 
