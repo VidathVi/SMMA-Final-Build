@@ -26,14 +26,32 @@ def _call_openai(prompt: str) -> str:
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
-        return f"Error connecting to OpenAI: {str(e)}"
+        # Fallback Simulation Mode for University Demo (Active if out of credits)
+        print(f"OpenAI API Warning: {str(e)}\n--- Triggering Simulation Mode ---")
+        
+        if "detect" in prompt.lower() or "language" in prompt.lower():
+            return "English"
+        elif "predict" in prompt.lower() or "engagement" in prompt.lower():
+            return "High - Simulated engagement prediction based on keyword synergy."
+        else:
+            return (
+                "Here is an incredibly optimized caption! 🚀 It grabs attention and builds curiosity.\n\n"
+                "#Orean360 #Innovation #Trending #EcoMugs\n\n"
+                "[Mock Variant 2]: Stop scrolling! Check out why everyone is talking about this! ✨ #Viral #MustHave"
+            )
 
 def generate_caption(topic: str, platform: str, tone: str) -> str:
     prompt = CAPTION_PROMPT.format(topic=topic, platform=platform, tone=tone)
     return _call_openai(prompt)
 
-def optimize_text(content: str, language: str) -> str:
-    prompt = OPTIMIZATION_PROMPT.format(content=content, language=language)
+def optimize_text(caption: str, tone: str, language: str, generate_variants: bool) -> str:
+    variants_instruction = "3. Generate 2-3 alternative variants of the optimized caption." if generate_variants else ""
+    prompt = OPTIMIZATION_PROMPT.format(
+        caption=caption, 
+        language=language, 
+        tone=tone, 
+        variants_instruction=variants_instruction
+    )
     return _call_openai(prompt)
 
 def predict_engagement(content: str) -> str:

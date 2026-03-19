@@ -16,11 +16,15 @@ def api_generate_caption(request: CaptionRequest):
 
 @router.post("/optimize-content")
 def api_optimize_content(request: OptimizeRequest):
-    result = optimize_text(request.content, request.target_language)
+    result = optimize_text(
+        caption=request.caption,
+        tone=request.tone,
+        language=request.target_language,
+        generate_variants=request.generate_variants
+    )
     return {
         "status": "success",
-        "original_content": request.content,
-        "optimized_content": result
+        "optimized_result": result
     }
 
 @router.post("/predict-engagement")

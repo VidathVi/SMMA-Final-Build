@@ -6,8 +6,10 @@ class CaptionRequest(BaseModel):
     tone: str
 
 class OptimizeRequest(BaseModel):
-    content: str
+    caption: str
+    tone: str
     target_language: str = "English"
+    generate_variants: bool = False
 
 class EngagementRequest(BaseModel):
     content: str

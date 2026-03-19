@@ -9,10 +9,18 @@ Provide only the caption. Include suitable emojis and a couple of relevant hasht
 """
 
 OPTIMIZATION_PROMPT = """
-Optimize the following content for better engagement in {language}.
-If hashtags are missing, suggest 3 relevant hashtags.
-Content:
-{content}
+You are an expert social media optimizer.
+Please optimize the following caption for better engagement.
+Original Caption: {caption}
+Target Language: {language}
+Tone to Maintain: {tone}
+
+Tasks:
+1. Improve the caption to be more engaging.
+2. Generate 3-5 highly relevant hashtags.
+{variants_instruction}
+
+Keep your response clean and well-formatted.
 """
 
 LANGUAGE_DETECTION_PROMPT = """
