@@ -54,9 +54,34 @@ def optimize_text(caption: str, tone: str, language: str, generate_variants: boo
     )
     return _call_openai(prompt)
 
-def predict_engagement(content: str) -> str:
-    prompt = f"Analyze this content and predict social media engagement (High, Medium, Low) with a brief 1-sentence reason:\n\n{content}"
-    return _call_openai(prompt)
+def predict_engagement(content: str) -> dict:
+    """Simulates an engagement prediction using basic heuristics for the university project."""
+    score = 50
+    suggestions = []
+    
+    if len(content) > 80:
+        score += 15
+    else:
+        suggestions.append("Make the caption longer to provide more context.")
+        
+    hashtag_count = content.count("#")
+    if hashtag_count >= 3:
+        score += 20
+    elif hashtag_count > 0:
+        score += 10
+        suggestions.append("Add more hashtags (3-5 is optimal).")
+    else:
+        suggestions.append("Include relevant hashtags to boost your reach.")
+        
+    if "?" in content or "!" in content:
+        score += 15
+    else:
+        suggestions.append("Add a question or exclamation to encourage audience interaction.")
+        
+    return {
+        "score": min(score, 98),
+        "suggestions": suggestions if suggestions else ["This caption is perfectly optimized!"]
+    }
 
 def detect_language(content: str) -> str:
     prompt = LANGUAGE_DETECTION_PROMPT.format(content=content)

@@ -30,7 +30,11 @@ def api_optimize_content(request: OptimizeRequest):
 @router.post("/predict-engagement")
 def api_predict_engagement(request: EngagementRequest):
     result = predict_engagement(request.content)
-    return {"status": "success", "prediction": result}
+    return {
+        "status": "success",
+        "engagement_score": result["score"],
+        "suggestions": result["suggestions"]
+    }
 
 @router.post("/detect-language")
 def api_detect_language(request: LanguageRequest):

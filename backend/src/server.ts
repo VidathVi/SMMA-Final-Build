@@ -3,6 +3,7 @@ import cors from "cors";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth";
+import geoRoutes from "./routes/geo.routes";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ pool.on("error", (err) => {
 
 // App Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/geo", geoRoutes);
 
 app.get("/api/health", async (req, res) => {
   try {
