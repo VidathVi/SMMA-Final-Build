@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import authRoutes from "./routes/auth";
+import geoRoutes from "./routes/geo.routes";
 import authRoutes from "./routes/auth"; 
 import assetRoutes from "./routes/asset";
 import userRoutes from "./routes/user";
@@ -25,6 +27,7 @@ app.get("/ping", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/geo", geoRoutes);
 app.use("/api/assets", assetRoutes);
 app.use("/api/users", userRoutes);
 
