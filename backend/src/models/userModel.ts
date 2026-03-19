@@ -1,4 +1,4 @@
-const pool = require("../db/seed");
+import pool from "../db/db";
 
 export interface User {
   id: number;
