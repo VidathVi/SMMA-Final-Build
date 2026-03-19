@@ -86,8 +86,3 @@ def predict_engagement(content: str) -> dict:
 def detect_language(content: str) -> str:
     prompt = LANGUAGE_DETECTION_PROMPT.format(content=content)
     return _call_openai(prompt)
-
-def analyze_tone_and_hashtags(content: str) -> str:
-    """Reusable service function specifically for tone analysis and hashtags."""
-    prompt = f"Analyze the tone of the following content. Then, suggest 5 highly relevant hashtags for reach.\nContent: {content}"
-    return _call_openai(prompt)
