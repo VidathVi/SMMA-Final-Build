@@ -1,8 +1,7 @@
 import express from "express";
 import { testAsset, uploadAsset, getAssets, addComment } from "../controllers/asset";
-import upload from "../middlewares/upload";
-import { testAsset, uploadAsset, getAssets } from "../controllers/asset";
 import upload from "../middleware/upload";
+
 
 const router = express.Router();
 

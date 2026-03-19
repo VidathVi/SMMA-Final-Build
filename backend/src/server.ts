@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth"; 
 import assetRoutes from "./routes/asset";
 import userRoutes from "./routes/user";
-import pool from "./db/db";
+//import pool from "./db/db";
 
 
 dotenv.config();
@@ -28,30 +28,22 @@ app.use("/api/auth", authRoutes);
 app.use("/api/assets", assetRoutes);
 app.use("/api/users", userRoutes);
 
-app.get("/api/health", async (req: Request, res: Response) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
-    res.json({
-      status: "healthy",
-      db_time: result.rows[0].now,
-      message: "Backend is running and connected to PostgreSQL",
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "error",
-      message: "Database connection failed",
-    });
-  }
-});
+//app.get("/api/health", async (req: Request, res: Response) => {
+//  try {
+//    const result = await pool.query("SELECT NOW()");
+//    res.json({
+//      status: "healthy",
+//      db_time: result.rows[0].now,
+//      message: "Backend is running and connected to PostgreSQL",
+//    });
+//  } catch (error) {
+//    res.status(500).json({
+//      status: "error",
+//      message: "Database connection failed",
+//    });
+//  }
+//});
 
-pool.connect()
-  .then((client) => {
-    console.log("Connected to PostgreSQL Database");
-    client.release();
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-    });
-  })
-  .catch((err) => {
-    console.error("Database connection error:", err);
-  });
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

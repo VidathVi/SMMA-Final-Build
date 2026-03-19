@@ -10,7 +10,7 @@ const allowedMimeTypes = [
 
 const fileFilter = (
   req: any,
-  file: Express.Multer.File,
+  file: any,
   cb: any
 ) => {
   if (allowedMimeTypes.includes(file.mimetype)) {
