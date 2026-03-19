@@ -57,6 +57,6 @@ async function runSeed() {
   }
 }
 
-runSeed();
+// runSeed();
 
 module.exports = pool;
