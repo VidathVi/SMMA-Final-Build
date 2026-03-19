@@ -1,9 +1,8 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { Pool } from "pg";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth";
-import assetRoutes from "./routes/asset";
+import pool from "./db/db";
 
 
 dotenv.config();
@@ -18,13 +17,9 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Backend is running!");
 });
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-pool.on("error", (err) => {
-  console.error("Unexpected error on idle client", err);
-  process.exit(-1);
+app.get("/ping", (req, res) => {
+  console.log("PING HIT");
+  res.send("pong");
 });
 
 app.use("/api/auth", authRoutes);
@@ -32,10 +27,7 @@ app.use("/api/assets", assetRoutes);
 
 app.get("/api/health", async (req: Request, res: Response) => {
   try {
-    const client = await pool.connect();
-    const result = await client.query("SELECT NOW()");
-    client.release();
-
+    const result = await pool.query("SELECT NOW()");
     res.json({
       status: "healthy",
       db_time: result.rows[0].now,
@@ -49,6 +41,14 @@ app.get("/api/health", async (req: Request, res: Response) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+pool.connect()
+  .then((client) => {
+    console.log("Connected to PostgreSQL Database");
+    client.release();
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Database connection error:", err);
+  });

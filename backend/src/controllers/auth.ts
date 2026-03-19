@@ -54,6 +54,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
 // LOGIN
 export const loginUser = async (req: Request, res: Response) => {
+  console.log("LOGIN HIT");
   try {
     const { email, password } = req.body;
 
@@ -63,7 +64,9 @@ export const loginUser = async (req: Request, res: Response) => {
       });
     }
 
+    console.log("BEFORE QUERY");
     const user = await findUserByEmail(email);
+    console.log("AFTER QUERY");
     if (!user) {
       return res.status(401).json({
         message: "Invalid credentials",
