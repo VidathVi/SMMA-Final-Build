@@ -10,7 +10,7 @@ export const uploadAsset = (req: Request, res: Response) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    const fileUrl = `local/${req.file.originalname}`;
+const fileUrl = `local/${Date.now()}-${req.file.originalname}`;
 
     return res.status(200).json({
       message: "File uploaded successfully",
