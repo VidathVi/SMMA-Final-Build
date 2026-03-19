@@ -1,9 +1,10 @@
 import express from "express";
+import { testAsset, uploadAsset } from "../controllers/asset";
+import upload from "../middlewares/upload";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.json({ message: "Asset route working" });
-});
+router.get("/", testAsset);
+router.post("/upload", upload.single("file"), uploadAsset);
 
 export default router;
