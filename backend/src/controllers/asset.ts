@@ -52,3 +52,27 @@ export const getAssets = (req: Request, res: Response) => {
 
   res.json(filteredAssets);
 };
+
+export const addComment = (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { userId, comment } = req.body;
+
+  if (!userId || !comment) {
+    return res.status(400).json({
+      message: "userId and comment are required",
+    });
+  }
+
+  const newComment = {
+    id: Date.now(),
+    assetId: id,
+    userId,
+    comment,
+    createdAt: new Date().toISOString(),
+  };
+
+  return res.status(201).json({
+    message: "Comment added successfully",
+    data: newComment,
+  });
+};
