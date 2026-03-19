@@ -2,38 +2,36 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { createUser, findUserByEmail } from "../models/userModel";
+import { registerSchema, loginSchema } from "../utils/validation";
 
 const JWT_SECRET = process.env.JWT_SECRET || "orean360_super_secret_key";
 
 // REGISTER
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, role } = req.body;
-
-    if (!name || !email || !password) {
+    const parsed = registerSchema.safeParse(req.body);
+    if (!parsed.success) {
       return res.status(400).json({
-        message: "Name, email and password are required",
+        message: "Validation failed",
+        errors: parsed.error.issues.map((e: any) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
       });
     }
 
-    // check existing
+    const { name, email, password, role } = parsed.data;
+
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
       return res.status(409).json({
-        message: "User already exists",
+        message: "User already exists with this email",
       });
     }
 
-    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // create user via model
-    const newUser = await createUser(
-      name,
-      email,
-      hashedPassword,
-      role || "user"
-    );
+    const newUser = await createUser(name, email, hashedPassword, role);
 
     res.status(201).json({
       message: "User registered successfully",
@@ -54,19 +52,21 @@ export const registerUser = async (req: Request, res: Response) => {
 
 // LOGIN
 export const loginUser = async (req: Request, res: Response) => {
-  console.log("LOGIN HIT");
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
+    const parsed = loginSchema.safeParse(req.body);
+    if (!parsed.success) {
       return res.status(400).json({
-        message: "Email and password required",
+        message: "Validation failed",
+        errors: parsed.error.issues.map((e: any) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
       });
     }
 
-    console.log("BEFORE QUERY");
+    const { email, password } = parsed.data;
+
     const user = await findUserByEmail(email);
-    console.log("AFTER QUERY");
     if (!user) {
       return res.status(401).json({
         message: "Invalid credentials",
