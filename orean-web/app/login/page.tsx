@@ -19,13 +19,20 @@ export default function Login() {
     setError("");
 
     try {
-      // Simulate network request to show loading state
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await fetch("http://localhost:8080/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-      // Accept any credentials, set a dummy token
-      localStorage.setItem("orean360_token", "sample_token_123");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      localStorage.setItem("orean360_token", data.token);
       
-      // Redirect to dashboard
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "An error occurred during login");
