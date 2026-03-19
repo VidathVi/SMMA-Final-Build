@@ -1,0 +1,61 @@
+/* BreakdownMetrics.css */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--geo-glass-border);
+}
+
+.metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.metric-label {
+    color: var(--geo-text-secondary);
+}
+
+.metric-value {
+    color: var(--geo-text-primary);
+}
+
+.metric-bar-bg {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.metric-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s ease-out;
+}
+
+.metric-bar-fill.seo {
+    background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+}
+
+.metric-bar-fill.engagement {
+    background: linear-gradient(90deg, #f2709c, #ff9472);
+}
+
+.metric-bar-fill.readability {
+    background: linear-gradient(90deg, #11998e, #38ef7d);
+}
+
+.metric-bar-fill.platform {
+    background: linear-gradient(90deg, #8E2DE2, #4A00E0);
+}

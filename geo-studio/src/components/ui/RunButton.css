@@ -1,0 +1,89 @@
+/* RunButton.css */
+.geo-run-button {
+    position: relative;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, var(--geo-neon-blue), var(--geo-neon-purple));
+    border: none;
+    border-radius: 0.75rem;
+    color: white;
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+    z-index: 1;
+}
+
+.geo-run-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 210, 255, 0.3);
+}
+
+.geo-run-button:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.geo-run-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    background: linear-gradient(135deg, rgba(0, 210, 255, 0.3), rgba(157, 80, 187, 0.3));
+}
+
+.button-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.button-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: skewX(-20deg);
+    z-index: 1;
+}
+
+.geo-run-button:hover:not(:disabled) .button-glow {
+    animation: sweep 1.5s ease-in-out infinite;
+}
+
+@keyframes sweep {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 200%;
+    }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.geo-run-button.analyzing {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--geo-neon-blue);
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.1) inset;
+    color: var(--geo-neon-blue);
+}
+
+.geo-run-button.analyzing:disabled {
+    opacity: 1;
+    /* keep it visible when analyzing */
+}

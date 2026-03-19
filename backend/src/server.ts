@@ -23,6 +23,7 @@ app.get("/ping", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/assets", assetRoutes);
 
 app.get("/api/health", async (req: Request, res: Response) => {
   try {

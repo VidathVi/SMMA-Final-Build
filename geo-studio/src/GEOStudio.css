@@ -1,0 +1,154 @@
+:root {
+  --geo-bg: #0a0e14;
+  --geo-card-bg: rgba(255, 255, 255, 0.05);
+  --geo-border: rgba(255, 255, 255, 0.1);
+  --geo-accent: #3b82f6;
+  --geo-text-primary: #ffffff;
+  --geo-text-secondary: #94a3b8;
+  --geo-neon-blue: #00d2ff;
+  --geo-neon-purple: #9d50bb;
+  --geo-glass-blur: blur(12px);
+  --geo-font-family: 'Inter', sans-serif;
+}
+
+.geo-studio-container {
+  min-height: 100vh;
+  background: var(--geo-bg);
+  color: var(--geo-text-primary);
+  font-family: var(--geo-font-family);
+  padding: 3rem 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.geo-studio-header {
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
+  text-align: left;
+}
+
+.geo-studio-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 0;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+
+:root {
+  --geo-glass-bg: rgba(15, 23, 42, 0.65);
+  --geo-glass-border: rgba(255, 255, 255, 0.08);
+  --geo-glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+
+
+.geo-studio-main {
+  display: grid;
+  flex: 1;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.geo-studio-main.layout-single {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  min-height: calc(100vh - 200px);
+  width: 100%;
+}
+
+.geo-studio-main.layout-single>.slide-up {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.geo-studio-main.layout-single .left-panel {
+  flex: 1;
+}
+
+.geo-studio-main.layout-split {
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  align-items: start;
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  .glass-effect {
+    background: #1e293b;
+  }
+}
+
+.glass-effect {
+  background: var(--geo-glass-bg);
+  backdrop-filter: var(--geo-glass-blur);
+  -webkit-backdrop-filter: var(--geo-glass-blur);
+  border: 1px solid var(--geo-glass-border);
+  border-radius: 1.25rem;
+  box-shadow: var(--geo-glass-shadow);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-effect::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
+
+@media (max-width: 1100px) {
+  .geo-studio-main {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .geo-studio-container {
+    padding: 1rem;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.slide-up {
+  opacity: 0;
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
