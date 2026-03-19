@@ -1,10 +1,11 @@
 # Simple prompt templates for OpenAI calls
 
 CAPTION_PROMPT = """
-Write a compelling social media caption for the following base content.
-Keep it engaging and suitable for a general audience.
-Content:
-{content}
+Write a highly engaging social media caption for {platform}.
+The topic is: {topic}
+The tone should be: {tone}
+
+Provide only the caption. Include suitable emojis and a couple of relevant hashtags if appropriate.
 """
 
 OPTIMIZATION_PROMPT = """

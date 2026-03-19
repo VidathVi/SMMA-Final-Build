@@ -28,8 +28,8 @@ def _call_openai(prompt: str) -> str:
     except Exception as e:
         return f"Error connecting to OpenAI: {str(e)}"
 
-def generate_caption(content: str) -> str:
-    prompt = CAPTION_PROMPT.format(content=content)
+def generate_caption(topic: str, platform: str, tone: str) -> str:
+    prompt = CAPTION_PROMPT.format(topic=topic, platform=platform, tone=tone)
     return _call_openai(prompt)
 
 def optimize_text(content: str, language: str) -> str:

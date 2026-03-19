@@ -1,7 +1,9 @@
 from pydantic import BaseModel
 
 class CaptionRequest(BaseModel):
-    content: str
+    topic: str
+    platform: str
+    tone: str
 
 class OptimizeRequest(BaseModel):
     content: str

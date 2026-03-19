@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.post("/generate-caption")
 def api_generate_caption(request: CaptionRequest):
-    result = generate_caption(request.content)
+    result = generate_caption(request.topic, request.platform, request.tone)
     return {"status": "success", "caption": result}
 
 @router.post("/optimize-content")
