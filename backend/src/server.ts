@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth"; 
 import assetRoutes from "./routes/asset";
+import userRoutes from "./routes/user";
 import pool from "./db/db";
 
 
@@ -25,6 +26,7 @@ app.get("/ping", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/assets", assetRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/api/health", async (req: Request, res: Response) => {
   try {
