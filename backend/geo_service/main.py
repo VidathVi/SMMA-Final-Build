@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+import os
 from dotenv import load_dotenv
-from routes.geo_routes import router
 
-# Load environment variables from .env file
+# Load environment variables FIRST before importing your routes or instantiating clients!
 load_dotenv()
+
+from fastapi import FastAPI
+from routes.geo_routes import router
 
 app = FastAPI(
     title="GEO Engine API", 
