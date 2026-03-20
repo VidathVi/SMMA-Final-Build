@@ -87,3 +87,39 @@ export const addComment = (req: Request, res: Response) => {
     data: newComment,
   });
 };
+
+export const getAssetById = (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const assets = [
+    {
+      id: 1,
+      campaignId: "123",
+      fileUrl: "local/123-image1.jpg",
+      version: 1,
+      visibility: "private",
+    },
+    {
+      id: 2,
+      campaignId: "123",
+      fileUrl: "local/123-video1.mp4",
+      version: 2,
+      visibility: "private",
+    },
+    {
+      id: 3,
+      campaignId: "456",
+      fileUrl: "local/456-image2.png",
+      version: 1,
+      visibility: "private",
+    },
+  ];
+
+  const asset = assets.find(a => a.id === Number(id));
+
+  if (!asset) {
+    return res.status(404).json({ message: "Asset not found" });
+  }
+
+  res.json(asset);
+};
