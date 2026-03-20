@@ -12,6 +12,7 @@ export const uploadAsset = (req: Request, res: Response) => {
 
     const fileUrl = `local/${Date.now()}-${req.file.originalname}`;
     const version = 1;
+    const visibility = "private";
 
     return res.status(200).json({
       message: "File uploaded successfully",
@@ -20,6 +21,7 @@ export const uploadAsset = (req: Request, res: Response) => {
       fileType: req.file.mimetype,
       fileSize: req.file.size,
       version,
+      visibility,
     });
   } catch (error) {
     return res.status(500).json({ message: "Upload failed", error });
@@ -36,18 +38,22 @@ export const getAssets = (req: Request, res: Response) => {
       campaignId: "123",
       fileUrl: "local/123-image1.jpg",
       version: 1,
+      visibility: "private",
     },
     {
       id: 2,
       campaignId: "123",
       fileUrl: "local/123-video1.mp4",
       version: 2,
+      visibility: "private",
     },
     {
       id: 3,
       campaignId: "456",
       fileUrl: "local/456-image2.png",
       version: 1,
+      visibility: "private",
+
     },
   ];
 
