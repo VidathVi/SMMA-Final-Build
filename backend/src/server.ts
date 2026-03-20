@@ -1,7 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-<<<<<<< Updated upstream
 import authRoutes from "./routes/auth";
 import geoRoutes from "./routes/geo.routes";
 import assetRoutes from "./routes/asset";
