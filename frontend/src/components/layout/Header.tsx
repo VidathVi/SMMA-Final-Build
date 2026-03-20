@@ -13,7 +13,7 @@ export default function Header() {
   };
 
   return (
-    <header className="h-20 bg-white/5 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-6 shrink-0 shadow-lg z-20 sticky top-0 transition-all">
+    <header className="h-20 bg-[#0A0A3C]/80 backdrop-blur-2xl border-b border-[#1E3C6D] flex items-center justify-between px-6 shrink-0 shadow-lg z-20 sticky top-0 transition-all">
       
       {/* Search / Command Palette Taser */}
       <div className="flex-1 max-w-lg">
