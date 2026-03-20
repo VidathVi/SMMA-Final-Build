@@ -6,9 +6,9 @@ import authRoutes from "./routes/auth";
 import geoRoutes from "./routes/geo.routes";
 import assetRoutes from "./routes/asset";
 import userRoutes from "./routes/user";
-=======
-import authRoutes from "./routes/auth"; 
->>>>>>> Stashed changes
+import socialTokenRoutes from "./routes/socialToken.routes";
+import mediaAssetRoutes from "./routes/mediaAsset.routes";
+import metaGraphRoutes from "./routes/metaGraph.routes";
 import pool from "./db/db";
 
 // V1 route imports
@@ -43,6 +43,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/geo", geoRoutes);
 app.use("/api/assets", assetRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/social-tokens", socialTokenRoutes);
+app.use("/api/media", mediaAssetRoutes);
+app.use("/api/meta", metaGraphRoutes);
 
 // ─── V1 Routes (Campaign/Post/Status/Task Management) ──────────────────
 app.use("/api/campaigns", campaignRoutes);
