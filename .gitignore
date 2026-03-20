@@ -23,3 +23,8 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files
+.env
+backend/.env
+backend/geo_service/.env

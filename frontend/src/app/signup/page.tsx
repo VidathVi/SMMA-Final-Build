@@ -65,7 +65,6 @@ export default function SignupPage() {
                     <h1 className={`${inter.className} text-3xl font-bold`}>Create an Account</h1>
                  
 
-                    <form className="space-y-4 absolute top-15 w-[350px]">
                     <form className="space-y-6 absolute top-15 w-[350px]">
                         <input 
                         type="email"

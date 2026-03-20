@@ -72,7 +72,7 @@ export default function Sidebar() {
             <motion.a
               key={item.name}
               href={item.href}
-              onClick={(e) => handleNavClick(item.name, e)}
+              onClick={(e: React.MouseEvent) => handleNavClick(item.name, e)}
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
               className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all relative overflow-hidden group ${

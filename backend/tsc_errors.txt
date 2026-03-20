@@ -1,0 +1,9 @@
+﻿src/routes/asset.ts(2,10): error TS2300: Duplicate identifier 'testAsset'.
+src/routes/asset.ts(2,21): error TS2300: Duplicate identifier 'uploadAsset'.
+src/routes/asset.ts(2,34): error TS2300: Duplicate identifier 'getAssets'.
+src/routes/asset.ts(3,8): error TS2300: Duplicate identifier 'upload'.
+src/routes/asset.ts(3,20): error TS2307: Cannot find module '../middlewares/upload' or its corresponding type declarations.
+src/routes/asset.ts(4,10): error TS2300: Duplicate identifier 'testAsset'.
+src/routes/asset.ts(4,21): error TS2300: Duplicate identifier 'uploadAsset'.
+src/routes/asset.ts(4,34): error TS2300: Duplicate identifier 'getAssets'.
+src/routes/asset.ts(5,8): error TS2300: Duplicate identifier 'upload'.

@@ -1,6 +1,3 @@
-import LoadingScreen from "./components/LoadingScreen";
-
-export default function Home() {
 'use client';
 
 import { useState, useRef } from 'react';
@@ -116,7 +113,7 @@ export default function Home() {
           {/* Create Post Header & Inputs */}
           <div className="bg-[#0B1221] border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden ">
             <h2 className="text-xl font-semibold text-white ">Create Post</h2>
-            <br></br>
+            <br />
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-gray-400 ml-4">
@@ -288,13 +285,4 @@ export default function Home() {
       </main>
     </div>
   );
-import Inbox from "./components/inbox";
-
-export default function InboxPage() {
-  return <Inbox />;
-}
-import LoadingScreen from "./components/LoadingScreen";
-
-export default function Home() {
-  return <LoadingScreen />;
 }
