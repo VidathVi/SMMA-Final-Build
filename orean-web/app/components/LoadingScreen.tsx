@@ -1,6 +1,19 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 const LoadingScreen = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      router.push("/register"); // Redirect to the register page
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [router]);
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#020617] to-[#020024]">
       <div className="relative flex items-center justify-center ">

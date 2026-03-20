@@ -1,82 +1,87 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { Pool } from "pg";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+import { createUser, findUserByEmail } from "../models/userModel";
+import { registerSchema, loginSchema } from "../utils/validation";
 
 const JWT_SECRET = process.env.JWT_SECRET || "orean360_super_secret_key";
 
+// REGISTER
 export const registerUser = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ message: "Username and password required" });
-  }
-
   try {
-    const client = await pool.connect();
-    
-    // Check if user exists
-    const existing = await client.query("SELECT * FROM users WHERE username = $1", [username]);
-    if (existing.rows.length > 0) {
-      client.release();
-      return res.status(409).json({ message: "Username already exists" });
+    const parsed = registerSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: parsed.error.issues.map((e: any) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
+      });
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
+    const { name, email, password, role } = parsed.data;
 
-    // Insert user
-    const newUser = await client.query(
-      "INSERT INTO users (username, password_hash) VALUES ($1, $2) RETURNING id, username, role",
-      [username, hash]
-    );
-    
-    client.release();
+    const existingUser = await findUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({
+        message: "User already exists with this email",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await createUser(name, email, hashedPassword, role);
 
     res.status(201).json({
       message: "User registered successfully",
-      user: newUser.rows[0],
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+      },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Register Error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
 
+// LOGIN
 export const loginUser = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ message: "Username and password required" });
-  }
-
   try {
-    const client = await pool.connect();
-    const result = await client.query("SELECT * FROM users WHERE username = $1", [username]);
-    client.release();
-
-    if (result.rows.length === 0) {
-      return res.status(401).json({ message: "Invalid credentials" });
+    const parsed = loginSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: parsed.error.issues.map((e: any) => ({
+          field: e.path.join("."),
+          message: e.message,
+        })),
+      });
     }
 
-    const user = result.rows[0];
-    const isMatch = await bcrypt.compare(password, user.password_hash);
+    const { email, password } = parsed.data;
 
+    const user = await findUserByEmail(email);
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid credentials",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({
+        message: "Invalid credentials",
+      });
     }
 
-    // Generate token
     const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role },
+      { id: user.id, email: user.email, role: user.role },
       JWT_SECRET,
       { expiresIn: "24h" }
     );
@@ -86,12 +91,15 @@ export const loginUser = async (req: Request, res: Response) => {
       token,
       user: {
         id: user.id,
-        username: user.username,
+        name: user.name,
+        email: user.email,
         role: user.role,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login Error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
