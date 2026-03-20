@@ -1,10 +1,14 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+<<<<<<< Updated upstream
 import authRoutes from "./routes/auth";
 import geoRoutes from "./routes/geo.routes";
 import assetRoutes from "./routes/asset";
 import userRoutes from "./routes/user";
+=======
+import authRoutes from "./routes/auth"; 
+>>>>>>> Stashed changes
 import pool from "./db/db";
 
 // V1 route imports
