@@ -5,7 +5,7 @@ interface PreviewProps {
     mediaType?: 'image' | 'video';
 }
 
-export default function TelegramPreview({ channelName = 'IT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
+export default function TelegramPreview({ channelName = 'IIT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#181818] rounded-lg overflow-hidden border border-gray-800">
             {/* Channel Header */}
