@@ -40,7 +40,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="w-72 bg-black/40 backdrop-blur-3xl text-white flex flex-col h-full border-r border-white/10 transition-all duration-300 relative z-30 shadow-2xl">
+    <div className="w-72 bg-[#0A0A3C]/80 backdrop-blur-3xl text-white flex flex-col h-full border-r border-white/10 transition-all duration-300 relative z-30 shadow-2xl">
       {/* Glowing accent border */}
       <div className="absolute top-0 bottom-0 right-0 w-[1px] bg-gradient-to-b from-transparent via-blue-500/50 to-transparent opacity-50"></div>
 
@@ -106,7 +106,7 @@ export default function Sidebar() {
         <motion.button
           onClick={() => {
             localStorage.removeItem("orean360_token");
-            window.location.href = "/login";
+            window.location.href = "/signin";
           }}
           whileHover={{ x: 4 }}
           className="w-full flex items-center px-4 py-3 rounded-xl text-sm font-bold text-slate-400 hover:bg-white/10 hover:text-white transition-all border border-transparent hover:border-white/5 group"
