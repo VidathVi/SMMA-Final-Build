@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Navbar from '@/components/layout/Navbar';
+import { motion } from 'framer-motion';
 import {
   FiImage,
   FiInfo,
@@ -141,15 +142,21 @@ export default function ApprovalPage() {
         <div className="flex-1 flex flex-col gap-6">
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-xl relative overflow-hidden overflow-x-auto min-h-[80vh]">
 
-            <div className="flex items-center gap-4 text-xs font-medium text-gray-400 mb-6 hover:text-gray-300">
-            </div>
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex items-center gap-4 text-xs font-medium text-gray-400 mb-6 hover:text-gray-300">
+              </div>
 
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-4xl text-blue-500 bg-blue-500/10 p-2 rounded-lg"><FiList></FiList></span>
-              <h1 className="text-4xl font-bold text-white tracking-wide">Approval</h1>
-            </div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-4xl text-blue-500 bg-blue-500/10 p-2 rounded-lg"><FiList></FiList></span>
+                <h1 className="text-4xl font-bold text-white tracking-wide">Approval</h1>
+              </div>
 
-            <p className="text-gray-300 text-sm mb-10 ml-2"></p>
+              <p className="text-gray-300 text-sm mb-10 ml-2"></p>
+            </motion.div>
 
             <div className="flex flex-wrap gap-4 items-center justify-between mb-4 pb-3 border-b border-white/10">
               <div className="flex items-center gap-4 overflow-x-auto">
@@ -174,14 +181,23 @@ export default function ApprovalPage() {
                 >
                   <FaSort className="w-4 h-4" />
                 </button>
-                <div className="flex items-center bg-blue-600 hover:bg-blue-500 text-white rounded-md overflow-hidden transition-colors ml-2 shadow-lg shadow-blue-500/20">
+                <motion.div 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center bg-blue-600 hover:bg-blue-500 text-white rounded-md overflow-hidden transition-colors ml-2 shadow-lg shadow-blue-500/20"
+                >
                   <button onClick={openNewTaskModal} className="px-3 py-1.5 text-sm font-medium">New Task</button>
                   <div className="w-[1px] h-4 bg-blue-400/50"></div>
-                </div>
+                </motion.div>
               </div>
             </div>
 
-            <div className="w-full text-sm text-gray-300 overflow-x-auto pb-6">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="w-full text-sm text-gray-300 overflow-x-auto pb-6"
+            >
               <div className="min-w-[1100px]">
                 <div className="grid grid-cols-[3fr_1.5fr_1.2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-4 pb-3 border-b border-white/10 font-medium text-gray-400/80 uppercase text-[10px] tracking-wider items-center">
                   <div className="flex items-center gap-2 text-sm normal-case tracking-normal text-gray-400">
@@ -229,7 +245,7 @@ export default function ApprovalPage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
           </div>
         </div>
@@ -238,7 +254,11 @@ export default function ApprovalPage() {
       {/* Edit / New Task Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-[#0A0A3C] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-[#0A0A3C] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative"
+          >
             <h2 className="text-xl font-bold text-white mb-6">
               {editingIndex !== null ? 'Edit Task' : 'Create New Task'}
             </h2>
@@ -319,7 +339,7 @@ export default function ApprovalPage() {
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       )}
     </div>
