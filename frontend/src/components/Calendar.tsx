@@ -206,7 +206,7 @@ export default function Calendar({ posts }: CalendarProps) {
         {selectedDay && (
           <motion.div
             initial={{ opacity: 0, x: 20, width: 0 }}
-            animate={{ opacity: 1, x: 0, width: "100%", lg: { width: 340 } }}
+            animate={{ opacity: 1, x: 0, width: "auto" }}
             exit={{ opacity: 0, x: 20, width: 0 }}
             className="bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col shrink-0 lg:w-[340px]"
           >
