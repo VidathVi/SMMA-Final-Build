@@ -15,6 +15,7 @@ import campaignRoutes from "./routes/campaign.routes";
 import postRoutes from "./routes/post.routes";
 import statusRoutes from "./routes/status.routes";
 import taskRoutes from "./routes/task.routes";
+import calendarRoutes from "./routes/calendar.routes";
 import { postController } from "./controllers/post.controller";
 import { validate } from "./middleware/validate";
 import { z } from "zod";
@@ -51,6 +52,7 @@ app.use("/api/campaigns", campaignRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/statuses", statusRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/calendar", calendarRoutes);
 
 // ─── Nested Route: Get posts by campaign ────────────────────────────────
 const campaignPostsSchema = z.object({
