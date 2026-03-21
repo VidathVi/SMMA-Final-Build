@@ -32,14 +32,12 @@ export default function Sidebar() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Calendar", href: "/calendar", icon: Calendar },
-    { name: "Campaigns", href: "#", icon: Megaphone },
     { name: "Workflows", href: "#", icon: Workflow },
-    { name: "Approvals", href: "#", icon: CheckCircle },
+    { name: "Approvals", href: "/approval", icon: CheckCircle },
     { name: "Unified Inbox", href: "/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
     { name: "Publish Post", href: "/create-post", icon: Upload },
     { name: "GEO Studio", href: "/geo-studio", icon: Globe },
-    { name: "Assets", href: "#", icon: FolderSearch },
   ];
 
   const handleNavClick = (item: any, e: React.MouseEvent) => {
@@ -55,7 +53,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div 
+    <div
       className={`${isCollapsed ? "w-24" : "w-72"} bg-[#0A0A3C]/80 backdrop-blur-3xl text-white flex flex-col h-full border-r border-white/10 transition-all duration-300 relative z-30 shadow-2xl shrink-0`}
     >
       {/* Glowing accent border */}
@@ -64,7 +62,7 @@ export default function Sidebar() {
       {/* Brand & Toggle */}
       <div className={`h-20 flex items-center ${isCollapsed ? "justify-center px-4" : "justify-between px-6"} border-b border-white/5 relative overflow-hidden group`}>
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center"></div>
-        
+
         <div className={`flex items-center overflow-hidden cursor-pointer ${isCollapsed ? "hidden" : "flex-1"}`} onClick={() => !isCollapsed && router.push('/dashboard')}>
           <motion.div
             whileHover={{ rotate: 180 }}
@@ -74,9 +72,9 @@ export default function Sidebar() {
             <Orbit className="w-7 h-7 text-blue-400 mr-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
           </motion.div>
           {!isCollapsed && (
-            <motion.span 
-              initial={{ opacity: 0, x: -10 }} 
-              animate={{ opacity: 1, x: 0 }} 
+            <motion.span
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
               className="font-heading font-extrabold text-2xl tracking-tight text-white relative z-10 drop-shadow-md whitespace-nowrap"
             >
               Orean<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">360</span>
@@ -84,7 +82,7 @@ export default function Sidebar() {
           )}
         </div>
 
-        <button 
+        <button
           onClick={(e) => {
             e.stopPropagation();
             setIsCollapsed(!isCollapsed);
@@ -113,11 +111,10 @@ export default function Sidebar() {
               onClick={(e: React.MouseEvent) => handleNavClick(item, e)}
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-center py-3 rounded-xl text-sm font-bold transition-all relative overflow-hidden group ${
-                isCollapsed ? 'justify-center px-0 mx-2' : 'px-4'
-              } ${isActive
-                ? "bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/10"
-                : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
+              className={`flex items-center py-3 rounded-xl text-sm font-bold transition-all relative overflow-hidden group ${isCollapsed ? 'justify-center px-0 mx-2' : 'px-4'
+                } ${isActive
+                  ? "bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/10"
+                  : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
                 }`}
             >
               {isActive && (

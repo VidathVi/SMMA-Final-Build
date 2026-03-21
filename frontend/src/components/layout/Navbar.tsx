@@ -58,14 +58,12 @@ export default function Navbar() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Calendar", href: "/calendar", icon: Calendar },
-    { name: "Campaigns", href: "#", icon: Calendar },
     { name: "Workflows", href: "#", icon: Workflow },
-    { name: "Approvals", href: "#", icon: CheckCircle },
+    { name: "Approvals", href: "/approval", icon: CheckCircle },
     { name: "Unified Inbox", href: "/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
     { name: "Publish Post", href: "/create-post", icon: Upload },
     { name: "GEO Studio", href: "/geo-studio", icon: Globe },
-    { name: "Assets", href: "#", icon: FolderSearch },
   ];
 
   const handleNavClick = (item: any, e: React.MouseEvent) => {
