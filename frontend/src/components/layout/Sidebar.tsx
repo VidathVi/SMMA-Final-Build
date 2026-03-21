@@ -25,7 +25,7 @@ export default function Sidebar() {
   const router = useRouter();
   const [activeItem, setActiveItem] = useState("Dashboard");
   const [isNavigating, setIsNavigating] = useState<string | null>(null);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -52,7 +52,10 @@ export default function Sidebar() {
   };
 
   return (
-    <div className={`${isCollapsed ? "w-24" : "w-72"} bg-[#0A0A3C]/80 backdrop-blur-3xl text-white flex flex-col h-full border-r border-white/10 transition-all duration-300 relative z-30 shadow-2xl shrink-0`}>
+    <div 
+      className={`${isCollapsed ? "w-24 cursor-pointer" : "w-72"} bg-[#0A0A3C]/80 backdrop-blur-3xl text-white flex flex-col h-full border-r border-white/10 transition-all duration-300 relative z-30 shadow-2xl shrink-0`}
+      onClick={() => isCollapsed && setIsCollapsed(false)}
+    >
       {/* Glowing accent border */}
       <div className="absolute top-0 bottom-0 right-0 w-[1px] bg-gradient-to-b from-transparent via-blue-500/50 to-transparent opacity-50"></div>
 
@@ -80,7 +83,10 @@ export default function Sidebar() {
         </div>
 
         <button 
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsCollapsed(!isCollapsed);
+          }}
           className="relative z-20 p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors border border-white/10 shrink-0"
         >
           {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
