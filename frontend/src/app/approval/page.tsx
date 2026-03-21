@@ -156,7 +156,7 @@ export default function ApprovalPage() {
 
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-4xl text-blue-500 bg-blue-500/10 p-2 rounded-lg"><FiList></FiList></span>
-                <h1 className="text-4xl font-bold text-white tracking-wide">Approval</h1>
+                <h1 className="text-4xl font-bold text-white tracking-wide">Approvals</h1>
               </div>
 
               <p className="text-gray-300 text-sm mb-10 ml-2"></p>

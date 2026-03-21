@@ -32,7 +32,6 @@ export default function Sidebar() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Calendar", href: "/calendar", icon: Calendar },
-    { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "/approval", icon: CheckCircle },
     { name: "Unified Inbox", href: "/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },

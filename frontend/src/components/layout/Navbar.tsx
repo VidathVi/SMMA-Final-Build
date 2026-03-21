@@ -58,7 +58,6 @@ export default function Navbar() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Calendar", href: "/calendar", icon: Calendar },
-    { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "/approval", icon: CheckCircle },
     { name: "Unified Inbox", href: "/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
@@ -84,7 +83,7 @@ export default function Navbar() {
 
       {/* Brand */}
       <div
-        className="flex items-center group cursor-pointer mr-8"
+        className="flex items-center group cursor-pointer mr-8 relative"
         onClick={() => router.push("/dashboard")}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -178,7 +177,7 @@ export default function Navbar() {
         </motion.button>
 
         {/* User Profile */}
-        <div className="pl-4 border-l border-white/10 flex items-center space-x-3 cursor-pointer group">
+        <a href="/personal-profile" className="pl-4 border-l border-white/10 flex items-center space-x-3 cursor-pointer group">
           <div className="hidden md:flex flex-col items-end mr-2">
             <span className="text-sm font-bold text-slate-200 group-hover:text-blue-400 transition-colors">Jane Doe</span>
             <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Admin</span>
@@ -186,7 +185,7 @@ export default function Navbar() {
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-slate-800 flex items-center justify-center text-white font-extrabold shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:scale-105 transition-transform">
             <span className="text-sm drop-shadow-md">JD</span>
           </div>
-        </div>
+        </a>
       </div>
     </nav>
   );

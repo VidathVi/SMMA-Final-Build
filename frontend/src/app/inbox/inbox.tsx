@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Facebook, Instagram, MessageCircle, Linkedin, Youtube, Twitter } from "lucide-react";
+import { motion } from "framer-motion";
 import "./inbox.css";
 
 const initialChats = [
@@ -109,7 +110,12 @@ export default function Inbox() {
   return (
     <div className="inbox-container">
       {/* Sidebar */}
-      <div className="sidebar">
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4 }}
+        className="sidebar"
+      >
         <div className="logo">Logo</div>
 
         <input type="text" placeholder="Search..." className="search" />
@@ -160,10 +166,15 @@ export default function Inbox() {
 
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Chat Area */}
-      <div className="chat-area">
+      <motion.div 
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="chat-area"
+      >
         <div className="chat-header">
           <h3>{selectedChat ? selectedChat.name : "Select a chat"}</h3>
           <div className="actions">
@@ -198,7 +209,7 @@ export default function Inbox() {
           />
           <button onClick={sendMessage} disabled={!selectedChatId}>Send</button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
