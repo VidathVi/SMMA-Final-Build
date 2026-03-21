@@ -2,6 +2,7 @@
 
 import React from "react";
 import Calendar from "@/components/Calendar";
+import Navbar from "@/components/layout/Navbar";
 import { ScheduledPost } from "@/types/calendar";
 import { motion } from "framer-motion";
 import { Loader2, Plus } from "lucide-react";
@@ -66,9 +67,11 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 p-6">
-      
-      {/* Page Header matching Dashboard */}
+    <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
+      <Navbar />
+      <div className="flex-1 max-w-7xl mx-auto space-y-8 p-6 w-full">
+        
+        {/* Page Header matching Dashboard */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -105,6 +108,7 @@ export default function CalendarPage() {
       >
         <Calendar posts={mockPosts} />
       </motion.div>
+      </div>
     </div>
   );
 }
