@@ -23,11 +23,37 @@ import {
 import { FaSort } from 'react-icons/fa';
 
 export default function ApprovalPage() {
-  const projects = [
-    { name: 'Design Meta Advert', start: '03/24/2025', end: '03/14/2025' },
-    { name: 'Finish Q3 Product Launch Video', start: '01/20/2025', end: '03/14/2025' },
-    { name: 'Work on Summer Collection Instagram Reels', start: '04/09/2025', end: '03/14/2025' }
-  ];
+  const [projects, setProjects] = React.useState([
+    { name: 'Design Meta Advert', start: '03/24/2025', end: '03/14/2025', status: 'In Progress' },
+    { name: 'Finish Q3 Product Launch Video', start: '01/20/2025', end: '03/14/2025', status: 'Not Started' },
+    { name: 'Work on Summer Collection Instagram Reels', start: '04/09/2025', end: '03/14/2025', status: 'Complete' }
+  ]);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [newTaskName, setNewTaskName] = React.useState('');
+  const [newStartDate, setNewStartDate] = React.useState('');
+  const [newEndDate, setNewEndDate] = React.useState('');
+
+  const handleAddTask = () => {
+    if (!newTaskName.trim()) return;
+
+    const formatDate = (dateStr: string) => {
+      if (!dateStr) return '';
+      const parts = dateStr.split('-');
+      if (parts.length === 3) return `${parts[1]}/${parts[2]}/${parts[0]}`;
+      return dateStr;
+    };
+
+    setProjects([...projects, {
+      name: newTaskName,
+      start: formatDate(newStartDate),
+      end: formatDate(newEndDate),
+      status: 'Not started'
+    }]);
+    setNewTaskName('');
+    setNewStartDate('');
+    setNewEndDate('');
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-gradient-to-r from-[#020617] via-[#0A0A3C] to-[#020024] bg-[length:300%_300%] animate-gradient text-white font-sans overflow-x-hidden">
@@ -52,11 +78,11 @@ export default function ApprovalPage() {
             <div className="flex flex-wrap gap-4 items-center justify-between mb-4 pb-3 border-b border-white/10">
               <div className="flex items-center gap-4 overflow-x-auto">
                 <button className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors whitespace-nowrap">
-                  <FiStar className="text-white fill-white" /> All Projects
+                  <FiLayout /> Sort By Status
                 </button>
                 <div className="h-4 w-[1px] bg-white/10 mx-1"></div>
                 <button className="flex items-center gap-2 text-sm text-white bg-white/10 px-3 py-1.5 rounded-md whitespace-nowrap">
-                  <FiLayout /> Sort By Status
+                  <FiLayout /> Sort By Date
                 </button>
               </div>
 
@@ -64,7 +90,7 @@ export default function ApprovalPage() {
                 <button className="hover:text-white transition-colors"><FaSort className="w-4 h-4" /></button>
                 <button className="hover:text-white transition-colors"><FiSearch className="w-4 h-4" /></button>
                 <div className="flex items-center bg-blue-600 hover:bg-blue-500 text-white rounded-md overflow-hidden transition-colors ml-2 shadow-lg shadow-blue-500/20">
-                  <button className="px-3 py-1.5 text-sm font-medium">New Task</button>
+                  <button onClick={() => setIsModalOpen(true)} className="px-3 py-1.5 text-sm font-medium">New Task</button>
                   <div className="w-[1px] h-4 bg-blue-400/50"></div>
                 </div>
               </div>
@@ -96,7 +122,7 @@ export default function ApprovalPage() {
                       </div>
                       <div>
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#3f3f46]/30 text-gray-300 text-xs border border-white/10 whitespace-nowrap">
-                          <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span> In Progress
+                          <span className={`w-1.5 h-1.5 rounded-full ${proj.status === 'In Progress' ? 'bg-blue-400' : 'bg-gray-400'}`}></span> {proj.status}
                         </span>
                       </div>
                       <div className="text-gray-400">{proj.start || <span className="text-gray-600">-</span>}</div>
@@ -116,6 +142,65 @@ export default function ApprovalPage() {
           </div>
         </div>
       </main>
+
+      {/* New Task Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-[#0A0A3C] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative">
+            <h2 className="text-xl font-bold text-white mb-6">Create New Task</h2>
+
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Task Name</label>
+                <input
+                  type="text"
+                  value={newTaskName}
+                  onChange={(e) => setNewTaskName(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                  placeholder="e.g. Design Meta Advert"
+                  autoFocus
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Start Date</label>
+                  <input
+                    type="date"
+                    value={newStartDate}
+                    onChange={(e) => setNewStartDate(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-gray-300 focus:outline-none focus:border-blue-500 transition-colors [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">End Date</label>
+                  <input
+                    type="date"
+                    value={newEndDate}
+                    onChange={(e) => setNewEndDate(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-gray-300 focus:outline-none focus:border-blue-500 transition-colors [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddTask}
+                  className="px-4 py-2 rounded-lg text-sm bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors shadow-lg shadow-blue-500/20"
+                >
+                  Add Task
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
