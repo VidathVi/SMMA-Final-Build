@@ -27,6 +27,7 @@ export default function Sidebar() {
 
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Calendar", href: "/calendar", icon: Calendar },
     { name: "Campaigns", href: "#", icon: Calendar },
     { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "#", icon: CheckCircle },
