@@ -18,7 +18,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Megaphone,
-  Upload
+  Upload,
+  Globe
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -36,6 +37,7 @@ export default function Sidebar() {
     { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
     { name: "Publish Post", href: "/create-post", icon: Upload },
+    { name: "GEO Studio", href: "/geo-studio", icon: Globe },
     { name: "Assets", href: "#", icon: FolderSearch },
   ];
 
