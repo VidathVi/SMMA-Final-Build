@@ -14,6 +14,7 @@ import {
   FolderSearch,
   CheckCircle,
   Gem,
+  Orbit,
   Loader2,
   ChevronLeft,
   ChevronRight,
@@ -34,7 +35,7 @@ export default function Sidebar() {
     { name: "Campaigns", href: "#", icon: Megaphone },
     { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "#", icon: CheckCircle },
-    { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
+    { name: "Unified Inbox", href: "/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
     { name: "Publish Post", href: "/create-post", icon: Upload },
     { name: "GEO Studio", href: "/geo-studio", icon: Globe },
@@ -70,7 +71,7 @@ export default function Sidebar() {
             transition={{ duration: 0.5 }}
             className="relative z-10 shrink-0"
           >
-            <Gem className="w-7 h-7 text-blue-400 mr-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
+            <Orbit className="w-7 h-7 text-blue-400 mr-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
           </motion.div>
           {!isCollapsed && (
             <motion.span 

@@ -13,6 +13,7 @@ import {
   FolderSearch,
   CheckCircle,
   Gem,
+  Orbit,
   Loader2,
   Upload,
   Bell
@@ -28,7 +29,7 @@ export default function Navbar() {
     { name: "Campaigns", href: "#", icon: Calendar },
     { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "#", icon: CheckCircle },
-    { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
+    { name: "Unified Inbox", href: "/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
     { name: "Publish Post", href: "/create-post", icon: Upload },
     { name: "Assets", href: "#", icon: FolderSearch },
@@ -37,7 +38,7 @@ export default function Navbar() {
   const handleNavClick = (item: any, e: React.MouseEvent) => {
     e.preventDefault();
     if (item.href === "#" || item.href === pathname) return;
-    
+
     setIsNavigating(item.name);
     setTimeout(() => {
       setIsNavigating(null);
@@ -51,8 +52,8 @@ export default function Navbar() {
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-50"></div>
 
       {/* Brand */}
-      <div 
-        className="flex items-center group cursor-pointer mr-8" 
+      <div
+        className="flex items-center group cursor-pointer mr-8"
         onClick={() => router.push("/dashboard")}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -61,7 +62,7 @@ export default function Navbar() {
           transition={{ duration: 0.5 }}
           className="relative z-10"
         >
-          <Gem className="w-7 h-7 text-blue-400 mr-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
+          <Orbit className="w-7 h-7 text-blue-400 mr-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
         </motion.div>
         <span className="font-heading font-extrabold text-2xl tracking-tight text-white relative z-10 drop-shadow-md hidden sm:block">
           Orean<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">360</span>
@@ -112,7 +113,7 @@ export default function Navbar() {
       {/* Right Side Actions & Profile */}
       <div className="flex items-center gap-4 ml-auto shrink-0">
         {/* Notifications */}
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.1, rotate: 10 }}
           whileTap={{ scale: 0.9 }}
           className="p-2.5 text-slate-400 hover:text-white focus:outline-none transition-colors rounded-xl hover:bg-white/10 relative shadow-sm border border-transparent hover:border-white/5"
