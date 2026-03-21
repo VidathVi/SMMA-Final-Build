@@ -10,6 +10,7 @@ import YouTubePreview from '@/components/previews/YouTubePreview';
 import WhatsAppPreview from '@/components/previews/WhatsAppPreview';
 import TelegramPreview from '@/components/previews/TelegramPreview';
 import { FaFacebookF, FaInstagram, FaTiktok, FaTwitter, FaWhatsapp, FaYoutube, FaTelegramPlane } from 'react-icons/fa';
+import Navbar from '@/components/layout/Navbar';
 
 export default function Home() {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>('facebook');
@@ -78,34 +79,10 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-gradient-to-r from-[#020617] via-[#0A0A3C] to-[#020024] bg-[length:300%_300%] animate-gradient text-white p-8 font-sans">
+    <div className="flex min-h-screen flex-col items-center bg-gradient-to-r from-[#020617] via-[#0A0A3C] to-[#020024] bg-[length:300%_300%] animate-gradient text-white font-sans overflow-x-hidden">
+      <Navbar />
 
-      {/*navbar goes here*/}
-      <nav className="w-full max-w-6xl flex flex-wrap items-center justify-between py-6 px-8 mb-12">
-        <div className="flex items-center gap-2">
-          {/* Logo placeholder */}
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 to-indigo-500"></div>
-          <span className="font-bold text-lg tracking-wide hidden sm:block">Orean</span>
-        </div>
-
-        <ul className="flex flex-wrap gap-8 text-sm font-medium text-gray-300">
-          <li><a href="#" className="hover:text-white transition-colors">Dashboard</a></li>
-          <li><a href="#" className="hover:text-white transition-colors">Workflow</a></li>
-          <li><a href="#" className="hover:text-white transition-colors">Analytics</a></li>
-          <li><a href="#" className="hover:text-white transition-colors">GEO Studio</a></li>
-          <li><a href="#" className="hover:text-white transition-colors">Calendar</a></li>
-        </ul>
-
-        <div className="flex items-center gap-4">
-          {/* Profile/Notification Placeholders */}
-          <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
-            <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-          </div>
-          <div className="w-10 h-10 bg-yellow-100 rounded-full border-2 border-gray-800"></div>
-        </div>
-      </nav>
-
-      <main className="flex w-full max-w-6xl gap-8 relative">
+      <main className="flex w-full max-w-6xl gap-8 relative p-8">
 
         {/* Main Content Area - Create Post */}
         <div className="flex-1 flex flex-col gap-6">
