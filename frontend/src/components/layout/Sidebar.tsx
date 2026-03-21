@@ -14,7 +14,8 @@ import {
   FolderSearch,
   CheckCircle,
   Gem,
-  Loader2
+  Loader2,
+  Upload
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -29,7 +30,7 @@ export default function Sidebar() {
     { name: "Approvals", href: "#", icon: CheckCircle },
     { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
-    { name: "Publish Post", href: "/create-post", icon: FolderSearch },
+    { name: "Publish Post", href: "/create-post", icon: Upload },
     { name: "Assets", href: "#", icon: FolderSearch },
   ];
 
