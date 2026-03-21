@@ -16,7 +16,8 @@ import {
   Gem,
   Loader2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Megaphone
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -28,7 +29,7 @@ export default function Sidebar() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Calendar", href: "/calendar", icon: Calendar },
-    { name: "Campaigns", href: "#", icon: Calendar },
+    { name: "Campaigns", href: "#", icon: Megaphone },
     { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "#", icon: CheckCircle },
     { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
