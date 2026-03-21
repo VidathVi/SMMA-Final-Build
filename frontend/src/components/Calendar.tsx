@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Navbar from '@/components/layout/Navbar';
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
@@ -94,7 +95,7 @@ export default function Calendar({ posts }: CalendarProps) {
         <div className="flex items-center justify-between mb-6 relative z-10">
           <h2 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-3">
             <span className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-500/20 border border-white/5 shadow-inner">
-               <CalendarIcon className="text-blue-400 w-5 h-5" />
+              <CalendarIcon className="text-blue-400 w-5 h-5" />
             </span>
             {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
           </h2>
@@ -153,21 +154,19 @@ export default function Calendar({ posts }: CalendarProps) {
                     )
                   )
                 }
-                className={`min-h-[100px] sm:min-h-[120px] rounded-xl border p-2 cursor-pointer transition-all ${
-                  isSelected
-                    ? "border-blue-400/50 bg-blue-500/10 shadow-[0_0_15px_rgba(59,130,246,0.2)]"
-                    : isToday
+                className={`min-h-[100px] sm:min-h-[120px] rounded-xl border p-2 cursor-pointer transition-all ${isSelected
+                  ? "border-blue-400/50 bg-blue-500/10 shadow-[0_0_15px_rgba(59,130,246,0.2)]"
+                  : isToday
                     ? "border-blue-500/30 bg-white/10"
                     : "bg-white/5 border border-white/10 hover:border-slate-400/50 hover:bg-white/10 shadow-lg"
-                }`}
+                  }`}
               >
                 <div className="flex justify-between items-start mb-2">
                   <span
-                    className={`text-xs font-bold flex items-center justify-center w-7 h-7 rounded-full ${
-                      isToday
-                        ? "bg-blue-600 text-white shadow-[0_0_10px_rgba(37,99,235,0.5)]"
-                        : "text-slate-300"
-                    }`}
+                    className={`text-xs font-bold flex items-center justify-center w-7 h-7 rounded-full ${isToday
+                      ? "bg-blue-600 text-white shadow-[0_0_10px_rgba(37,99,235,0.5)]"
+                      : "text-slate-300"
+                      }`}
                   >
                     {day}
                   </span>
@@ -181,9 +180,8 @@ export default function Calendar({ posts }: CalendarProps) {
                   {dayPosts.slice(0, 3).map((post) => (
                     <div
                       key={post.id}
-                      className={`text-[10px] px-1.5 py-1 rounded border truncate flex items-center gap-1.5 ${
-                        platformColors[post.platform]
-                      }`}
+                      className={`text-[10px] px-1.5 py-1 rounded border truncate flex items-center gap-1.5 ${platformColors[post.platform]
+                        }`}
                     >
                       {platformIcons[post.platform]}
                       <span className="truncate font-medium">{post.title}</span>
@@ -229,7 +227,7 @@ export default function Calendar({ posts }: CalendarProps) {
               {selectedPosts.length === 0 ? (
                 <div className="text-center text-slate-500 py-10 flex flex-col items-center gap-3">
                   <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/5 mb-2">
-                     <CalendarIcon size={24} className="opacity-40" />
+                    <CalendarIcon size={24} className="opacity-40" />
                   </div>
                   <p className="text-sm font-medium">No posts scheduled</p>
                 </div>
@@ -240,9 +238,8 @@ export default function Calendar({ posts }: CalendarProps) {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: idx * 0.05 }}
-                    className={`p-4 rounded-xl border flex flex-col gap-3 shadow-lg hover:brightness-110 transition-all ${
-                      platformColors[post.platform]
-                    }`}
+                    className={`p-4 rounded-xl border flex flex-col gap-3 shadow-lg hover:brightness-110 transition-all ${platformColors[post.platform]
+                      }`}
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex items-center gap-2 font-bold truncate text-sm">
@@ -257,8 +254,8 @@ export default function Calendar({ posts }: CalendarProps) {
                     </div>
                     <div className="flex justify-between items-center pt-2 border-t border-black/10 text-xs font-semibold opacity-90">
                       <span className="flex items-center gap-1.5">
-                         <div className="w-4 h-4 rounded-full bg-white/20 border border-white/10 shadow-inner flex items-center justify-center text-[8px] text-white">A</div>
-                         {post.author}
+                        <div className="w-4 h-4 rounded-full bg-white/20 border border-white/10 shadow-inner flex items-center justify-center text-[8px] text-white">A</div>
+                        {post.author}
                       </span>
                       <span>{new Date(post.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>

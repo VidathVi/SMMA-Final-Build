@@ -8,10 +8,14 @@ import "./src/components/ui/GlassCard.css";
 import "./src/components/ui/RunButton.css";
 import "./src/components/ui/ScoreBadge.css";
 import "./src/components/ui/BreakdownMetrics.css";
+import Navbar from '@/components/layout/Navbar';
 
 // Import the main GEOStudio component
 import GEOStudio from "./src/GEOStudio";
 
 export default function GeoStudioPage() {
-  return <GEOStudio />;
+  return <>
+    <Navbar />
+    <GEOStudio />;
+  </>
 }
