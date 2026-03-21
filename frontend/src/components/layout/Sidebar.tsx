@@ -16,7 +16,9 @@ import {
   Gem,
   Loader2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Megaphone,
+  Send
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -28,12 +30,12 @@ export default function Sidebar() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Calendar", href: "/calendar", icon: Calendar },
-    { name: "Campaigns", href: "#", icon: Calendar },
+    { name: "Campaigns", href: "#", icon: Megaphone },
     { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "#", icon: CheckCircle },
     { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
-    { name: "Publish Post", href: "/create-post", icon: FolderSearch },
+    { name: "Publish Post", href: "/create-post", icon: Send },
     { name: "Assets", href: "#", icon: FolderSearch },
   ];
 
