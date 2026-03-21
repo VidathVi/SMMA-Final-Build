@@ -26,10 +26,18 @@ export default function ApprovalPage() {
   const [projects, setProjects] = useState([
     { name: 'Design Meta Advert', start: '03/24/2025', end: '03/14/2025', status: 'In Progress', priority: 'High' },
     { name: 'Finish Q3 Product Launch Video', start: '01/20/2025', end: '03/14/2025', status: 'Not Started', priority: 'Medium' },
-    { name: 'Work on Summer Collection Instagram Reels', start: '04/09/2025', end: '03/14/2025', status: 'Complete', priority: 'Low' }
+    { name: 'Work on Summer Collection Instagram Reels', start: '04/09/2025', end: '03/14/2025', status: 'Complete', priority: 'Low' },
+    { name: 'Design Packaging for New Product Line', start: '03/05/2025', end: '03/25/2025', status: 'Not Started', priority: 'Medium' },
+    { name: 'Schedule Social Media Posts for April', start: '03/15/2025', end: '03/28/2025', status: 'Not Started', priority: 'Low' },
+    { name: 'Conduct User Feedback Survey', start: '02/20/2025', end: '03/19/2025', status: 'Complete', priority: 'Medium' },
+    { name: 'Prepare Monthly Analytics Report', start: '03/10/2025', end: '03/21/2025', status: 'In Progress', priority: 'High' },
+    { name: 'Revamp Brand Guidelines Document', start: '02/18/2025', end: '03/23/2025', status: 'In Progress', priority: 'Medium' }
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  const [sortType, setSortType] = useState<'status' | 'priority' | null>('priority');
+  const [sortDirection, setSortDirection] = useState<'desc' | 'asc'>('desc');
 
   const [newTaskName, setNewTaskName] = useState('');
   const [newStartDate, setNewStartDate] = useState('');
@@ -102,6 +110,29 @@ export default function ApprovalPage() {
     }
   };
 
+  const sortedProjects = [...projects].sort((a, b) => {
+    if (!sortType) return 0;
+
+    let weightA = 0;
+    let weightB = 0;
+
+    if (sortType === 'priority') {
+      const pMap: Record<string, number> = { High: 3, Medium: 2, Low: 1 };
+      weightA = pMap[a.priority as string] || 0;
+      weightB = pMap[b.priority as string] || 0;
+    } else if (sortType === 'status') {
+      const sMap: Record<string, number> = { 'Not Started': 3, 'In Progress': 2, 'Complete': 1 };
+      weightA = sMap[a.status as string] || 0;
+      weightB = sMap[b.status as string] || 0;
+    }
+
+    if (sortDirection === 'desc') {
+      return weightB - weightA;
+    } else {
+      return weightA - weightB;
+    }
+  });
+
   return (
     <div className="flex min-h-screen flex-col items-center bg-gradient-to-r from-[#020617] via-[#0A0A3C] to-[#020024] bg-[length:300%_300%] animate-gradient text-white font-sans overflow-x-hidden">
       <Navbar />
@@ -122,18 +153,27 @@ export default function ApprovalPage() {
 
             <div className="flex flex-wrap gap-4 items-center justify-between mb-4 pb-3 border-b border-white/10">
               <div className="flex items-center gap-4 overflow-x-auto">
-                <button className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors whitespace-nowrap">
+                <button
+                  onClick={() => setSortType('status')}
+                  className={`flex items-center gap-2 text-sm whitespace-nowrap transition-colors rounded-md px-3 py-1.5 ${sortType === 'status' ? 'text-white bg-white/10' : 'text-gray-400 hover:text-white'}`}>
                   <FiLayout /> Sort By Status
                 </button>
                 <div className="h-4 w-[1px] bg-white/10 mx-1"></div>
-                <button className="flex items-center gap-2 text-sm text-white bg-white/10 px-3 py-1.5 rounded-md whitespace-nowrap">
+                <button
+                  onClick={() => setSortType('priority')}
+                  className={`flex items-center gap-2 text-sm whitespace-nowrap transition-colors rounded-md px-3 py-1.5 ${sortType === 'priority' ? 'text-white bg-white/10' : 'text-gray-400 hover:text-white'}`}>
                   <FiLayout /> Sort By Priority
                 </button>
               </div>
 
               <div className="flex items-center gap-5 text-gray-400">
-                <button className="hover:text-white transition-colors"><FaSort className="w-4 h-4" /></button>
-                <button className="hover:text-white transition-colors"><FiSearch className="w-4 h-4" /></button>
+                <button
+                  onClick={() => setSortDirection(prev => prev === 'desc' ? 'asc' : 'desc')}
+                  className={`hover:text-white transition-colors ${sortDirection === 'asc' ? 'text-white' : ''}`}
+                  title={`Toggle sort direction (currently ${sortDirection})`}
+                >
+                  <FaSort className="w-4 h-4" />
+                </button>
                 <div className="flex items-center bg-blue-600 hover:bg-blue-500 text-white rounded-md overflow-hidden transition-colors ml-2 shadow-lg shadow-blue-500/20">
                   <button onClick={openNewTaskModal} className="px-3 py-1.5 text-sm font-medium">New Task</button>
                   <div className="w-[1px] h-4 bg-blue-400/50"></div>
@@ -155,8 +195,12 @@ export default function ApprovalPage() {
                 </div>
 
                 <div className="flex flex-col">
-                  {projects.map((proj, i) => (
-                    <div key={i} onClick={() => openEditModal(i)} className="grid grid-cols-[3fr_1.5fr_1.2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors items-center group cursor-pointer">
+                  {sortedProjects.map((proj, i) => (
+                    <div
+                      key={i}
+                      onClick={() => openEditModal(projects.findIndex(p => p === proj))}
+                      className="grid grid-cols-[3fr_1.5fr_1.2fr_1fr_1fr_1fr_1fr_1fr_auto] gap-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors items-center group cursor-pointer"
+                    >
                       <div className="text-white font-medium truncate pr-4 group-hover:text-blue-400 transition-colors">{proj.name}</div>
                       <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center text-[10px] text-white font-semibold tracking-wider">J</div>
