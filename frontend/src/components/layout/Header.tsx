@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { Bell, Search, Command, Sparkles, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const pathname = usePathname();
+  const isCalendarPage = pathname === '/calendar';
   const [isAiLoading, setIsAiLoading] = useState(false);
 
   const triggerAi = () => {
@@ -17,7 +20,9 @@ export default function Header() {
       
       {/* Search / Command Palette Taser */}
       <div className="flex-1 max-w-lg">
-        <div className="relative group hidden sm:block">
+        {!isCalendarPage && (
+          <>
+            <div className="relative group hidden sm:block">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <Search className="h-4 w-4 text-slate-400 group-focus-within:text-blue-400 transition-colors" />
           </div>
@@ -32,9 +37,11 @@ export default function Header() {
             </kbd>
           </div>
         </div>
-        <button className="sm:hidden p-2.5 text-slate-300 hover:bg-white/10 rounded-xl transition-colors">
-           <Search className="w-5 h-5" />
-        </button>
+            <button className="sm:hidden p-2.5 text-slate-300 hover:bg-white/10 rounded-xl transition-colors">
+               <Search className="w-5 h-5" />
+            </button>
+          </>
+        )}
       </div>
 
       {/* Right Side Actions */}
