@@ -14,6 +14,7 @@ import {
   FolderSearch,
   CheckCircle,
   Gem,
+  Orbit,
   Loader2,
   Upload
 } from "lucide-react";
@@ -28,7 +29,7 @@ export default function Sidebar() {
     { name: "Campaigns", href: "#", icon: Calendar },
     { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "#", icon: CheckCircle },
-    { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
+    { name: "Unified Inbox", href: "/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
     { name: "Publish Post", href: "/create-post", icon: Upload },
     { name: "Assets", href: "#", icon: FolderSearch },
@@ -59,7 +60,7 @@ export default function Sidebar() {
           transition={{ duration: 0.5 }}
           className="relative z-10"
         >
-          <Gem className="w-7 h-7 text-blue-400 mr-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
+          <Orbit className="w-7 h-7 text-blue-400 mr-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
         </motion.div>
         <span className="font-heading font-extrabold text-2xl tracking-tight text-white relative z-10 drop-shadow-md">
           Orean<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">360</span>
