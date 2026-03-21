@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const pathname = usePathname();
-  const isCalendarPage = pathname === '/calendar';
+  const hideSearchBar = pathname === '/calendar' || pathname === '/geo-studio';
   const [isAiLoading, setIsAiLoading] = useState(false);
 
   const triggerAi = () => {
@@ -20,7 +20,7 @@ export default function Header() {
       
       {/* Search / Command Palette Taser */}
       <div className="flex-1 max-w-lg">
-        {!isCalendarPage && (
+        {!hideSearchBar && (
           <>
             <div className="relative group hidden sm:block">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
