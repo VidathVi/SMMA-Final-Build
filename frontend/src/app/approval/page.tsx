@@ -25,14 +25,14 @@ import { FaSort } from 'react-icons/fa';
 
 export default function ApprovalPage() {
   const [projects, setProjects] = useState([
-    { name: 'Design Meta Advert', start: '03/24/2025', end: '03/14/2025', status: 'In Progress', priority: 'High' },
-    { name: 'Finish Q3 Product Launch Video', start: '01/20/2025', end: '03/14/2025', status: 'Not Started', priority: 'Medium' },
-    { name: 'Work on Summer Collection Instagram Reels', start: '04/09/2025', end: '03/14/2025', status: 'Complete', priority: 'Low' },
-    { name: 'Design Packaging for New Product Line', start: '03/05/2025', end: '03/25/2025', status: 'Not Started', priority: 'Medium' },
-    { name: 'Schedule Social Media Posts for April', start: '03/15/2025', end: '03/28/2025', status: 'Not Started', priority: 'Low' },
-    { name: 'Conduct User Feedback Survey', start: '02/20/2025', end: '03/19/2025', status: 'Complete', priority: 'Medium' },
-    { name: 'Prepare Monthly Analytics Report', start: '03/10/2025', end: '03/21/2025', status: 'In Progress', priority: 'High' },
-    { name: 'Revamp Brand Guidelines Document', start: '02/18/2025', end: '03/23/2025', status: 'In Progress', priority: 'Medium' }
+    { name: 'Design Meta Advert', start: '03/24/2025', end: '03/14/2025', status: 'In Progress', priority: 'High', assignee: 'John Doe' },
+    { name: 'Finish Q3 Product Launch Video', start: '01/20/2025', end: '03/14/2025', status: 'Not Started', priority: 'Medium', assignee: 'Chris Reynolds' },
+    { name: 'Work on Summer Collection Instagram Reels', start: '04/09/2025', end: '03/14/2025', status: 'Complete', priority: 'Low', assignee: 'Barry Clark' },
+    { name: 'Design Packaging for New Product Line', start: '03/05/2025', end: '03/25/2025', status: 'Not Started', priority: 'Medium', assignee: 'Chris Reynolds' },
+    { name: 'Schedule Social Media Posts for April', start: '03/15/2025', end: '03/28/2025', status: 'Not Started', priority: 'Low', assignee: 'John Doe' },
+    { name: 'Conduct User Feedback Survey', start: '02/20/2025', end: '03/19/2025', status: 'Complete', priority: 'Medium', assignee: 'Sarah J.' },
+    { name: 'Prepare Monthly Analytics Report', start: '03/10/2025', end: '03/21/2025', status: 'In Progress', priority: 'High', assignee: 'Barry Clark' },
+    { name: 'Revamp Brand Guidelines Document', start: '02/18/2025', end: '03/23/2025', status: 'In Progress', priority: 'Medium', assignee: 'Admin User' }
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -45,6 +45,7 @@ export default function ApprovalPage() {
   const [newEndDate, setNewEndDate] = useState('');
   const [newPriority, setNewPriority] = useState('Medium');
   const [newStatus, setNewStatus] = useState('Not Started');
+  const [newAssignee, setNewAssignee] = useState('John Doe');
 
   const formatDateForDisplay = (dateStr: string) => {
     if (!dateStr) return '';
@@ -67,6 +68,7 @@ export default function ApprovalPage() {
     setNewEndDate('');
     setNewPriority('Medium');
     setNewStatus('Not Started');
+    setNewAssignee('John Doe');
     setIsModalOpen(true);
   };
 
@@ -78,6 +80,7 @@ export default function ApprovalPage() {
     setNewEndDate(parseDateForInput(task.end));
     setNewPriority(task.priority || 'Medium');
     setNewStatus(task.status || 'Not Started');
+    setNewAssignee(task.assignee || 'John Doe');
     setIsModalOpen(true);
   };
 
@@ -89,7 +92,8 @@ export default function ApprovalPage() {
       start: newStartDate.includes('-') ? formatDateForDisplay(newStartDate) : newStartDate,
       end: newEndDate.includes('-') ? formatDateForDisplay(newEndDate) : newEndDate,
       status: newStatus,
-      priority: newPriority
+      priority: newPriority,
+      assignee: newAssignee
     };
 
     if (editingIndex !== null) {
@@ -142,7 +146,7 @@ export default function ApprovalPage() {
         <div className="flex-1 flex flex-col gap-6">
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-xl relative overflow-hidden overflow-x-auto min-h-[80vh]">
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -181,7 +185,7 @@ export default function ApprovalPage() {
                 >
                   <FaSort className="w-4 h-4" />
                 </button>
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="flex items-center bg-blue-600 hover:bg-blue-500 text-white rounded-md overflow-hidden transition-colors ml-2 shadow-lg shadow-blue-500/20"
@@ -192,7 +196,7 @@ export default function ApprovalPage() {
               </div>
             </div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2 }}
@@ -219,8 +223,10 @@ export default function ApprovalPage() {
                     >
                       <div className="text-white font-medium truncate pr-4 group-hover:text-blue-400 transition-colors">{proj.name}</div>
                       <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center text-[10px] text-white font-semibold tracking-wider">J</div>
-                        <span className="truncate text-gray-300">John Doe</span>
+                        <div className="w-6 h-6 rounded-full bg-cyan-600 flex items-center justify-center text-[10px] text-white font-semibold tracking-wider">
+                          {(proj.assignee || 'John Doe').charAt(0).toUpperCase()}
+                        </div>
+                        <span className="truncate text-gray-300">{proj.assignee || 'John Doe'}</span>
                       </div>
                       <div>
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#3f3f46]/30 text-gray-300 text-xs border border-white/10 whitespace-nowrap">
@@ -254,7 +260,7 @@ export default function ApprovalPage() {
       {/* Edit / New Task Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             className="bg-[#0A0A3C] border border-white/10 rounded-2xl p-6 w-full max-w-md shadow-2xl relative"
@@ -273,6 +279,17 @@ export default function ApprovalPage() {
                   className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
                   placeholder="e.g. Design Meta Advert"
                   autoFocus
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Assignee</label>
+                <input
+                  type="text"
+                  value={newAssignee}
+                  onChange={(e) => setNewAssignee(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-blue-500 transition-colors"
+                  placeholder="e.g. John Doe"
                 />
               </div>
 
