@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { 
-  LayoutDashboard, 
-  Settings, 
-  MessageSquare, 
-  BarChart3, 
-  Calendar, 
-  Workflow, 
+import {
+  LayoutDashboard,
+  Settings,
+  MessageSquare,
+  BarChart3,
+  Calendar,
+  Workflow,
   FolderSearch,
   CheckCircle,
   Gem,
@@ -17,6 +18,7 @@ import {
 } from "lucide-react";
 
 export default function Sidebar() {
+  const router = useRouter();
   const [activeItem, setActiveItem] = useState("Dashboard");
   const [isNavigating, setIsNavigating] = useState<string | null>(null);
 
@@ -25,17 +27,20 @@ export default function Sidebar() {
     { name: "Campaigns", href: "#", icon: Calendar },
     { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "#", icon: CheckCircle },
-    { name: "Unified Inbox", href: "#", icon: MessageSquare },
+    { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
     { name: "Assets", href: "#", icon: FolderSearch },
   ];
 
-  const handleNavClick = (name: string, e: React.MouseEvent) => {
+  const handleNavClick = (item: any, e: React.MouseEvent) => {
     e.preventDefault();
-    setIsNavigating(name);
+    setIsNavigating(item.name);
     setTimeout(() => {
-      setActiveItem(name);
+      setActiveItem(item.name);
       setIsNavigating(null);
+      if (item.href !== "#") {
+        router.push(item.href);
+      }
     }, 800);
   };
 
@@ -47,7 +52,7 @@ export default function Sidebar() {
       {/* Brand */}
       <div className="h-20 flex items-center px-8 border-b border-white/5 relative overflow-hidden group cursor-pointer">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <motion.div 
+        <motion.div
           whileHover={{ rotate: 180 }}
           transition={{ duration: 0.5 }}
           className="relative z-10"
@@ -72,22 +77,21 @@ export default function Sidebar() {
             <motion.a
               key={item.name}
               href={item.href}
-              onClick={(e: React.MouseEvent) => handleNavClick(item.name, e)}
+              onClick={(e: React.MouseEvent) => handleNavClick(item, e)}
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
-              className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all relative overflow-hidden group ${
-                isActive
+              className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all relative overflow-hidden group ${isActive
                   ? "bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/10"
                   : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
-              }`}
+                }`}
             >
               {isActive && (
-                <motion.div 
+                <motion.div
                   layoutId="activeIndicator"
                   className="absolute left-0 top-2 bottom-2 w-1.5 rounded-r-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"
                 />
               )}
-              
+
               <div className="relative z-10 flex items-center w-full">
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 mr-3.5 text-blue-400 animate-spin" />
@@ -114,9 +118,9 @@ export default function Sidebar() {
           <Settings className="w-5 h-5 mr-3.5 group-hover:rotate-90 transition-transform duration-500" />
           <span className="tracking-wide">Log Out</span>
         </motion.button>
-        
+
         {/* Workspace Card */}
-        <motion.div 
+        <motion.div
           whileHover={{ y: -2, scale: 1.02 }}
           className="mt-6 p-4 bg-white/5 border border-white/10 rounded-2xl flex items-center shrink-0 cursor-pointer shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.05)] transition-all group overflow-hidden relative"
         >
