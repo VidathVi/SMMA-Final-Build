@@ -23,12 +23,13 @@ export default function Sidebar() {
   const [isNavigating, setIsNavigating] = useState<string | null>(null);
 
   const navItems = [
-    { name: "Dashboard", href: "#", icon: LayoutDashboard },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Campaigns", href: "#", icon: Calendar },
     { name: "Workflows", href: "#", icon: Workflow },
     { name: "Approvals", href: "#", icon: CheckCircle },
     { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
+    { name: "Publish Post", href: "/create-post", icon: FolderSearch },
     { name: "Assets", href: "#", icon: FolderSearch },
   ];
 
@@ -81,8 +82,8 @@ export default function Sidebar() {
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
               className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all relative overflow-hidden group ${isActive
-                  ? "bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/10"
-                  : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
+                ? "bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/10"
+                : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
                 }`}
             >
               {isActive && (

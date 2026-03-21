@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
+import { Facebook, Instagram, MessageCircle, Linkedin, Youtube, Twitter } from "lucide-react";
 import "./inbox.css";
 
 const initialChats = [
   {
     id: 1,
-    name: "Thilina",
+    name: "Facebook",
     type: "private",
+    icon: Facebook,
+    color: "#1877F2",
     messages: [
       { from: "them", text: "Hello there!" },
       { from: "them", text: "Are you available today?" },
@@ -15,60 +18,93 @@ const initialChats = [
   },
   {
     id: 2,
-    name: "Nadeesha",
+    name: "Instagram",
     type: "comment",
+    icon: Instagram,
+    color: "#E1306C",
     messages: [
-    { from: "them", text: "The design looks amazing! How can I order this?" },
-    { from: "me", text: "Thank you! You can place your order through our website or send us a DM." }
+      { from: "them", text: "The design looks amazing! How can I order this?" },
+      { from: "me", text: "Thank you! You can place your order through our website or send us a DM." }
     ],
   },
-  
   {
-  id: 3,
-  name: "Kasun",
-  type: "review",
-  messages: [
-    { from: "them", text: "⭐️⭐️⭐️⭐️⭐️ The product quality is excellent. Highly recommended!" },
-    { from: "me", text: "Thank you so much for your feedback! We appreciate your support." }
-  ],
-}
-    
+    id: 3,
+    name: "WhatsApp",
+    type: "review",
+    icon: MessageCircle,
+    color: "#25D366",
+    messages: [
+      { from: "them", text: "⭐️⭐️⭐️⭐️⭐️ The product quality is excellent. Highly recommended!" },
+      { from: "me", text: "Thank you so much for your feedback! We appreciate your support." }
+    ],
+  },
+  {
+    id: 4,
+    name: "LinkedIn",
+    type: "private",
+    icon: Linkedin,
+    color: "#0A66C2",
+    messages: [
+      { from: "them", text: "I would like to discuss a business opportunity." },
+      { from: "me", text: "Hi! I'd love to connect and chat about this." }
+    ]
+  },
+  {
+    id: 5,
+    name: "YouTube",
+    type: "comment",
+    icon: Youtube,
+    color: "#FF0000",
+    messages: [
+      { from: "them", text: "Great video! Subscribed." },
+    ]
+  },
+  {
+    id: 6,
+    name: "X",
+    type: "private",
+    icon: Twitter,
+    color: "#E2E8F0",
+    messages: [
+      { from: "them", text: "Hey! Just saw your latest tweet." },
+    ]
+  }
 ];
 
 export default function Inbox() {
-const [chats, setChats] = useState(initialChats);
-const [inputValue, setInputValue] = useState("");
-const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
-const [activeTab, setActiveTab] = useState("all");
+  const [chats, setChats] = useState(initialChats);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState("all");
 
-const selectedChat =
-  chats.find((chat) => chat.id === selectedChatId) || null;
+  const selectedChat =
+    chats.find((chat) => chat.id === selectedChatId) || null;
 
-const filteredChats =
-  activeTab === "all"
-    ? chats
-    : chats.filter((chat) => chat.type === activeTab);
+  const filteredChats =
+    activeTab === "all"
+      ? chats
+      : chats.filter((chat) => chat.type === activeTab);
 
-const sendMessage = () => {
-  if (!selectedChatId) return;
-  if (inputValue.trim() === "") return;
+  const sendMessage = () => {
+    if (!selectedChatId) return;
+    if (inputValue.trim() === "") return;
 
-  setChats((prev) =>
-    prev.map((chat) =>
-      chat.id === selectedChatId
-        ? {
+    setChats((prev) =>
+      prev.map((chat) =>
+        chat.id === selectedChatId
+          ? {
             ...chat,
             messages: [
               ...chat.messages,
               { from: "me", text: inputValue.trim() },
             ],
           }
-        : chat
-    )
-  );
+          : chat
+      )
+    );
 
-  setInputValue("");
-};
+    setInputValue("");
+  };
 
   return (
     <div className="inbox-container">
@@ -78,50 +114,53 @@ const sendMessage = () => {
 
         <input type="text" placeholder="Search..." className="search" />
 
-      <div className="tabs">
-        <button
-          className={activeTab === "all" ? "active-tab" : ""}
-          onClick={() => setActiveTab("all")}
-        >
-          All
-        </button>
+        <div className="tabs">
+          <button
+            className={activeTab === "all" ? "active-tab" : ""}
+            onClick={() => setActiveTab("all")}
+          >
+            All
+          </button>
 
-        <button
-          className={activeTab === "private" ? "active-tab" : ""}
-          onClick={() => setActiveTab("private")}
-        >
-          Private Chats
-        </button>
+          <button
+            className={activeTab === "private" ? "active-tab" : ""}
+            onClick={() => setActiveTab("private")}
+          >
+            Private Chats
+          </button>
 
-        <button
-          className={activeTab === "comment" ? "active-tab" : ""}
-          onClick={() => setActiveTab("comment")}
-        >
-          Post Comments
-        </button>
+          <button
+            className={activeTab === "comment" ? "active-tab" : ""}
+            onClick={() => setActiveTab("comment")}
+          >
+            Post Comments
+          </button>
 
-        <button
-          className={activeTab === "review" ? "active-tab" : ""}
-          onClick={() => setActiveTab("review")}
-        >
-          Reviews
-        </button>
-      </div>
+          <button
+            className={activeTab === "review" ? "active-tab" : ""}
+            onClick={() => setActiveTab("review")}
+          >
+            Reviews
+          </button>
+        </div>
 
-              <div className="chat-list">
-                {filteredChats.map((chat) => (
-                  <div
-                key={chat.id}
-                className={`chat-item ${selectedChatId === chat.id ? "active" : ""}`}
-                onClick={() => setSelectedChatId(chat.id)}
-              >
+        <div className="chat-list">
+          {filteredChats.map((chat) => (
+            <div
+              key={chat.id}
+              className={`chat-item ${selectedChatId === chat.id ? "active" : ""}`}
+              onClick={() => setSelectedChatId(chat.id)}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
+                <chat.icon size={20} color={chat.color} />
                 <h4>{chat.name}</h4>
-                <p>{chat.messages[chat.messages.length - 1].text}</p>
               </div>
-
-                ))}
-              </div>
+              <p>{chat.messages[chat.messages.length - 1].text}</p>
             </div>
+
+          ))}
+        </div>
+      </div>
 
       {/* Chat Area */}
       <div className="chat-area">
