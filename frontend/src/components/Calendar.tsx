@@ -34,11 +34,23 @@ const platformColors: Record<PostPlatform, string> = {
 
 interface CalendarProps {
   posts: ScheduledPost[];
+  initialTaskId?: string;
 }
 
-export default function Calendar({ posts }: CalendarProps) {
+export default function Calendar({ posts, initialTaskId }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+
+  React.useEffect(() => {
+    if (initialTaskId) {
+      const task = posts.find((p) => p.id === initialTaskId);
+      if (task) {
+        const taskDate = new Date(task.date);
+        setCurrentDate(taskDate);
+        setSelectedDay(taskDate);
+      }
+    }
+  }, [initialTaskId, posts]);
 
   const daysInMonth = new Date(
     currentDate.getFullYear(),

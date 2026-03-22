@@ -153,7 +153,11 @@ export default function Dashboard() {
                   <span className="bg-white/10 text-white text-xs py-0.5 px-2.5 rounded-full border border-white/10">3</span>
                 </div>
                 {/* Task Card */}
-                <motion.div whileHover={{ scale: 1.02 }} className="bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/10 hover:border-blue-400/50 transition-colors cursor-pointer group">
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => router.push('/calendar?taskId=7')}
+                  className="bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/10 hover:border-blue-400/50 transition-colors cursor-pointer group"
+                >
                   <div className="flex justify-between items-start mb-3">
                     <span className="text-[10px] font-bold px-2 py-1 rounded bg-blue-500/20 text-blue-300 uppercase tracking-wider border border-blue-500/20">Instagram</span>
                   </div>
@@ -173,7 +177,11 @@ export default function Dashboard() {
                   <span className="bg-white/10 text-white text-xs py-0.5 px-2.5 rounded-full border border-white/10">2</span>
                 </div>
                 {/* Task Card */}
-                <motion.div whileHover={{ scale: 1.02 }} className="bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/10 border-l-2 border-l-amber-400 hover:border-l-amber-300 transition-colors cursor-pointer group mb-2">
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => router.push('/calendar?taskId=8')}
+                  className="bg-white/10 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/10 border-l-2 border-l-amber-400 hover:border-l-amber-300 transition-colors cursor-pointer group mb-2"
+                >
                   <div className="flex justify-between items-start mb-3">
                     <span className="text-[10px] font-bold px-2 py-1 rounded bg-amber-500/20 text-amber-300 uppercase tracking-wider border border-amber-500/20">Multi-platform</span>
                     <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
@@ -195,11 +203,15 @@ export default function Dashboard() {
                   <span className="bg-white/10 text-white text-xs py-0.5 px-2.5 rounded-full border border-white/10">5</span>
                 </div>
                 {/* Task Card */}
-                <motion.div whileHover={{ scale: 1.02 }} className="bg-white/5 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/5 opacity-80 hover:opacity-100 transition-all cursor-pointer">
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  onClick={() => router.push('/calendar?taskId=9')}
+                  className="bg-white/5 backdrop-blur-md p-4 rounded-xl shadow-lg border border-white/5 opacity-80 hover:opacity-100 transition-all cursor-pointer"
+                >
                   <div className="flex justify-between items-start mb-3">
                     <span className="text-[10px] font-bold px-2 py-1 rounded bg-slate-500/20 text-slate-300 uppercase tracking-wider border border-slate-500/20">LinkedIn</span>
                   </div>
-                  <h4 className="text-sm font-semibold text-slate-300 leading-tight line-through decoration-slate-500">CEO Interview Teaser</h4>
+                  <h4 className="text-sm font-semibold text-slate-300 leading-tight line-through decoration-slate-500">CEO Interview-Teaser</h4>
                   <div className="mt-4 pt-2 border-t border-white/5 text-[11px] font-bold text-emerald-400 flex items-center">
                     <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" /> Ready to publish
                   </div>
