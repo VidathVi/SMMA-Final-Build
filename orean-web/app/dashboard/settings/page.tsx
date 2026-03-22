@@ -415,8 +415,8 @@ function ConnectedAccounts() {
           throw new Error("Failed to fetch auth URL");
         }
       }
-    } catch (err: any) {
-      setError(err.message || "Failed to initiate connection");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to initiate connection");
     } finally {
       setConnectLoading(false);
     }

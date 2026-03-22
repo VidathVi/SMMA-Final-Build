@@ -37,7 +37,7 @@ export default function SigninPage() {
             </div>
             <div className="absolute bottom-35 flex items-center justify-center w-full">
                 <p className={`${inter.className} text-sm text-[#F5EFE7]/50`}>
-                    Didn't have an account?
+                    Didn&apos;t have an account?
                 </p>
             </div>
             <div className="absolute bottom-20 flex items-center justify-center w-full">

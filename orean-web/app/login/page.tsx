@@ -8,8 +8,16 @@ import Link from "next/link";
 
 declare global {
   interface Window {
-    google?: any;
-    handleGoogleCredential?: (response: any) => void;
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void;
+          renderButton: (parent: HTMLElement | null, options: unknown) => void;
+          prompt: () => void;
+        };
+      };
+    };
+    handleGoogleCredential?: (response: { credential: string }) => void;
   }
 }
 
@@ -54,7 +62,7 @@ export default function Login() {
     };
   }, []);
 
-  const handleGoogleResponse = async (response: any) => {
+  const handleGoogleResponse = async (response: { credential: string }) => {
     setIsGoogleLoading(true);
     setError("");
 
@@ -76,8 +84,8 @@ export default function Login() {
         localStorage.setItem("orean360_user", JSON.stringify(data.user));
       }
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "Google sign-in failed");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Google sign-in failed");
       setIsGoogleLoading(false);
     }
   };
@@ -106,8 +114,8 @@ export default function Login() {
       }
       
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "An error occurred during login");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred during login");
       setIsLoading(false);
     }
   };

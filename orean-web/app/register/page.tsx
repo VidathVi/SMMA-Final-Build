@@ -8,7 +8,15 @@ import Link from "next/link";
 
 declare global {
   interface Window {
-    google?: any;
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: { client_id: string; callback: (response: { credential: string }) => void }) => void;
+          renderButton: (parent: HTMLElement | null, options: unknown) => void;
+          prompt: () => void;
+        };
+      };
+    };
   }
 }
 
@@ -54,7 +62,7 @@ export default function Register() {
     };
   }, []);
 
-  const handleGoogleResponse = async (response: any) => {
+  const handleGoogleResponse = async (response: { credential: string }) => {
     setIsGoogleLoading(true);
     setError("");
 
@@ -76,8 +84,8 @@ export default function Register() {
         localStorage.setItem("orean360_user", JSON.stringify(data.user));
       }
       router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "Google sign-up failed");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Google sign-up failed");
       setIsGoogleLoading(false);
     }
   };
@@ -109,8 +117,8 @@ export default function Register() {
       setTimeout(() => {
         router.push("/login");
       }, 2000);
-    } catch (err: any) {
-      setError(err.message || "Registration failed");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
       setIsLoading(false);
     }
