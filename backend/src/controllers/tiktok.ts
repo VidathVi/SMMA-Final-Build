@@ -1,4 +1,11 @@
 import { Request, Response } from "express";
+
+export interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    [key: string]: any;
+  };
+}
 import axios from "axios";
 import { Pool } from "pg";
 import dotenv from "dotenv";
@@ -16,9 +23,11 @@ const TIKTOK_REDIRECT_URI = process.env.TIKTOK_REDIRECT_URI || "http://localhost
 const TIKTOK_SCOPES = "user.info.basic,video.list";
 
 // Generate TikTok OAuth URL (Login Kit)
-export const getTikTokAuthUrl = (req: any, res: Response) => {
+export const getTikTokAuthUrl = (req: AuthRequest, res: Response) => {
   try {
-    const state = JSON.stringify({ userId: req.user.id });
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const state = JSON.stringify({ userId });
     const csrfState = Buffer.from(state).toString("base64");
 
     const authUrl = `https://www.tiktok.com/v2/auth/authorize/?client_key=${TIKTOK_CLIENT_KEY}&scope=${encodeURIComponent(TIKTOK_SCOPES)}&response_type=code&redirect_uri=${encodeURIComponent(TIKTOK_REDIRECT_URI)}&state=${encodeURIComponent(csrfState)}`;
@@ -164,9 +173,11 @@ async function getTikTokToken(userId: number): Promise<string> {
 }
 
 // Get TikTok user info
-export const getTikTokUserInfo = async (req: any, res: Response) => {
+export const getTikTokUserInfo = async (req: AuthRequest, res: Response) => {
   try {
-    const accessToken = await getTikTokToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const accessToken = await getTikTokToken(userId);
 
     const response = await axios.get(
       "https://open.tiktokapis.com/v2/user/info/",
@@ -191,9 +202,11 @@ export const getTikTokUserInfo = async (req: any, res: Response) => {
 };
 
 // Get TikTok videos
-export const getTikTokVideos = async (req: any, res: Response) => {
+export const getTikTokVideos = async (req: AuthRequest, res: Response) => {
   try {
-    const accessToken = await getTikTokToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const accessToken = await getTikTokToken(userId);
     const maxCount = parseInt(req.query.limit as string) || 10;
     const cursor = req.query.cursor;
 
@@ -234,14 +247,17 @@ export const getTikTokVideos = async (req: any, res: Response) => {
 };
 
 // Disconnect TikTok
-export const disconnectTikTok = async (req: any, res: Response) => {
+export const disconnectTikTok = async (req: AuthRequest, res: Response) => {
   try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
     // Revoke token
     const client = await pool.connect();
     try {
       const result = await client.query(
         "SELECT access_token FROM social_tokens WHERE user_id = $1 AND platform = 'tiktok'",
-        [req.user.id]
+        [userId]
       );
 
       if (result.rows.length > 0) {
@@ -266,11 +282,11 @@ export const disconnectTikTok = async (req: any, res: Response) => {
 
       await client.query(
         "DELETE FROM social_tokens WHERE user_id = $1 AND platform = 'tiktok'",
-        [req.user.id]
+        [userId]
       );
       await client.query(
         "DELETE FROM social_connections WHERE user_id = $1 AND platform = 'tiktok'",
-        [req.user.id]
+        [userId]
       );
     } finally {
       client.release();
