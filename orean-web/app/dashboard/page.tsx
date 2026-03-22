@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSocialMedia } from "../../../contexts/SocialMediaContext";
 import { 
   ArrowUpRight, 
   ArrowDownRight, 
@@ -20,9 +21,10 @@ import {
 export default function Dashboard() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const { connections } = useSocialMedia();
 
   const kpis = [
-    { label: "Active Campaigns", value: "12", change: "+2", trend: "up", icon: Share2, color: "text-blue-400", bg: "bg-blue-500/20" },
+    { label: "Connected Accounts", value: connections.length.toString(), change: "Active", trend: connections.length > 0 ? "up" : "down", icon: Share2, color: "text-blue-400", bg: "bg-blue-500/20" },
     { label: "Pending Approvals", value: "5", change: "-1", trend: "down", icon: AlertCircle, color: "text-amber-400", bg: "bg-amber-500/20" },
     { label: "Avg. GEO Score", value: "94/100", change: "+5%", trend: "up", icon: Sparkles, color: "text-purple-400", bg: "bg-purple-500/20" },
     { label: "Total Engagement", value: "48.2k", change: "+12%", trend: "up", icon: BarChart3, color: "text-emerald-400", bg: "bg-emerald-500/20" },
