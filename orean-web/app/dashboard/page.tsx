@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSocialMedia } from "../../../contexts/SocialMediaContext";
+import { useSocialMedia } from "../../contexts/SocialMediaContext";
 import { 
   ArrowUpRight, 
   ArrowDownRight, 
