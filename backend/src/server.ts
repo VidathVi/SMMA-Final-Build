@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { Pool } from "pg";
 import dotenv from "dotenv";
@@ -52,6 +52,12 @@ app.get("/api/health", async (req, res) => {
       message: "Database connection failed",
     });
   }
+});
+
+// Global Error Handler
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error("Unhandled Error:", err);
+  res.status(500).json({ status: "error", message: err.message || "Internal Server Error" });
 });
 
 app.listen(port, () => {
