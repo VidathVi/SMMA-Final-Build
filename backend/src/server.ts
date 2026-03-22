@@ -3,6 +3,11 @@ import cors from "cors";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth";
+import youtubeRoutes from "./routes/youtube";
+import metaRoutes from "./routes/meta";
+import whatsappRoutes from "./routes/whatsapp";
+import linkedinRoutes from "./routes/linkedin";
+import tiktokRoutes from "./routes/tiktok";
 
 dotenv.config();
 
@@ -23,6 +28,13 @@ pool.on("error", (err) => {
 
 // App Routes
 app.use("/api/auth", authRoutes);
+
+// Social Media API Routes
+app.use("/api/youtube", youtubeRoutes);
+app.use("/api/meta", metaRoutes);
+app.use("/api/whatsapp", whatsappRoutes);
+app.use("/api/linkedin", linkedinRoutes);
+app.use("/api/tiktok", tiktokRoutes);
 
 app.get("/api/health", async (req, res) => {
   try {
@@ -45,3 +57,4 @@ app.get("/api/health", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
