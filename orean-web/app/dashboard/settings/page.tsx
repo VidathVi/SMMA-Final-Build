@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSocialMedia } from "../../../contexts/SocialMediaContext";
 import {
   User, Building2, Bot, Lock, CreditCard, AlertTriangle,
   Camera, Smartphone, Laptop, CheckCircle, AlertCircle, RefreshCw,
@@ -356,18 +357,14 @@ interface SocialConnection {
 }
 
 function ConnectedAccounts() {
-  const [connections, setConnections] = useState<SocialConnection[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { connections, loading, refreshConnections } = useSocialMedia();
   const [connectModal, setConnectModal] = useState<string | null>(null);
   const [connectUsername, setConnectUsername] = useState("");
   const [connectLoading, setConnectLoading] = useState(false);
   const [disconnectLoading, setDisconnectLoading] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
-
-  useEffect(() => {
-    fetchConnections();
-  }, []);
+  const [whatsappQR, setWhatsappQR] = useState<{qrCode: string, deepLink: string, type: string} | null>(null);
 
   useEffect(() => {
     if (successMsg) {
@@ -376,62 +373,50 @@ function ConnectedAccounts() {
     }
   }, [successMsg]);
 
-  const fetchConnections = async () => {
-    try {
-      const token = localStorage.getItem("orean360_token");
-      const res = await fetch("http://localhost:8080/api/auth/social-connections", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setConnections(data.connections || []);
-      }
-    } catch (err) {
-      console.error("Failed to fetch connections:", err);
-    } finally {
-      setLoading(false);
+  // Read URL params to see if we just connected
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const connected = params.get("connected");
+    if (connected) {
+      setSuccessMsg(`${connected} connected successfully!`);
+      refreshConnections();
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
-  };
+  }, [refreshConnections]);
 
   const handleConnect = async (platformId: string) => {
-    if (!connectUsername.trim()) {
-      setError("Please enter your username or handle");
-      return;
-    }
-
     setConnectLoading(true);
     setError("");
 
     try {
-      const token = localStorage.getItem("orean360_token");
-      const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
-      const profileUrl = platform ? platform.urlPrefix + connectUsername.replace("@", "") : "";
-
-      const res = await fetch("http://localhost:8080/api/auth/social-connections", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          platform: platformId,
-          platform_username: connectUsername,
-          profile_url: profileUrl,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to connect");
+      const token = localStorage.getItem("token") || localStorage.getItem("orean360_token");
+      
+      if (platformId === "whatsapp") {
+        const res = await fetch("http://localhost:8080/api/whatsapp/qr", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.qrCode) {
+          setWhatsappQR(data);
+        } else {
+          throw new Error("Failed to generate QR code");
+        }
+      } else {
+        // Map frontend IDs to backend routes
+        const routeId = platformId === "facebook" ? "meta" : platformId;
+        const res = await fetch(`http://localhost:8080/api/${routeId}/auth`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        const data = await res.json();
+        if (data.authUrl) {
+          window.location.href = data.authUrl;
+        } else {
+          throw new Error("Failed to fetch auth URL");
+        }
       }
-
-      setSuccessMsg(`${platform?.name} connected successfully!`);
-      setConnectModal(null);
-      setConnectUsername("");
-      fetchConnections();
     } catch (err: any) {
-      setError(err.message || "Failed to connect account");
+      setError(err.message || "Failed to initiate connection");
     } finally {
       setConnectLoading(false);
     }
@@ -441,16 +426,16 @@ function ConnectedAccounts() {
     setDisconnectLoading(platformId);
 
     try {
-      const token = localStorage.getItem("orean360_token");
-      const res = await fetch(`http://localhost:8080/api/auth/social-connections/${platformId}`, {
+      const token = localStorage.getItem("token") || localStorage.getItem("orean360_token");
+      const routeId = platformId === "facebook" ? "meta" : platformId;
+      const res = await fetch(`http://localhost:8080/api/${routeId}/disconnect`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.ok) {
-        const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
-        setSuccessMsg(`${platform?.name} disconnected`);
-        setConnections(prev => prev.filter(c => c.platform !== platformId));
+        setSuccessMsg(`${platformId} disconnected`);
+        refreshConnections();
       }
     } catch (err) {
       console.error("Failed to disconnect:", err);
@@ -589,11 +574,7 @@ function ConnectedAccounts() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => {
-                        setConnectModal(platform.id);
-                        setConnectUsername("");
-                        setError("");
-                      }}
+                      onClick={() => handleConnect(platform.id)}
                       className="px-4 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-xs font-bold hover:bg-blue-500/20 transition-all flex items-center gap-1.5"
                     >
                       <Link2 className="w-3 h-3" />
@@ -607,100 +588,36 @@ function ConnectedAccounts() {
         })}
       </div>
 
-      {/* Connect Modal */}
+      {/* WhatsApp QR Modal */}
       <AnimatePresence>
-        {connectModal && (() => {
-          const platform = SOCIAL_PLATFORMS.find(p => p.id === connectModal);
-          if (!platform) return null;
-          const IconComponent = platform.icon;
-
-          return (
+        {whatsappQR && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            onClick={(e) => { if (e.target === e.currentTarget) setWhatsappQR(null); }}
+          >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-              onClick={(e) => { if (e.target === e.currentTarget) { setConnectModal(null); setError(""); } }}
+               initial={{ opacity: 0, scale: 0.9, y: 20 }}
+               animate={{ opacity: 1, scale: 1, y: 0 }}
+               exit={{ opacity: 0, scale: 0.9, y: 20 }}
+               className="bg-[#151c2e] border border-white/10 rounded-2xl shadow-2xl w-full max-w-sm p-6 text-center space-y-4"
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="bg-[#151c2e] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-5"
+              <h3 className="text-xl font-bold text-white">Connect WhatsApp</h3>
+              <p className="text-sm text-slate-400">Scan this QR code with your phone to link your WhatsApp Business account.</p>
+              <div className="flex justify-center my-4">
+                <img src={whatsappQR.qrCode} alt="WhatsApp QR" className="w-48 h-48 rounded-xl object-cover border border-white/20" />
+              </div>
+              <button
+                 onClick={() => setWhatsappQR(null)}
+                 className="w-full px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-all"
               >
-                {/* Modal Header */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
-                      style={{ backgroundColor: platform.color }}
-                    >
-                      <IconComponent className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-white">Connect {platform.name}</h3>
-                      <p className="text-xs text-slate-400">Enter your {platform.name} handle</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => { setConnectModal(null); setError(""); }}
-                    className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {error && (
-                  <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-2.5 rounded-xl flex items-center text-sm">
-                    <AlertCircle className="w-4 h-4 mr-2 shrink-0" />
-                    {error}
-                  </div>
-                )}
-
-                <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-slate-300">Username / Handle</label>
-                  <input
-                    type="text"
-                    value={connectUsername}
-                    onChange={(e) => setConnectUsername(e.target.value)}
-                    placeholder={platform.placeholder}
-                    className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-white text-sm focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all placeholder-slate-500"
-                    autoFocus
-                    onKeyDown={(e) => { if (e.key === "Enter") handleConnect(platform.id); }}
-                  />
-                  <p className="text-xs text-slate-500 mt-1">
-                    Profile URL will be: {platform.urlPrefix}{connectUsername.replace("@", "") || "..."}
-                  </p>
-                </div>
-
-                <div className="flex gap-3 pt-2">
-                  <button
-                    onClick={() => { setConnectModal(null); setError(""); }}
-                    className="flex-1 px-4 py-3 bg-white/5 border border-white/10 text-slate-300 rounded-xl text-sm font-bold hover:bg-white/10 transition-all"
-                  >
-                    Cancel
-                  </button>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleConnect(platform.id)}
-                    disabled={connectLoading}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(79,70,229,0.3)] flex items-center justify-center gap-2"
-                  >
-                    {connectLoading ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <>
-                        <Link2 className="w-4 h-4" />
-                        Connect
-                      </>
-                    )}
-                  </motion.button>
-                </div>
-              </motion.div>
+                Close
+              </button>
             </motion.div>
-          );
-        })()}
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
   );
