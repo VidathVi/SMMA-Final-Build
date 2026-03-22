@@ -2,6 +2,11 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth";
+import youtubeRoutes from "./routes/youtube";
+import metaRoutes from "./routes/meta";
+import whatsappRoutes from "./routes/whatsapp";
+import linkedinRoutes from "./routes/linkedin";
+import tiktokRoutes from "./routes/tiktok";
 import geoRoutes from "./routes/geo.routes";
 import assetRoutes from "./routes/asset";
 import userRoutes from "./routes/user";
@@ -54,6 +59,14 @@ app.use("/api/statuses", statusRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/calendar", calendarRoutes);
 
+// Social Media API Routes
+app.use("/api/youtube", youtubeRoutes);
+app.use("/api/meta", metaRoutes);
+app.use("/api/whatsapp", whatsappRoutes);
+app.use("/api/linkedin", linkedinRoutes);
+app.use("/api/tiktok", tiktokRoutes);
+
+app.get("/api/health", async (req, res) => {
 // ─── Nested Route: Get posts by campaign ────────────────────────────────
 const campaignPostsSchema = z.object({
   params: z.object({ campaignId: z.string().uuid("Invalid campaign ID") }),
@@ -78,6 +91,10 @@ app.get("/api/health", async (req: Request, res: Response) => {
       message: "Database connection failed",
     });
   }
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
 
 // ─── Error Handler (must be last) ───────────────────────────────────────

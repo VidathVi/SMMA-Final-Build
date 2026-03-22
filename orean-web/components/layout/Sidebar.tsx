@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
   LayoutDashboard, 
@@ -14,30 +15,35 @@ import {
   CheckCircle,
   Gem,
   Loader2,
-  Map
+  Map,
+  PenTool
 } from "lucide-react";
 
 export default function Sidebar() {
-  const [activeItem, setActiveItem] = useState("Dashboard");
+  const pathname = usePathname();
+  const router = useRouter();
   const [isNavigating, setIsNavigating] = useState<string | null>(null);
 
   const navItems = [
-    { name: "Dashboard", href: "#", icon: LayoutDashboard },
-    { name: "Geo Engine", href: "#", icon: Map },
-    { name: "Campaigns", href: "#", icon: Calendar },
-    { name: "Workflows", href: "#", icon: Workflow },
-    { name: "Approvals", href: "#", icon: CheckCircle },
-    { name: "Unified Inbox", href: "#", icon: MessageSquare },
-    { name: "Analytics", href: "#", icon: BarChart3 },
-    { name: "Assets", href: "#", icon: FolderSearch },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Publisher", href: "/dashboard/publisher", icon: PenTool },
+    { name: "Geo Engine", href: "/dashboard/geo-engine", icon: Map },
+    { name: "Campaigns", href: "/dashboard/campaigns", icon: Calendar },
+    { name: "Workflows", href: "/dashboard/workflows", icon: Workflow },
+    { name: "Approvals", href: "/dashboard/approvals", icon: CheckCircle },
+    { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
+    { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+    { name: "Assets", href: "/dashboard/assets", icon: FolderSearch },
+    { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ];
 
-  const handleNavClick = (name: string, e: React.MouseEvent) => {
+  const handleNavClick = (name: string, href: string, e: React.MouseEvent) => {
+    if (pathname === href) return;
     e.preventDefault();
     setIsNavigating(name);
     setTimeout(() => {
-      setActiveItem(name);
       setIsNavigating(null);
+      router.push(href);
     }, 800);
   };
 
@@ -67,14 +73,14 @@ export default function Sidebar() {
           Main Menu
         </div>
         {navItems.map((item) => {
-          const isActive = activeItem === item.name;
+          const isActive = pathname === item.href;
           const isLoading = isNavigating === item.name;
 
           return (
             <motion.a
               key={item.name}
               href={item.href}
-              onClick={(e) => handleNavClick(item.name, e)}
+              onClick={(e) => handleNavClick(item.name, item.href, e)}
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
               className={`flex items-center px-4 py-3 rounded-xl text-sm font-bold transition-all relative overflow-hidden group ${
