@@ -9,23 +9,14 @@
   --input-bg: #2C3E50;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  background-color: var(--bg-dark);
-  color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
-}
-
 /* Layout Structure */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
 }
 
 .app-body {
@@ -248,15 +239,15 @@ body {
   flex: 1;
 }
 
-label {
+.profile-section label {
   display: block;
   margin-bottom: 8px;
   color: var(--text-primary);
   font-weight: 500;
 }
 
-input,
-select,
+.profile-section input,
+.profile-section select,
 .input-imitation {
   width: 100%;
   background-color: var(--input-bg);
@@ -270,7 +261,7 @@ select,
 }
 
 /* Custom Select Arrow Styling */
-select {
+.profile-section select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -283,8 +274,8 @@ select {
   /* Space for the arrow */
 }
 
-input:focus,
-select:focus {
+.profile-section input:focus,
+.profile-section select:focus {
   border-color: var(--accent-gold);
 }
 

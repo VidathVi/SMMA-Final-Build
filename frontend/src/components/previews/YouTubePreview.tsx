@@ -6,7 +6,7 @@ interface PreviewProps {
     mediaType?: 'image' | 'video';
 }
 
-export default function YouTubePreview({ channelName = 'IT Life', title = '', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
+export default function YouTubePreview({ channelName = 'IIT Life', title = '', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#0f0f0f] rounded-lg overflow-hidden border border-gray-800">
             {/* Video Thumbnail */}

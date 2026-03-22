@@ -1,0 +1,183 @@
+.inbox-container {
+  display: flex;
+  height: calc(100vh - 80px); /* Adjusting for potential navbar */
+  background-color: transparent;
+  width: 100%;
+}
+
+.sidebar {
+  width: 30%;
+  background-color: transparent;
+  color: white;
+  padding: 20px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: white;
+  display: none; /* Let dashboard take care of the logo */
+}
+
+.search {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+}
+
+.tabs button {
+  margin-right: 5px;
+  padding: 6px 10px;
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.chat-list {
+  margin-top: 20px;
+}
+
+.chat-item {
+  background-color: rgba(255,255,255,0.05);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.05);
+  color: white;
+}
+
+.chat-item h4 {
+  margin: 0;
+  color: #e2e8f0;
+}
+
+.chat-item p {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin: 0;
+  margin-top: 5px;
+}
+
+.chat-item:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.chat-area {
+  width: 70%;
+  background-color: transparent;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255,255,255,0.05);
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.chat-header h3 { margin: 0; }
+
+.chat-header .actions button {
+  background-color: rgba(255,255,255,0.1);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.messages {
+  flex: 1;
+  margin-top: 20px;
+  background-color: rgba(255,255,255,0.02);
+  padding: 15px;
+  border-radius: 6px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  margin-bottom: 10px;
+}
+
+.message-bubble.received {
+  background-color: rgba(255,255,255,0.1);
+  color: white;
+  align-self: flex-start;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.message-bubble.sent {
+  background-color: #3b82f6;
+  color: white;
+  align-self: flex-end;
+}
+
+.message-input button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.message-input {
+  display: flex;
+  margin-top: 10px;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background-color: rgba(255,255,255,0.05);
+  color: white;
+}
+
+.message-input button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  margin-left: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-item.active {
+  background-color: rgba(255,255,255,0.15);
+  outline: 1px solid #3b82f6;
+}
+
+.message-input input::placeholder {
+  color: #64748b;
+}
+
+.tabs button.active-tab {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border-color: #3b82f6;
+}
