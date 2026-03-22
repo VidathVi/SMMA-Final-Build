@@ -1,4 +1,11 @@
 import { Request, Response } from "express";
+
+export interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    [key: string]: any;
+  };
+}
 import axios from "axios";
 import QRCode from "qrcode";
 import { Pool } from "pg";
@@ -18,7 +25,7 @@ const WHATSAPP_VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "orean360_wha
 const WHATSAPP_API_BASE = `https://graph.facebook.com/${WHATSAPP_API_VERSION}`;
 
 // Generate QR code for WhatsApp Business linking
-export const generateWhatsAppQR = async (req: any, res: Response) => {
+export const generateWhatsAppQR = async (req: Request, res: Response) => {
   try {
     // If using WhatsApp Cloud API, generate QR for the business number
     if (WHATSAPP_PHONE_NUMBER_ID && WHATSAPP_ACCESS_TOKEN) {
@@ -70,8 +77,11 @@ export const generateWhatsAppQR = async (req: any, res: Response) => {
 };
 
 // Get WhatsApp connection status
-export const getWhatsAppStatus = async (req: any, res: Response) => {
+export const getWhatsAppStatus = async (req: AuthRequest, res: Response) => {
   try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
     if (!WHATSAPP_PHONE_NUMBER_ID || !WHATSAPP_ACCESS_TOKEN) {
       return res.json({
         connected: false,
@@ -95,7 +105,7 @@ export const getWhatsAppStatus = async (req: any, res: Response) => {
     try {
       const result = await client.query(
         "SELECT * FROM social_tokens WHERE user_id = $1 AND platform = 'whatsapp'",
-        [req.user.id]
+        [userId]
       );
 
       res.json({
@@ -115,7 +125,7 @@ export const getWhatsAppStatus = async (req: any, res: Response) => {
 };
 
 // Send WhatsApp message
-export const sendWhatsAppMessage = async (req: any, res: Response) => {
+export const sendWhatsAppMessage = async (req: Request, res: Response) => {
   const { to, message, templateName, templateLanguage } = req.body;
 
   if (!to) {
@@ -234,7 +244,7 @@ export const whatsappWebhook = async (req: Request, res: Response) => {
 };
 
 // Store WhatsApp connection for a user
-export const connectWhatsApp = async (req: any, res: Response) => {
+export const connectWhatsApp = async (req: AuthRequest, res: Response) => {
   const { phoneNumber, displayName } = req.body;
 
   if (!phoneNumber) {
@@ -242,6 +252,9 @@ export const connectWhatsApp = async (req: any, res: Response) => {
   }
 
   try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
     const client = await pool.connect();
     try {
       await client.query(
@@ -249,7 +262,7 @@ export const connectWhatsApp = async (req: any, res: Response) => {
          VALUES ($1, 'whatsapp', $2, $3, $4)
          ON CONFLICT (user_id, platform)
          DO UPDATE SET access_token = $2, platform_user_id = $3, platform_username = $4, updated_at = CURRENT_TIMESTAMP`,
-        [req.user.id, WHATSAPP_ACCESS_TOKEN || "configured", phoneNumber, displayName || phoneNumber]
+        [userId, WHATSAPP_ACCESS_TOKEN || "configured", phoneNumber, displayName || phoneNumber]
       );
 
       await client.query(
@@ -257,7 +270,7 @@ export const connectWhatsApp = async (req: any, res: Response) => {
          VALUES ($1, 'whatsapp', $2, $3)
          ON CONFLICT (user_id, platform)
          DO UPDATE SET platform_username = $2, profile_url = $3, connected_at = CURRENT_TIMESTAMP`,
-        [req.user.id, displayName || phoneNumber, `https://wa.me/${phoneNumber}`]
+        [userId, displayName || phoneNumber, `https://wa.me/${phoneNumber}`]
       );
     } finally {
       client.release();
@@ -271,17 +284,20 @@ export const connectWhatsApp = async (req: any, res: Response) => {
 };
 
 // Disconnect WhatsApp
-export const disconnectWhatsApp = async (req: any, res: Response) => {
+export const disconnectWhatsApp = async (req: AuthRequest, res: Response) => {
   try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
     const client = await pool.connect();
     try {
       await client.query(
         "DELETE FROM social_tokens WHERE user_id = $1 AND platform = 'whatsapp'",
-        [req.user.id]
+        [userId]
       );
       await client.query(
         "DELETE FROM social_connections WHERE user_id = $1 AND platform = 'whatsapp'",
-        [req.user.id]
+        [userId]
       );
     } finally {
       client.release();
