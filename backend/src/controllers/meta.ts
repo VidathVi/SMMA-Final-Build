@@ -1,4 +1,11 @@
 import { Request, Response } from "express";
+
+export interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    [key: string]: any;
+  };
+}
 import axios from "axios";
 import { Pool } from "pg";
 import dotenv from "dotenv";
@@ -25,9 +32,12 @@ const META_SCOPES = [
 const GRAPH_API_BASE = "https://graph.facebook.com/v19.0";
 
 // Generate Meta (Facebook) OAuth URL
-export const getMetaAuthUrl = (req: any, res: Response) => {
+export const getMetaAuthUrl = (req: AuthRequest, res: Response) => {
   try {
-    const state = JSON.stringify({ userId: req.user.id });
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    
+    const state = JSON.stringify({ userId });
     const authUrl = `https://www.facebook.com/v19.0/dialog/oauth?client_id=${META_APP_ID}&redirect_uri=${encodeURIComponent(META_REDIRECT_URI)}&scope=${encodeURIComponent(META_SCOPES)}&state=${encodeURIComponent(state)}&response_type=code`;
 
     res.json({ authUrl });
@@ -135,9 +145,12 @@ async function getMetaToken(userId: number): Promise<string> {
 }
 
 // Get user's Facebook pages
-export const getMetaPages = async (req: any, res: Response) => {
+export const getMetaPages = async (req: AuthRequest, res: Response) => {
   try {
-    const accessToken = await getMetaToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const accessToken = await getMetaToken(userId);
 
     const response = await axios.get(`${GRAPH_API_BASE}/me/accounts`, {
       params: {
@@ -157,11 +170,14 @@ export const getMetaPages = async (req: any, res: Response) => {
 };
 
 // Get posts from a Facebook page
-export const getMetaPagePosts = async (req: any, res: Response) => {
+export const getMetaPagePosts = async (req: AuthRequest, res: Response) => {
   const { pageId } = req.params;
 
   try {
-    const accessToken = await getMetaToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const accessToken = await getMetaToken(userId);
 
     const response = await axios.get(`${GRAPH_API_BASE}/${pageId}/posts`, {
       params: {
@@ -179,9 +195,12 @@ export const getMetaPagePosts = async (req: any, res: Response) => {
 };
 
 // Get connected Instagram business account
-export const getInstagramAccount = async (req: any, res: Response) => {
+export const getInstagramAccount = async (req: AuthRequest, res: Response) => {
   try {
-    const accessToken = await getMetaToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const accessToken = await getMetaToken(userId);
 
     // First get pages
     const pagesResponse = await axios.get(`${GRAPH_API_BASE}/me/accounts`, {
@@ -223,9 +242,12 @@ export const getInstagramAccount = async (req: any, res: Response) => {
 };
 
 // Get Instagram media
-export const getInstagramMedia = async (req: any, res: Response) => {
+export const getInstagramMedia = async (req: AuthRequest, res: Response) => {
   try {
-    const accessToken = await getMetaToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const accessToken = await getMetaToken(userId);
     const igAccountId = req.query.accountId;
 
     if (!igAccountId) {
@@ -248,11 +270,14 @@ export const getInstagramMedia = async (req: any, res: Response) => {
 };
 
 // Get page insights
-export const getMetaInsights = async (req: any, res: Response) => {
+export const getMetaInsights = async (req: AuthRequest, res: Response) => {
   const { pageId } = req.params;
 
   try {
-    const accessToken = await getMetaToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const accessToken = await getMetaToken(userId);
 
     // Get page access token for insights
     const pagesResponse = await axios.get(`${GRAPH_API_BASE}/me/accounts`, {
@@ -284,17 +309,20 @@ export const getMetaInsights = async (req: any, res: Response) => {
 };
 
 // Disconnect Meta account
-export const disconnectMeta = async (req: any, res: Response) => {
+export const disconnectMeta = async (req: AuthRequest, res: Response) => {
   try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
     const client = await pool.connect();
     try {
       await client.query(
         "DELETE FROM social_tokens WHERE user_id = $1 AND platform = 'facebook'",
-        [req.user.id]
+        [userId]
       );
       await client.query(
         "DELETE FROM social_connections WHERE user_id = $1 AND platform IN ('facebook', 'instagram')",
-        [req.user.id]
+        [userId]
       );
     } finally {
       client.release();
