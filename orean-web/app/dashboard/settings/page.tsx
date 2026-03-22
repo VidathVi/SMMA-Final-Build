@@ -1,18 +1,23 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   User, Building2, Bot, Lock, CreditCard, AlertTriangle,
   Camera, Smartphone, Laptop, CheckCircle, AlertCircle, RefreshCw,
-  ChevronLeft
+  ChevronLeft, Share2, X, Loader2, ExternalLink, Unlink, Link2
 } from "lucide-react";
+import {
+  FaInstagram, FaFacebookF, FaLinkedinIn, FaYoutube, FaTiktok
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 /* ─── Settings Sidebar ─── */
 function SettingsSidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
   const menuItems = [
     { id: "personal", label: "Personal Profile", icon: User },
     { id: "organization", label: "Organization", icon: Building2 },
+    { id: "social", label: "Connected Accounts", icon: Share2 },
     { id: "ai", label: "AI & Integrations", icon: Bot },
     { id: "security", label: "Security & Access", icon: Lock },
     { id: "billing", label: "Billing & Plan", icon: CreditCard },
@@ -284,6 +289,423 @@ function OrganizationProfile() {
   );
 }
 
+/* ─── Connected Social Accounts Tab ─── */
+const SOCIAL_PLATFORMS = [
+  {
+    id: "instagram",
+    name: "Instagram",
+    icon: FaInstagram,
+    color: "#E1306C",
+    gradient: "from-[#833AB4] via-[#E1306C] to-[#F77737]",
+    placeholder: "@username",
+    urlPrefix: "https://instagram.com/",
+  },
+  {
+    id: "facebook",
+    name: "Facebook",
+    icon: FaFacebookF,
+    color: "#1877F2",
+    gradient: "from-[#1877F2] to-[#0C5DC7]",
+    placeholder: "Page or profile name",
+    urlPrefix: "https://facebook.com/",
+  },
+  {
+    id: "twitter",
+    name: "X (Twitter)",
+    icon: FaXTwitter,
+    color: "#000000",
+    gradient: "from-[#14171A] to-[#657786]",
+    placeholder: "@handle",
+    urlPrefix: "https://x.com/",
+  },
+  {
+    id: "linkedin",
+    name: "LinkedIn",
+    icon: FaLinkedinIn,
+    color: "#0A66C2",
+    gradient: "from-[#0A66C2] to-[#004182]",
+    placeholder: "Profile or company URL",
+    urlPrefix: "https://linkedin.com/in/",
+  },
+  {
+    id: "youtube",
+    name: "YouTube",
+    icon: FaYoutube,
+    color: "#FF0000",
+    gradient: "from-[#FF0000] to-[#CC0000]",
+    placeholder: "@channel or channel name",
+    urlPrefix: "https://youtube.com/@",
+  },
+  {
+    id: "tiktok",
+    name: "TikTok",
+    icon: FaTiktok,
+    color: "#000000",
+    gradient: "from-[#00F2EA] via-[#FF0050] to-[#000000]",
+    placeholder: "@username",
+    urlPrefix: "https://tiktok.com/@",
+  },
+];
+
+interface SocialConnection {
+  id: number;
+  platform: string;
+  platform_username: string;
+  profile_url: string | null;
+  connected_at: string;
+}
+
+function ConnectedAccounts() {
+  const [connections, setConnections] = useState<SocialConnection[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [connectModal, setConnectModal] = useState<string | null>(null);
+  const [connectUsername, setConnectUsername] = useState("");
+  const [connectLoading, setConnectLoading] = useState(false);
+  const [disconnectLoading, setDisconnectLoading] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
+  useEffect(() => {
+    fetchConnections();
+  }, []);
+
+  useEffect(() => {
+    if (successMsg) {
+      const timer = setTimeout(() => setSuccessMsg(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMsg]);
+
+  const fetchConnections = async () => {
+    try {
+      const token = localStorage.getItem("orean360_token");
+      const res = await fetch("http://localhost:8080/api/auth/social-connections", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setConnections(data.connections || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch connections:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConnect = async (platformId: string) => {
+    if (!connectUsername.trim()) {
+      setError("Please enter your username or handle");
+      return;
+    }
+
+    setConnectLoading(true);
+    setError("");
+
+    try {
+      const token = localStorage.getItem("orean360_token");
+      const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
+      const profileUrl = platform ? platform.urlPrefix + connectUsername.replace("@", "") : "";
+
+      const res = await fetch("http://localhost:8080/api/auth/social-connections", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          platform: platformId,
+          platform_username: connectUsername,
+          profile_url: profileUrl,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to connect");
+      }
+
+      setSuccessMsg(`${platform?.name} connected successfully!`);
+      setConnectModal(null);
+      setConnectUsername("");
+      fetchConnections();
+    } catch (err: any) {
+      setError(err.message || "Failed to connect account");
+    } finally {
+      setConnectLoading(false);
+    }
+  };
+
+  const handleDisconnect = async (platformId: string) => {
+    setDisconnectLoading(platformId);
+
+    try {
+      const token = localStorage.getItem("orean360_token");
+      const res = await fetch(`http://localhost:8080/api/auth/social-connections/${platformId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.ok) {
+        const platform = SOCIAL_PLATFORMS.find(p => p.id === platformId);
+        setSuccessMsg(`${platform?.name} disconnected`);
+        setConnections(prev => prev.filter(c => c.platform !== platformId));
+      }
+    } catch (err) {
+      console.error("Failed to disconnect:", err);
+    } finally {
+      setDisconnectLoading(null);
+    }
+  };
+
+  const getConnection = (platformId: string) =>
+    connections.find(c => c.platform === platformId);
+
+  const connectedCount = connections.length;
+  const totalCount = SOCIAL_PLATFORMS.length;
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold text-white">Connected Accounts</h2>
+        <p className="text-sm text-slate-400 mt-1">
+          Link your social media accounts to manage and publish across platforms
+        </p>
+      </div>
+
+      {/* Stats bar */}
+      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-white/10">
+              <Share2 className="w-6 h-6 text-blue-400" />
+            </div>
+            <div>
+              <p className="text-lg font-bold text-white">{connectedCount} of {totalCount} Connected</p>
+              <p className="text-xs text-slate-400">Social media accounts linked to your profile</p>
+            </div>
+          </div>
+          <div className="flex gap-1">
+            {SOCIAL_PLATFORMS.map(p => {
+              const connected = !!getConnection(p.id);
+              return (
+                <div
+                  key={p.id}
+                  className={`w-2 h-8 rounded-full transition-all ${connected ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" : "bg-white/10"}`}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Success message */}
+      <AnimatePresence>
+        {successMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-3 rounded-xl flex items-center text-sm"
+          >
+            <CheckCircle className="w-4 h-4 mr-2 shrink-0" />
+            {successMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Platform Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {SOCIAL_PLATFORMS.map((platform) => {
+          const connection = getConnection(platform.id);
+          const isConnected = !!connection;
+          const IconComponent = platform.icon;
+
+          return (
+            <motion.div
+              key={platform.id}
+              whileHover={{ scale: 1.01 }}
+              className={`relative bg-white/5 backdrop-blur-xl border rounded-2xl p-5 transition-all overflow-hidden group ${
+                isConnected
+                  ? "border-emerald-500/20 shadow-[0_0_20px_rgba(52,211,153,0.05)]"
+                  : "border-white/10 hover:border-white/20"
+              }`}
+            >
+              {/* Subtle gradient overlay on hover */}
+              <div className={`absolute inset-0 bg-gradient-to-r ${platform.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-300`} />
+
+              <div className="relative z-10 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-11 h-11 rounded-xl flex items-center justify-center text-white shadow-lg"
+                    style={{ backgroundColor: platform.color }}
+                  >
+                    <IconComponent className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">{platform.name}</p>
+                    {isConnected ? (
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        <CheckCircle className="w-3 h-3 text-emerald-400" />
+                        <span className="text-xs text-emerald-400 font-medium">
+                          {connection.platform_username}
+                        </span>
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-500 mt-0.5">Not connected</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {isConnected && connection.profile_url && (
+                    <a
+                      href={connection.profile_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-8 h-8 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+
+                  {isConnected ? (
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleDisconnect(platform.id)}
+                      disabled={disconnectLoading === platform.id}
+                      className="px-4 py-2 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-xs font-bold hover:bg-rose-500/20 transition-all flex items-center gap-1.5"
+                    >
+                      {disconnectLoading === platform.id ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : (
+                        <Unlink className="w-3 h-3" />
+                      )}
+                      Disconnect
+                    </motion.button>
+                  ) : (
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        setConnectModal(platform.id);
+                        setConnectUsername("");
+                        setError("");
+                      }}
+                      className="px-4 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-xs font-bold hover:bg-blue-500/20 transition-all flex items-center gap-1.5"
+                    >
+                      <Link2 className="w-3 h-3" />
+                      Connect
+                    </motion.button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Connect Modal */}
+      <AnimatePresence>
+        {connectModal && (() => {
+          const platform = SOCIAL_PLATFORMS.find(p => p.id === connectModal);
+          if (!platform) return null;
+          const IconComponent = platform.icon;
+
+          return (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+              onClick={(e) => { if (e.target === e.currentTarget) { setConnectModal(null); setError(""); } }}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                className="bg-[#151c2e] border border-white/10 rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-5"
+              >
+                {/* Modal Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
+                      style={{ backgroundColor: platform.color }}
+                    >
+                      <IconComponent className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-white">Connect {platform.name}</h3>
+                      <p className="text-xs text-slate-400">Enter your {platform.name} handle</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => { setConnectModal(null); setError(""); }}
+                    className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {error && (
+                  <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-2.5 rounded-xl flex items-center text-sm">
+                    <AlertCircle className="w-4 h-4 mr-2 shrink-0" />
+                    {error}
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-slate-300">Username / Handle</label>
+                  <input
+                    type="text"
+                    value={connectUsername}
+                    onChange={(e) => setConnectUsername(e.target.value)}
+                    placeholder={platform.placeholder}
+                    className="w-full px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-white text-sm focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all placeholder-slate-500"
+                    autoFocus
+                    onKeyDown={(e) => { if (e.key === "Enter") handleConnect(platform.id); }}
+                  />
+                  <p className="text-xs text-slate-500 mt-1">
+                    Profile URL will be: {platform.urlPrefix}{connectUsername.replace("@", "") || "..."}
+                  </p>
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    onClick={() => { setConnectModal(null); setError(""); }}
+                    className="flex-1 px-4 py-3 bg-white/5 border border-white/10 text-slate-300 rounded-xl text-sm font-bold hover:bg-white/10 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleConnect(platform.id)}
+                    disabled={connectLoading}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold transition-all shadow-[0_0_15px_rgba(79,70,229,0.3)] flex items-center justify-center gap-2"
+                  >
+                    {connectLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Link2 className="w-4 h-4" />
+                        Connect
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 /* ─── AI & Integrations Tab ─── */
 function AIIntegrations() {
   const [level, setLevel] = useState("Pro");
@@ -538,6 +960,7 @@ export default function SettingsPage() {
     switch (activeTab) {
       case "personal": return <PersonalProfile />;
       case "organization": return <OrganizationProfile />;
+      case "social": return <ConnectedAccounts />;
       case "ai": return <AIIntegrations />;
       case "security": return <SecurityAccess />;
       case "billing": return <BillingPlan />;
