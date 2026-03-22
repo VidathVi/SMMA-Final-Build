@@ -1,4 +1,11 @@
 import { Request, Response } from "express";
+
+export interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    [key: string]: any;
+  };
+}
 import { google } from "googleapis";
 import { Pool } from "pg";
 import dotenv from "dotenv";
@@ -26,9 +33,13 @@ const YOUTUBE_SCOPES = [
 ];
 
 // Generate YouTube OAuth2 consent URL
-export const getYouTubeAuthUrl = (req: any, res: Response) => {
+export const getYouTubeAuthUrl = (req: AuthRequest, res: Response) => {
   try {
-    const state = JSON.stringify({ userId: req.user.id });
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const state = JSON.stringify({ userId });
     const authUrl = oauth2Client.generateAuthUrl({
       access_type: "offline",
       scope: YOUTUBE_SCOPES,
@@ -155,9 +166,12 @@ async function getAuthenticatedYouTube(userId: number) {
 }
 
 // Get user's YouTube channels
-export const getYouTubeChannels = async (req: any, res: Response) => {
+export const getYouTubeChannels = async (req: AuthRequest, res: Response) => {
   try {
-    const youtube = await getAuthenticatedYouTube(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const youtube = await getAuthenticatedYouTube(userId);
     const response = await youtube.channels.list({
       part: ["snippet", "statistics", "contentDetails"],
       mine: true,
@@ -174,9 +188,12 @@ export const getYouTubeChannels = async (req: any, res: Response) => {
 };
 
 // Get user's uploaded videos
-export const getYouTubeVideos = async (req: any, res: Response) => {
+export const getYouTubeVideos = async (req: AuthRequest, res: Response) => {
   try {
-    const youtube = await getAuthenticatedYouTube(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const youtube = await getAuthenticatedYouTube(userId);
     const maxResults = parseInt(req.query.maxResults as string) || 10;
 
     // First get the uploads playlist ID
@@ -227,9 +244,12 @@ export const getYouTubeVideos = async (req: any, res: Response) => {
 };
 
 // Get YouTube channel analytics
-export const getYouTubeAnalytics = async (req: any, res: Response) => {
+export const getYouTubeAnalytics = async (req: AuthRequest, res: Response) => {
   try {
-    const youtube = await getAuthenticatedYouTube(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const youtube = await getAuthenticatedYouTube(userId);
 
     // Get channel statistics
     const channelResponse = await youtube.channels.list({
@@ -262,17 +282,20 @@ export const getYouTubeAnalytics = async (req: any, res: Response) => {
 };
 
 // Disconnect YouTube account
-export const disconnectYouTube = async (req: any, res: Response) => {
+export const disconnectYouTube = async (req: AuthRequest, res: Response) => {
   try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
     const client = await pool.connect();
     try {
       await client.query(
         "DELETE FROM social_tokens WHERE user_id = $1 AND platform = 'youtube'",
-        [req.user.id]
+        [userId]
       );
       await client.query(
         "DELETE FROM social_connections WHERE user_id = $1 AND platform = 'youtube'",
-        [req.user.id]
+        [userId]
       );
     } finally {
       client.release();
