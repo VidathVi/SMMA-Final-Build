@@ -27,6 +27,40 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isNavigating, setIsNavigating] = useState<string | null>(null);
 
+  // User Profile
+  const [userProfile, setUserProfile] = useState({
+    fullName: "Jane Doe",
+    avatar: "/default-avatar.png",
+    workflowRole: "Admin"
+  });
+
+  useEffect(() => {
+    const loadProfile = () => {
+      const savedUser = localStorage.getItem("user_profile");
+      if (savedUser) {
+        try {
+          setUserProfile(JSON.parse(savedUser));
+        } catch (e) {
+          console.error("Error parsing user profile in Navbar", e);
+        }
+      }
+    };
+
+    const handleStorageEvent = (e: StorageEvent) => {
+      if (e.key === "user_profile") loadProfile();
+    };
+
+    loadProfile();
+    window.addEventListener("storage_user_profile", loadProfile);
+    window.addEventListener("storage", handleStorageEvent);
+    return () => {
+      window.removeEventListener("storage_user_profile", loadProfile);
+      window.removeEventListener("storage", handleStorageEvent);
+    };
+
+  }, []);
+
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftScroll, setShowLeftScroll] = useState(false);
   const [showRightScroll, setShowRightScroll] = useState(true); // Defaults to true initially for long lists
@@ -179,13 +213,37 @@ export default function Navbar() {
         {/* User Profile */}
         <a href="/personal-profile" className="pl-4 border-l border-white/10 flex items-center space-x-3 cursor-pointer group">
           <div className="hidden md:flex flex-col items-end mr-2">
-            <span className="text-sm font-bold text-slate-200 group-hover:text-blue-400 transition-colors">Jane Doe</span>
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Admin</span>
+            <span className="text-sm font-bold text-slate-200 group-hover:text-blue-400 transition-colors">
+              {userProfile.fullName}
+            </span>
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              {userProfile.workflowRole || "Admin"}
+            </span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-slate-800 flex items-center justify-center text-white font-extrabold shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:scale-105 transition-transform">
-            <span className="text-sm drop-shadow-md">JD</span>
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-slate-800 flex items-center justify-center text-white font-extrabold shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:scale-105 transition-transform overflow-hidden relative">
+            {userProfile.avatar && userProfile.avatar !== "/default-avatar.png" ? (
+              <img 
+                src={userProfile.avatar} 
+                alt="Profile" 
+                className="w-full h-full object-cover transition-transform group-hover:scale-110" 
+              />
+            ) : (
+              <span className="text-sm drop-shadow-md">
+                {userProfile.fullName
+                  ? userProfile.fullName
+                      .split(" ")
+                      .filter(Boolean)
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()
+                      .slice(0, 2)
+                  : "JD"}
+
+              </span>
+            )}
           </div>
         </a>
+
       </div>
     </nav>
   );

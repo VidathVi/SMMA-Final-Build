@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from '@/components/layout/Navbar';
 import PersonalProfile from "../components/PersonalProfile";
 import "../profile.css";
@@ -18,8 +18,25 @@ export default function PersonalProfilePage() {
     avatar: "/default-avatar.png"
   });
 
+  // Load user from localStorage on mount
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user_profile");
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        console.error("Error parsing user profile", e);
+      }
+    }
+  }, []);
+
   const handleUserUpdate = (field: string, value: string) => {
-    setUser(prev => ({ ...prev, [field]: value }));
+    const updatedUser = { ...user, [field]: value };
+    setUser(updatedUser);
+    localStorage.setItem("user_profile", JSON.stringify(updatedUser));
+    
+    // Trigger storage event for other components (like Navbar) to update
+    window.dispatchEvent(new Event("storage_user_profile"));
   };
 
   return (
@@ -40,3 +57,4 @@ export default function PersonalProfilePage() {
     </div>
   );
 }
+
