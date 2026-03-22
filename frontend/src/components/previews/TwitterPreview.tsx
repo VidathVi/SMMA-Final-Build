@@ -6,7 +6,7 @@ interface PreviewProps {
     mediaType?: 'image' | 'video';
 }
 
-export default function TwitterPreview({ username = 'itlife', displayName = 'IT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
+export default function TwitterPreview({ username = 'iitlife', displayName = 'IIT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-black rounded-lg overflow-hidden border border-gray-800">
             <div className="p-4">

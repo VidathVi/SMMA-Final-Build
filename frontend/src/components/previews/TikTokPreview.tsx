@@ -5,7 +5,7 @@ interface PreviewProps {
     mediaType?: 'image' | 'video';
 }
 
-export default function TikTokPreview({ username = '@itlife', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
+export default function TikTokPreview({ username = '@iitlife', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-black rounded-lg overflow-hidden border border-gray-800 relative">
             {/* Vertical Video Container */}

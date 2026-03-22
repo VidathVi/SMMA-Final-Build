@@ -5,7 +5,7 @@ interface PreviewProps {
     mediaType?: 'image' | 'video';
 }
 
-export default function FacebookPreview({ username = 'IT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
+export default function FacebookPreview({ username = 'IIT Life', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#242526] rounded-lg overflow-hidden border border-gray-700">
             {/* Profile Header */}

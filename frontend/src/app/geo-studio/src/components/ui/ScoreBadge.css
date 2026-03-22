@@ -1,0 +1,89 @@
+/* ScoreBadge.css */
+.score-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circular-chart {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 250px;
+}
+
+/* Sizes */
+.size-sm {
+    width: 40px;
+    height: 40px;
+}
+
+.size-sm .percentage {
+    font-size: 10px;
+}
+
+.size-md {
+    width: 60px;
+    height: 60px;
+}
+
+.size-md .percentage {
+    font-size: 9px;
+}
+
+.size-lg {
+    width: 80px;
+    height: 80px;
+}
+
+.size-lg .percentage {
+    font-size: 8px;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 3.8;
+}
+
+.circle {
+    fill: none;
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    animation: progress 1s ease-out forwards;
+}
+
+@keyframes progress {
+    0% {
+        stroke-dasharray: 0 100;
+    }
+}
+
+.percentage {
+    fill: var(--geo-text-primary);
+    font-family: inherit;
+    font-weight: 700;
+    text-anchor: middle;
+}
+
+/* Colors based on score */
+.score-excellent .circle {
+    stroke: #00d2ff;
+}
+
+/* Neon Blue */
+.score-good .circle {
+    stroke: #2ecc71;
+}
+
+/* Emerald */
+.score-average .circle {
+    stroke: #f39c12;
+}
+
+/* Orange */
+.score-poor .circle {
+    stroke: #e74c3c;
+}
+
+/* Red */

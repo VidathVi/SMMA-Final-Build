@@ -14,4 +14,8 @@ router.get("/social-connections", authMiddleware as any, getSocialConnections as
 router.post("/social-connections", authMiddleware as any, connectSocial as any);
 router.delete("/social-connections/:platform", authMiddleware as any, disconnectSocial as any);
 
+router.get("/protected", authMiddleware as any, (req, res) => {
+  res.json({ message: "You are authenticated" });
+});
+
 export default router;

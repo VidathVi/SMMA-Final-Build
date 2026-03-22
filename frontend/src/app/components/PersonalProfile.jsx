@@ -11,10 +11,15 @@ export default function PersonalProfile({ user, onUpdate }) {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      onUpdate("avatar", imageUrl);
+      // Use FileReader to convert to base64 for persistent storage in localStorage
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onUpdate("avatar", reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
+
 
   return (
     <div className="profile-section">

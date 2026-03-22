@@ -11,7 +11,7 @@ export default function WhatsAppPreview({ caption = '', imageUrl, mediaType = 'i
             <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-800">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-green-500 to-teal-500"></div>
                 <div className="flex-1">
-                    <div className="text-white text-sm font-semibold">IT Life</div>
+                    <div className="text-white text-sm font-semibold">IIT Life</div>
                     <div className="text-gray-400 text-xs">online</div>
                 </div>
             </div>

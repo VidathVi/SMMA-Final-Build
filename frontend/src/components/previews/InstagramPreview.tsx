@@ -5,7 +5,7 @@ interface PreviewProps {
     mediaType?: 'image' | 'video';
 }
 
-export default function InstagramPreview({ username = 'itlife', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
+export default function InstagramPreview({ username = 'iitlife', caption = '', imageUrl, mediaType = 'image' }: PreviewProps) {
     return (
         <div className="bg-[#1a1a1a] rounded-lg overflow-hidden border border-gray-700">
             {/* Preview Header */}
