@@ -8,6 +8,7 @@ import metaRoutes from "./routes/meta";
 import whatsappRoutes from "./routes/whatsapp";
 import linkedinRoutes from "./routes/linkedin";
 import tiktokRoutes from "./routes/tiktok";
+import webhookRoutes from "./routes/webhook";
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use("/api/meta", metaRoutes);
 app.use("/api/whatsapp", whatsappRoutes);
 app.use("/api/linkedin", linkedinRoutes);
 app.use("/api/tiktok", tiktokRoutes);
+app.use("/api/webhooks", webhookRoutes);
 
 app.get("/api/health", async (req, res) => {
   try {
