@@ -1,4 +1,11 @@
 import { Request, Response } from "express";
+
+export interface AuthRequest extends Request {
+  user?: {
+    id: number;
+    [key: string]: any;
+  };
+}
 import axios from "axios";
 import { Pool } from "pg";
 import dotenv from "dotenv";
@@ -16,9 +23,11 @@ const LINKEDIN_REDIRECT_URI = process.env.LINKEDIN_REDIRECT_URI || "http://local
 const LINKEDIN_SCOPES = ["openid", "profile", "email", "w_member_social"].join(" ");
 
 // Generate LinkedIn OAuth2 URL
-export const getLinkedInAuthUrl = (req: any, res: Response) => {
+export const getLinkedInAuthUrl = (req: AuthRequest, res: Response) => {
   try {
-    const state = JSON.stringify({ userId: req.user.id });
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const state = JSON.stringify({ userId });
     const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${LINKEDIN_CLIENT_ID}&redirect_uri=${encodeURIComponent(LINKEDIN_REDIRECT_URI)}&scope=${encodeURIComponent(LINKEDIN_SCOPES)}&state=${encodeURIComponent(state)}`;
 
     res.json({ authUrl });
@@ -120,9 +129,11 @@ async function getLinkedInToken(userId: number): Promise<{ accessToken: string; 
 }
 
 // Get LinkedIn profile
-export const getLinkedInProfile = async (req: any, res: Response) => {
+export const getLinkedInProfile = async (req: AuthRequest, res: Response) => {
   try {
-    const { accessToken } = await getLinkedInToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const { accessToken } = await getLinkedInToken(userId);
 
     const response = await axios.get("https://api.linkedin.com/v2/userinfo", {
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -139,9 +150,11 @@ export const getLinkedInProfile = async (req: any, res: Response) => {
 };
 
 // Get LinkedIn posts (shares)
-export const getLinkedInPosts = async (req: any, res: Response) => {
+export const getLinkedInPosts = async (req: AuthRequest, res: Response) => {
   try {
-    const { accessToken, platformUserId } = await getLinkedInToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const { accessToken, platformUserId } = await getLinkedInToken(userId);
 
     const response = await axios.get("https://api.linkedin.com/v2/posts", {
       params: {
@@ -166,7 +179,7 @@ export const getLinkedInPosts = async (req: any, res: Response) => {
 };
 
 // Create LinkedIn post
-export const createLinkedInPost = async (req: any, res: Response) => {
+export const createLinkedInPost = async (req: AuthRequest, res: Response) => {
   const { text, visibility } = req.body;
 
   if (!text) {
@@ -174,7 +187,9 @@ export const createLinkedInPost = async (req: any, res: Response) => {
   }
 
   try {
-    const { accessToken, platformUserId } = await getLinkedInToken(req.user.id);
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const { accessToken, platformUserId } = await getLinkedInToken(userId);
 
     const response = await axios.post(
       "https://api.linkedin.com/v2/posts",
@@ -214,17 +229,19 @@ export const createLinkedInPost = async (req: any, res: Response) => {
 };
 
 // Disconnect LinkedIn
-export const disconnectLinkedIn = async (req: any, res: Response) => {
+export const disconnectLinkedIn = async (req: AuthRequest, res: Response) => {
   try {
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
     const client = await pool.connect();
     try {
       await client.query(
         "DELETE FROM social_tokens WHERE user_id = $1 AND platform = 'linkedin'",
-        [req.user.id]
+        [userId]
       );
       await client.query(
         "DELETE FROM social_connections WHERE user_id = $1 AND platform = 'linkedin'",
-        [req.user.id]
+        [userId]
       );
     } finally {
       client.release();
