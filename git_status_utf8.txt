@@ -1,0 +1,174 @@
+﻿On branch fix-frontend-package
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Changes to be committed:
+	modified:   .gitignore
+	new file:   _V1_deprecated/.dockerignore
+	new file:   _V1_deprecated/.gitignore
+	new file:   _V1_deprecated/Dockerfile
+	new file:   _V1_deprecated/docker-compose.yml
+	new file:   _V1_deprecated/package-lock.json
+	new file:   _V1_deprecated/package.json
+	new file:   _V1_deprecated/prisma/schema.prisma
+	new file:   _V1_deprecated/prisma/seed.ts
+	new file:   _V1_deprecated/src/app.ts
+	new file:   _V1_deprecated/src/controllers/campaign.controller.ts
+	new file:   _V1_deprecated/src/controllers/post.controller.ts
+	new file:   _V1_deprecated/src/controllers/status.controller.ts
+	new file:   _V1_deprecated/src/controllers/task.controller.ts
+	new file:   _V1_deprecated/src/lib/prisma.ts
+	new file:   _V1_deprecated/src/middleware/error-handler.ts
+	new file:   _V1_deprecated/src/middleware/validate.ts
+	new file:   _V1_deprecated/src/routes/campaign.routes.ts
+	new file:   _V1_deprecated/src/routes/post.routes.ts
+	new file:   _V1_deprecated/src/routes/status.routes.ts
+	new file:   _V1_deprecated/src/routes/task.routes.ts
+	new file:   _V1_deprecated/src/server.ts
+	new file:   _V1_deprecated/src/services/campaign.service.ts
+	new file:   _V1_deprecated/src/services/post.service.ts
+	new file:   _V1_deprecated/src/services/status.service.ts
+	new file:   _V1_deprecated/src/services/task.service.ts
+	new file:   _V1_deprecated/src/utils/api-error.ts
+	new file:   _V1_deprecated/tsconfig.json
+	new file:   backend/geo_service/__pycache__/main.cpython-314.pyc
+	new file:   backend/geo_service/main.py
+	new file:   backend/geo_service/models/__pycache__/schemas.cpython-314.pyc
+	new file:   backend/geo_service/models/schemas.py
+	new file:   backend/geo_service/requirements.txt
+	new file:   backend/geo_service/routes/__pycache__/geo_routes.cpython-314.pyc
+	new file:   backend/geo_service/routes/geo_routes.py
+	new file:   backend/geo_service/services/__pycache__/openai_service.cpython-314.pyc
+	new file:   backend/geo_service/services/openai_service.py
+	new file:   backend/geo_service/utils/__pycache__/prompts.cpython-314.pyc
+	new file:   backend/geo_service/utils/prompts.py
+	modified:   backend/package-lock.json
+	modified:   backend/package.json
+	new file:   backend/prisma/schema.prisma
+	new file:   backend/prisma/seed.ts
+	new file:   backend/src/controllers/asset.ts
+	new file:   backend/src/controllers/calendar.controller.ts
+	new file:   backend/src/controllers/campaign.controller.ts
+	new file:   backend/src/controllers/geo.controller.ts
+	new file:   backend/src/controllers/mediaAssetController.ts
+	new file:   backend/src/controllers/metaGraphController.ts
+	new file:   backend/src/controllers/post.controller.ts
+	new file:   backend/src/controllers/socialTokenController.ts
+	new file:   backend/src/controllers/status.controller.ts
+	new file:   backend/src/controllers/task.controller.ts
+	new file:   backend/src/controllers/userController.ts
+	new file:   backend/src/db/db.ts
+	modified:   backend/src/db/seed.js
+	new file:   backend/src/lib/prisma.ts
+	new file:   backend/src/middleware/authMiddleware.ts
+	new file:   backend/src/middleware/error-handler.ts
+	new file:   backend/src/middleware/roleMiddleware.ts
+	new file:   backend/src/middleware/upload.ts
+	new file:   backend/src/middleware/validate.ts
+	new file:   backend/src/models/mediaAssetModel.ts
+	new file:   backend/src/models/socialTokenModel.ts
+	new file:   backend/src/models/userModel.ts
+	new file:   backend/src/routes/asset.ts
+	new file:   backend/src/routes/calendar.routes.ts
+	new file:   backend/src/routes/campaign.routes.ts
+	new file:   backend/src/routes/geo.routes.ts
+	new file:   backend/src/routes/mediaAsset.routes.ts
+	new file:   backend/src/routes/metaGraph.routes.ts
+	new file:   backend/src/routes/post.routes.ts
+	new file:   backend/src/routes/socialToken.routes.ts
+	new file:   backend/src/routes/status.routes.ts
+	new file:   backend/src/routes/task.routes.ts
+	new file:   backend/src/routes/user.ts
+	new file:   backend/src/services/calendar.service.ts
+	new file:   backend/src/services/campaign.service.ts
+	new file:   backend/src/services/geo.service.ts
+	new file:   backend/src/services/metaGraph.service.ts
+	new file:   backend/src/services/post.service.ts
+	new file:   backend/src/services/status.service.ts
+	new file:   backend/src/services/task.service.ts
+	new file:   backend/src/utils/api-error.ts
+	new file:   backend/src/utils/encryption.ts
+	new file:   backend/src/utils/validation.ts
+	new file:   backend/tsc_check.txt
+	new file:   backend/tsc_errors.txt
+	modified:   backend/tsconfig.json
+	new file:   frontend/src/app/approval/page.tsx
+	new file:   frontend/src/app/calendar/layout.tsx
+	new file:   frontend/src/app/calendar/page.tsx
+	modified:   frontend/src/app/components/PersonalProfile.jsx
+	deleted:    frontend/src/app/components/inbox.tsx
+	new file:   frontend/src/app/create-post/page.tsx
+	modified:   frontend/src/app/dashboard/layout.tsx
+	modified:   frontend/src/app/dashboard/page.tsx
+	new file:   frontend/src/app/geo-studio/.gitignore
+	new file:   frontend/src/app/geo-studio/eslint.config.js
+	new file:   frontend/src/app/geo-studio/index.html
+	new file:   frontend/src/app/geo-studio/layout.tsx
+	new file:   frontend/src/app/geo-studio/package-lock.json
+	new file:   frontend/src/app/geo-studio/package.json
+	new file:   frontend/src/app/geo-studio/page.tsx
+	new file:   frontend/src/app/geo-studio/public/vite.svg
+	new file:   frontend/src/app/geo-studio/src/App.css
+	new file:   frontend/src/app/geo-studio/src/App.jsx
+	new file:   frontend/src/app/geo-studio/src/GEOStudio.css
+	new file:   frontend/src/app/geo-studio/src/GEOStudio.jsx
+	new file:   frontend/src/app/geo-studio/src/LeftPanel.css
+	new file:   frontend/src/app/geo-studio/src/LeftPanel.jsx
+	new file:   frontend/src/app/geo-studio/src/RightPanel.css
+	new file:   frontend/src/app/geo-studio/src/RightPanel.jsx
+	new file:   frontend/src/app/geo-studio/src/assets/react.svg
+	new file:   frontend/src/app/geo-studio/src/components/ui/BreakdownMetrics.css
+	new file:   frontend/src/app/geo-studio/src/components/ui/BreakdownMetrics.jsx
+	new file:   frontend/src/app/geo-studio/src/components/ui/GlassCard.css
+	new file:   frontend/src/app/geo-studio/src/components/ui/GlassCard.jsx
+	new file:   frontend/src/app/geo-studio/src/components/ui/RunButton.css
+	new file:   frontend/src/app/geo-studio/src/components/ui/RunButton.jsx
+	new file:   frontend/src/app/geo-studio/src/components/ui/ScoreBadge.css
+	new file:   frontend/src/app/geo-studio/src/components/ui/ScoreBadge.jsx
+	new file:   frontend/src/app/geo-studio/src/index.css
+	new file:   frontend/src/app/geo-studio/src/main.jsx
+	new file:   frontend/src/app/geo-studio/vite.config.js
+	modified:   frontend/src/app/globals.css
+	renamed:    frontend/src/app/components/inbox.css -> frontend/src/app/inbox/inbox.css
+	new file:   frontend/src/app/inbox/inbox.tsx
+	new file:   frontend/src/app/inbox/page.tsx
+	modified:   frontend/src/app/loading.tsx
+	modified:   frontend/src/app/page.tsx
+	new file:   frontend/src/app/personal-profile/page.tsx
+	modified:   frontend/src/app/profile.css
+	modified:   frontend/src/app/signin/page.tsx
+	modified:   frontend/src/app/signup/page.tsx
+	new file:   frontend/src/components/Calendar.tsx
+	modified:   frontend/src/components/layout/Header.tsx
+	new file:   frontend/src/components/layout/Navbar.tsx
+	modified:   frontend/src/components/layout/Sidebar.tsx
+	modified:   frontend/src/components/previews/FacebookPreview.tsx
+	modified:   frontend/src/components/previews/InstagramPreview.tsx
+	modified:   frontend/src/components/previews/TelegramPreview.tsx
+	modified:   frontend/src/components/previews/TikTokPreview.tsx
+	modified:   frontend/src/components/previews/TwitterPreview.tsx
+	modified:   frontend/src/components/previews/WhatsAppPreview.tsx
+	modified:   frontend/src/components/previews/YouTubePreview.tsx
+	new file:   frontend/src/types/calendar.ts
+	modified:   node_modules/.package-lock.json
+	modified:   orean-web/app/components/LoadingScreen.tsx
+	modified:   orean-web/package-lock.json
+	modified:   package-lock.json
+	new file:   status.txt
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+	both modified:   backend/.env
+	both modified:   backend/node_modules/.package-lock.json
+	both modified:   backend/src/controllers/auth.ts
+	both modified:   backend/src/routes/auth.ts
+	both modified:   backend/src/server.ts
+	both added:      backend/tsc_output.txt
+	both modified:   frontend/package-lock.json
+	both modified:   orean-web/app/loading.tsx
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	git_status.txt
+
