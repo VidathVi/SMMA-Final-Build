@@ -18,9 +18,13 @@ const pool = new Pool({
 
 const LINKEDIN_CLIENT_ID = process.env.LINKEDIN_CLIENT_ID;
 const LINKEDIN_CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
-const LINKEDIN_REDIRECT_URI = process.env.LINKEDIN_REDIRECT_URI || "http://localhost:8080/api/linkedin/callback";
+const LINKEDIN_REDIRECT_URI =
+  process.env.LINKEDIN_REDIRECT_URI ||
+  "http://localhost:8080/api/linkedin/callback";
 
-const LINKEDIN_SCOPES = ["openid", "profile", "email", "w_member_social"].join(" ");
+const LINKEDIN_SCOPES = ["openid", "profile", "email", "w_member_social"].join(
+  " ",
+);
 
 // Generate LinkedIn OAuth2 URL
 export const getLinkedInAuthUrl = (req: AuthRequest, res: Response) => {
@@ -60,18 +64,28 @@ export const linkedinCallback = async (req: Request, res: Response) => {
       }).toString(),
       {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      }
+      },
     );
 
-    const { access_token, expires_in, refresh_token, refresh_token_expires_in } = tokenResponse.data;
+    const {
+      access_token,
+      expires_in,
+      refresh_token,
+      refresh_token_expires_in,
+    } = tokenResponse.data;
 
     // Get user profile using OpenID userinfo endpoint
-    const profileResponse = await axios.get("https://api.linkedin.com/v2/userinfo", {
-      headers: { Authorization: `Bearer ${access_token}` },
-    });
+    const profileResponse = await axios.get(
+      "https://api.linkedin.com/v2/userinfo",
+      {
+        headers: { Authorization: `Bearer ${access_token}` },
+      },
+    );
 
     const profile = profileResponse.data;
-    const displayName = profile.name || `${profile.given_name || ""} ${profile.family_name || ""}`.trim();
+    const displayName =
+      profile.name ||
+      `${profile.given_name || ""} ${profile.family_name || ""}`.trim();
     const platformUserId = profile.sub;
 
     // Store tokens in database
@@ -84,7 +98,15 @@ export const linkedinCallback = async (req: Request, res: Response) => {
          VALUES ($1, 'linkedin', $2, $3, $4, $5, $6, $7)
          ON CONFLICT (user_id, platform)
          DO UPDATE SET access_token = $2, refresh_token = $3, token_expiry = $4, platform_user_id = $5, platform_username = $6, scopes = $7, updated_at = CURRENT_TIMESTAMP`,
-        [userId, access_token, refresh_token || null, tokenExpiry, platformUserId, displayName, LINKEDIN_SCOPES]
+        [
+          userId,
+          access_token,
+          refresh_token || null,
+          tokenExpiry,
+          platformUserId,
+          displayName,
+          LINKEDIN_SCOPES,
+        ],
       );
 
       // Update social_connections
@@ -93,26 +115,32 @@ export const linkedinCallback = async (req: Request, res: Response) => {
          VALUES ($1, 'linkedin', $2, $3)
          ON CONFLICT (user_id, platform)
          DO UPDATE SET platform_username = $2, profile_url = $3, connected_at = CURRENT_TIMESTAMP`,
-        [userId, displayName, `https://linkedin.com/in/${platformUserId}`]
+        [userId, displayName, `https://linkedin.com/in/${platformUserId}`],
       );
     } finally {
       client.release();
     }
 
-    res.redirect(`${process.env.FRONTEND_URL || "http://localhost:3000"}/dashboard/settings?connected=linkedin`);
+    res.redirect(
+      `${process.env.FRONTEND_URL || "http://localhost:3000"}/dashboard/settings?connected=linkedin`,
+    );
   } catch (error: any) {
     console.error("LinkedIn Callback Error:", error.response?.data || error);
-    res.status(500).json({ message: "Failed to complete LinkedIn authentication" });
+    res
+      .status(500)
+      .json({ message: "Failed to complete LinkedIn authentication" });
   }
 };
 
 // Helper to get LinkedIn access token
-async function getLinkedInToken(userId: number): Promise<{ accessToken: string; platformUserId: string }> {
+async function getLinkedInToken(
+  userId: number,
+): Promise<{ accessToken: string; platformUserId: string }> {
   const client = await pool.connect();
   try {
     const result = await client.query(
       "SELECT access_token, platform_user_id FROM social_tokens WHERE user_id = $1 AND platform = 'linkedin'",
-      [userId]
+      [userId],
     );
 
     if (result.rows.length === 0) {
@@ -143,7 +171,9 @@ export const getLinkedInProfile = async (req: AuthRequest, res: Response) => {
   } catch (error: any) {
     console.error("LinkedIn Profile Error:", error.response?.data || error);
     if (error.message === "LinkedIn not connected") {
-      return res.status(404).json({ message: "LinkedIn account not connected" });
+      return res
+        .status(404)
+        .json({ message: "LinkedIn account not connected" });
     }
     res.status(500).json({ message: "Failed to fetch LinkedIn profile" });
   }
@@ -172,7 +202,9 @@ export const getLinkedInPosts = async (req: AuthRequest, res: Response) => {
   } catch (error: any) {
     console.error("LinkedIn Posts Error:", error.response?.data || error);
     if (error.message === "LinkedIn not connected") {
-      return res.status(404).json({ message: "LinkedIn account not connected" });
+      return res
+        .status(404)
+        .json({ message: "LinkedIn account not connected" });
     }
     res.status(500).json({ message: "Failed to fetch LinkedIn posts" });
   }
@@ -212,7 +244,7 @@ export const createLinkedInPost = async (req: AuthRequest, res: Response) => {
           "LinkedIn-Version": "202401",
           "X-Restli-Protocol-Version": "2.0.0",
         },
-      }
+      },
     );
 
     res.json({
@@ -222,7 +254,9 @@ export const createLinkedInPost = async (req: AuthRequest, res: Response) => {
   } catch (error: any) {
     console.error("LinkedIn Create Post Error:", error.response?.data || error);
     if (error.message === "LinkedIn not connected") {
-      return res.status(404).json({ message: "LinkedIn account not connected" });
+      return res
+        .status(404)
+        .json({ message: "LinkedIn account not connected" });
     }
     res.status(500).json({ message: "Failed to create LinkedIn post" });
   }
@@ -237,11 +271,11 @@ export const disconnectLinkedIn = async (req: AuthRequest, res: Response) => {
     try {
       await client.query(
         "DELETE FROM social_tokens WHERE user_id = $1 AND platform = 'linkedin'",
-        [userId]
+        [userId],
       );
       await client.query(
         "DELETE FROM social_connections WHERE user_id = $1 AND platform = 'linkedin'",
-        [userId]
+        [userId],
       );
     } finally {
       client.release();

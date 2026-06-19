@@ -1,64 +1,68 @@
 /* GlassCard specific styles */
 .glass-card {
-    /* Inherits .glass-effect from GEOStudio.css for now */
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+  /* Inherits .glass-effect from GEOStudio.css for now */
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 /* We also migrate the .glass-effect styles here for better modularity */
 .glass-effect {
-    background: var(--geo-glass-bg);
-    backdrop-filter: var(--geo-glass-blur);
-    -webkit-backdrop-filter: var(--geo-glass-blur);
-    border: 1px solid var(--geo-glass-border);
-    border-radius: 1.25rem;
-    box-shadow: var(--geo-glass-shadow);
-    padding: 1.75rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--geo-glass-bg);
+  backdrop-filter: var(--geo-glass-blur);
+  -webkit-backdrop-filter: var(--geo-glass-blur);
+  border: 1px solid var(--geo-glass-border);
+  border-radius: 1.25rem;
+  box-shadow: var(--geo-glass-shadow);
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-effect::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.05) 0%,
-            rgba(255, 255, 255, 0) 100%);
-    pointer-events: none;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
 }
 
 /* Optional hover state for cards */
 .glass-card.interactive {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .glass-card.interactive:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        0 0 20px rgba(0, 210, 255, 0.1);
-    /* Subtle neon glow */
-    border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(0, 210, 255, 0.1);
+  /* Subtle neon glow */
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .glass-card.interactive::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-            rgba(255, 255, 255, 0.06),
-            transparent 40%);
-    opacity: 0;
-    transition: opacity 0.5s;
-    pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.06),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
 }
 
 .glass-card.interactive:hover::after {
-    opacity: 1;
+  opacity: 1;
 }

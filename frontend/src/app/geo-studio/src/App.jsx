@@ -1,6 +1,6 @@
-import React from 'react'
-import GEOStudio from './GEOStudio'
-import './App.css'
+import React from "react";
+import GEOStudio from "./GEOStudio";
+import "./App.css";
 
 function App() {
   return (
@@ -8,7 +8,7 @@ function App() {
       {/* Navbar would go here (Shared Global Component) */}
       <GEOStudio />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

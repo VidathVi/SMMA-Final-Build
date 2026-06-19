@@ -39,7 +39,7 @@ export const createMediaAsset = async (
   durationSeconds: number | null = null,
   altText: string | null = null,
   tags: string | null = null,
-  campaignId: string | null = null
+  campaignId: string | null = null,
 ): Promise<MediaAsset> => {
   const result = await pool.query(
     `INSERT INTO media_assets
@@ -49,10 +49,21 @@ export const createMediaAsset = async (
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
      RETURNING *`,
     [
-      userId, fileName, originalName, mimeType, mediaType, fileSize,
-      fileUrl, thumbnailUrl, width, height, durationSeconds,
-      altText, tags, campaignId,
-    ]
+      userId,
+      fileName,
+      originalName,
+      mimeType,
+      mediaType,
+      fileSize,
+      fileUrl,
+      thumbnailUrl,
+      width,
+      height,
+      durationSeconds,
+      altText,
+      tags,
+      campaignId,
+    ],
   );
 
   return result.rows[0];
@@ -61,7 +72,7 @@ export const createMediaAsset = async (
 // ─── Get all media assets for a user ────────────────────────────────────
 export const getMediaAssetsByUserId = async (
   userId: number,
-  mediaType?: MediaType
+  mediaType?: MediaType,
 ): Promise<MediaAsset[]> => {
   let query = `SELECT * FROM media_assets WHERE user_id = $1`;
   const params: any[] = [userId];
@@ -79,23 +90,22 @@ export const getMediaAssetsByUserId = async (
 
 // ─── Get a single media asset by ID ─────────────────────────────────────
 export const getMediaAssetById = async (
-  id: number
+  id: number,
 ): Promise<MediaAsset | undefined> => {
-  const result = await pool.query(
-    `SELECT * FROM media_assets WHERE id = $1`,
-    [id]
-  );
+  const result = await pool.query(`SELECT * FROM media_assets WHERE id = $1`, [
+    id,
+  ]);
 
   return result.rows[0];
 };
 
 // ─── Get media assets by campaign ID ────────────────────────────────────
 export const getMediaAssetsByCampaignId = async (
-  campaignId: string
+  campaignId: string,
 ): Promise<MediaAsset[]> => {
   const result = await pool.query(
     `SELECT * FROM media_assets WHERE campaign_id = $1 ORDER BY created_at DESC`,
-    [campaignId]
+    [campaignId],
   );
 
   return result.rows;
@@ -106,7 +116,7 @@ export const updateMediaAsset = async (
   id: number,
   altText: string | null,
   tags: string | null,
-  campaignId: string | null
+  campaignId: string | null,
 ): Promise<MediaAsset | undefined> => {
   const result = await pool.query(
     `UPDATE media_assets
@@ -116,7 +126,7 @@ export const updateMediaAsset = async (
          updated_at = CURRENT_TIMESTAMP
      WHERE id = $4
      RETURNING *`,
-    [altText, tags, campaignId, id]
+    [altText, tags, campaignId, id],
   );
 
   return result.rows[0];
@@ -124,21 +134,20 @@ export const updateMediaAsset = async (
 
 // ─── Delete a media asset ───────────────────────────────────────────────
 export const deleteMediaAsset = async (id: number): Promise<boolean> => {
-  const result = await pool.query(
-    `DELETE FROM media_assets WHERE id = $1`,
-    [id]
-  );
+  const result = await pool.query(`DELETE FROM media_assets WHERE id = $1`, [
+    id,
+  ]);
 
   return (result.rowCount ?? 0) > 0;
 };
 
 // ─── Delete all media assets for a user ─────────────────────────────────
 export const deleteMediaAssetsByUserId = async (
-  userId: number
+  userId: number,
 ): Promise<number> => {
   const result = await pool.query(
     `DELETE FROM media_assets WHERE user_id = $1`,
-    [userId]
+    [userId],
   );
 
   return result.rowCount ?? 0;

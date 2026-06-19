@@ -18,12 +18,14 @@ const pool = new Pool({
 
 const YOUTUBE_CLIENT_ID = process.env.YOUTUBE_CLIENT_ID;
 const YOUTUBE_CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET;
-const YOUTUBE_REDIRECT_URI = process.env.YOUTUBE_REDIRECT_URI || "http://localhost:8080/api/youtube/callback";
+const YOUTUBE_REDIRECT_URI =
+  process.env.YOUTUBE_REDIRECT_URI ||
+  "http://localhost:8080/api/youtube/callback";
 
 const oauth2Client = new google.auth.OAuth2(
   YOUTUBE_CLIENT_ID,
   YOUTUBE_CLIENT_SECRET,
-  YOUTUBE_REDIRECT_URI
+  YOUTUBE_REDIRECT_URI,
 );
 
 const YOUTUBE_SCOPES = [
@@ -95,7 +97,7 @@ export const youtubeCallback = async (req: Request, res: Response) => {
           platformUserId,
           platformUsername,
           YOUTUBE_SCOPES.join(","),
-        ]
+        ],
       );
 
       // Also update social_connections table
@@ -104,17 +106,25 @@ export const youtubeCallback = async (req: Request, res: Response) => {
          VALUES ($1, 'youtube', $2, $3)
          ON CONFLICT (user_id, platform)
          DO UPDATE SET platform_username = $2, profile_url = $3, connected_at = CURRENT_TIMESTAMP`,
-        [userId, platformUsername, `https://youtube.com/channel/${platformUserId}`]
+        [
+          userId,
+          platformUsername,
+          `https://youtube.com/channel/${platformUserId}`,
+        ],
       );
     } finally {
       client.release();
     }
 
     // Redirect to frontend settings page
-    res.redirect(`${process.env.FRONTEND_URL || "http://localhost:3000"}/dashboard/settings?connected=youtube`);
+    res.redirect(
+      `${process.env.FRONTEND_URL || "http://localhost:3000"}/dashboard/settings?connected=youtube`,
+    );
   } catch (error: any) {
     console.error("YouTube Callback Error:", error);
-    res.status(500).json({ message: "Failed to complete YouTube authentication" });
+    res
+      .status(500)
+      .json({ message: "Failed to complete YouTube authentication" });
   }
 };
 
@@ -124,7 +134,7 @@ async function getAuthenticatedYouTube(userId: number) {
   try {
     const result = await client.query(
       "SELECT access_token, refresh_token, token_expiry FROM social_tokens WHERE user_id = $1 AND platform = 'youtube'",
-      [userId]
+      [userId],
     );
 
     if (result.rows.length === 0) {
@@ -136,7 +146,7 @@ async function getAuthenticatedYouTube(userId: number) {
     const authClient = new google.auth.OAuth2(
       YOUTUBE_CLIENT_ID,
       YOUTUBE_CLIENT_SECRET,
-      YOUTUBE_REDIRECT_URI
+      YOUTUBE_REDIRECT_URI,
     );
 
     authClient.setCredentials({
@@ -152,7 +162,11 @@ async function getAuthenticatedYouTube(userId: number) {
         await dbClient.query(
           `UPDATE social_tokens SET access_token = $1, token_expiry = $2, updated_at = CURRENT_TIMESTAMP
            WHERE user_id = $3 AND platform = 'youtube'`,
-          [tokens.access_token, tokens.expiry_date ? new Date(tokens.expiry_date) : null, userId]
+          [
+            tokens.access_token,
+            tokens.expiry_date ? new Date(tokens.expiry_date) : null,
+            userId,
+          ],
         );
       } finally {
         dbClient.release();
@@ -202,7 +216,9 @@ export const getYouTubeVideos = async (req: AuthRequest, res: Response) => {
       mine: true,
     });
 
-    const uploadsPlaylistId = channelResponse.data.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+    const uploadsPlaylistId =
+      channelResponse.data.items?.[0]?.contentDetails?.relatedPlaylists
+        ?.uploads;
 
     if (!uploadsPlaylistId) {
       return res.json({ videos: [] });
@@ -215,9 +231,9 @@ export const getYouTubeVideos = async (req: AuthRequest, res: Response) => {
       maxResults,
     });
 
-    const videoIds = playlistResponse.data.items?.map(
-      (item) => item.contentDetails?.videoId
-    ).filter(Boolean) as string[];
+    const videoIds = playlistResponse.data.items
+      ?.map((item) => item.contentDetails?.videoId)
+      .filter(Boolean) as string[];
 
     if (!videoIds || videoIds.length === 0) {
       return res.json({ videos: [] });
@@ -291,11 +307,11 @@ export const disconnectYouTube = async (req: AuthRequest, res: Response) => {
     try {
       await client.query(
         "DELETE FROM social_tokens WHERE user_id = $1 AND platform = 'youtube'",
-        [userId]
+        [userId],
       );
       await client.query(
         "DELETE FROM social_connections WHERE user_id = $1 AND platform = 'youtube'",
-        [userId]
+        [userId],
       );
     } finally {
       client.release();

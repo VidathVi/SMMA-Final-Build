@@ -1,9 +1,14 @@
 import express from "express";
-import { testAsset, uploadAsset, getAssets, addComment, getAssetById } from "../controllers/asset";
+import {
+  testAsset,
+  uploadAsset,
+  getAssets,
+  addComment,
+  getAssetById,
+} from "../controllers/asset";
 import upload from "../middleware/upload";
 import { authMiddleware } from "../middleware/authMiddleware";
 import { roleMiddleware } from "../middleware/roleMiddleware";
-
 
 const router = express.Router();
 
@@ -21,7 +26,7 @@ router.post(
   authMiddleware,
   roleMiddleware(["admin", "manager", "designer"]),
   upload.single("file"),
-  uploadAsset
+  uploadAsset,
 );
 
 // All authenticated users can view assets

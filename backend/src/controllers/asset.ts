@@ -26,7 +26,6 @@ export const uploadAsset = (req: Request, res: Response) => {
   } catch (error) {
     return res.status(500).json({ message: "Upload failed", error });
   }
-
 };
 
 export const getAssets = (req: Request, res: Response) => {
@@ -53,12 +52,11 @@ export const getAssets = (req: Request, res: Response) => {
       fileUrl: "local/456-image2.png",
       version: 1,
       visibility: "private",
-
     },
   ];
 
   const filteredAssets = campaignId
-    ? assets.filter(a => a.campaignId === campaignId)
+    ? assets.filter((a) => a.campaignId === campaignId)
     : assets;
 
   res.json(filteredAssets);
@@ -115,7 +113,7 @@ export const getAssetById = (req: Request, res: Response) => {
     },
   ];
 
-  const asset = assets.find(a => a.id === Number(id));
+  const asset = assets.find((a) => a.id === Number(id));
 
   if (!asset) {
     return res.status(404).json({ message: "Asset not found" });

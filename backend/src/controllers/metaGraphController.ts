@@ -53,7 +53,7 @@ export const metaOAuthCallback = async (req: AuthRequest, res: Response) => {
     const longLivedResult = await exchangeForLongLivedToken(
       accessToken,
       appId,
-      appSecret
+      appSecret,
     );
 
     // Get user profile to store platform identifiers
@@ -73,7 +73,7 @@ export const metaOAuthCallback = async (req: AuthRequest, res: Response) => {
       expiresAt,
       profile.id,
       profile.name,
-      "public_profile,email,pages_manage_posts,pages_read_engagement"
+      "public_profile,email,pages_manage_posts,pages_read_engagement",
     );
 
     res.status(200).json({
@@ -99,7 +99,7 @@ export const metaOAuthCallback = async (req: AuthRequest, res: Response) => {
 
 export const refreshMetaPlatformToken = async (
   req: AuthRequest,
-  res: Response
+  res: Response,
 ) => {
   try {
     const userId = req.user?.id;
@@ -115,7 +115,7 @@ export const refreshMetaPlatformToken = async (
 
     const refreshed = await refreshMetaToken(
       userId,
-      platform as SocialPlatform
+      platform as SocialPlatform,
     );
 
     res.json({
@@ -189,14 +189,14 @@ export const publishToFacebook = async (req: AuthRequest, res: Response) => {
         pageId,
         targetPage.access_token,
         mediaUrl,
-        message
+        message,
       );
     } else {
       result = await publishToFacebookPage(
         pageId,
         targetPage.access_token,
         message,
-        mediaUrl
+        mediaUrl,
       );
     }
 
@@ -231,7 +231,9 @@ export const scheduleToFacebook = async (req: AuthRequest, res: Response) => {
     const scheduledDate = new Date(scheduledTime);
     const now = new Date();
     const tenMinutesFromNow = new Date(now.getTime() + 10 * 60 * 1000);
-    const sixMonthsFromNow = new Date(now.getTime() + 180 * 24 * 60 * 60 * 1000);
+    const sixMonthsFromNow = new Date(
+      now.getTime() + 180 * 24 * 60 * 60 * 1000,
+    );
 
     if (scheduledDate < tenMinutesFromNow) {
       return res.status(400).json({
@@ -265,7 +267,7 @@ export const scheduleToFacebook = async (req: AuthRequest, res: Response) => {
       targetPage.access_token,
       message,
       scheduledTimestamp,
-      mediaUrl
+      mediaUrl,
     );
 
     res.status(201).json({
@@ -315,7 +317,7 @@ export const publishToInstagram = async (req: AuthRequest, res: Response) => {
     const containerId = await createInstagramMediaContainer(
       igUserId,
       token.access_token,
-      { caption, imageUrl, videoUrl }
+      { caption, imageUrl, videoUrl },
     );
 
     // For video, we need to wait for processing
@@ -328,7 +330,7 @@ export const publishToInstagram = async (req: AuthRequest, res: Response) => {
     const result = await publishInstagramMedia(
       igUserId,
       token.access_token,
-      containerId
+      containerId,
     );
 
     res.status(201).json({

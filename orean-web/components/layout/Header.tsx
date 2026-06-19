@@ -14,7 +14,6 @@ export default function Header() {
 
   return (
     <header className="h-20 bg-white/5 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-6 shrink-0 shadow-lg z-20 sticky top-0 transition-all">
-      
       {/* Search / Command Palette Taser */}
       <div className="flex-1 max-w-lg">
         <div className="relative group hidden sm:block">
@@ -33,15 +32,14 @@ export default function Header() {
           </div>
         </div>
         <button className="sm:hidden p-2.5 text-slate-300 hover:bg-white/10 rounded-xl transition-colors">
-           <Search className="w-5 h-5" />
+          <Search className="w-5 h-5" />
         </button>
       </div>
 
       {/* Right Side Actions */}
       <div className="flex items-center space-x-3 sm:space-x-5">
-        
         {/* GEO AI Toggle */}
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={triggerAi}
@@ -54,13 +52,13 @@ export default function Header() {
             <Sparkles className="w-4 h-4 mr-2 shrink-0 animate-pulse text-purple-400" />
           )}
           <span className="hidden sm:inline-block truncate">
-             {isAiLoading ? "Processing..." : "AI Co-pilot"}
+            {isAiLoading ? "Processing..." : "AI Co-pilot"}
           </span>
         </motion.button>
 
         {/* Notifications */}
         <div className="relative px-1">
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.1, rotate: 10 }}
             whileTap={{ scale: 0.9 }}
             className="p-2.5 text-slate-400 hover:text-white focus:outline-none transition-colors rounded-xl hover:bg-white/10 relative shadow-sm border border-transparent hover:border-white/5"
@@ -73,8 +71,12 @@ export default function Header() {
         {/* User Profile */}
         <div className="pl-4 border-l border-white/10 flex items-center space-x-3 cursor-pointer group">
           <div className="hidden md:flex flex-col items-end">
-            <span className="text-sm font-bold text-slate-200 group-hover:text-blue-400 transition-colors">Jane Doe</span>
-            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Admin</span>
+            <span className="text-sm font-bold text-slate-200 group-hover:text-blue-400 transition-colors">
+              Jane Doe
+            </span>
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider">
+              Admin
+            </span>
           </div>
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-slate-800 flex items-center justify-center text-white font-extrabold shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:scale-105 transition-transform">
             <span className="text-sm drop-shadow-md">JD</span>

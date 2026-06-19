@@ -32,10 +32,12 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.get("/", (req: Request, res: Response) => {
@@ -78,7 +80,7 @@ const campaignPostsSchema = z.object({
 app.get(
   "/api/campaigns/:campaignId/posts",
   validate(campaignPostsSchema),
-  postController.getByCampaign
+  postController.getByCampaign,
 );
 
 app.get("/api/health", async (req: Request, res: Response) => {
@@ -100,7 +102,9 @@ app.get("/api/health", async (req: Request, res: Response) => {
 // Global Error Handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("Unhandled Error:", err);
-  res.status(500).json({ status: "error", message: err.message || "Internal Server Error" });
+  res
+    .status(500)
+    .json({ status: "error", message: err.message || "Internal Server Error" });
 });
 
 app.listen(port, () => {
@@ -110,7 +114,8 @@ app.listen(port, () => {
 // ─── Error Handler (must be last) ───────────────────────────────────────
 app.use(errorHandler);
 
-pool.connect()
+pool
+  .connect()
   .then((client) => {
     console.log("Connected to PostgreSQL Database");
     client.release();

@@ -1,12 +1,12 @@
 :root {
   --bg-dark: #213555;
-  --bg-card: #3E5879;
-  --text-primary: #F5EFE7;
+  --bg-card: #3e5879;
+  --text-primary: #f5efe7;
   --text-secondary: #ffffff;
-  --text-muted: #A0AAB4;
-  --accent-gold: #D8C4B6;
-  --border-color: #4B5563;
-  --input-bg: #2C3E50;
+  --text-muted: #a0aab4;
+  --accent-gold: #d8c4b6;
+  --border-color: #4b5563;
+  --input-bg: #2c3e50;
 }
 
 /* Layout Structure */
@@ -16,7 +16,7 @@
   min-height: 100vh;
   background-color: var(--bg-dark);
   color: var(--text-primary);
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .app-body {
@@ -116,7 +116,7 @@
 .breadcrumbs {
   color: var(--text-primary);
   font-size: 25px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .header-actions {
@@ -132,7 +132,6 @@
   cursor: pointer;
   position: relative;
 }
-
 
 .user-avatar-sm {
   width: 40px;

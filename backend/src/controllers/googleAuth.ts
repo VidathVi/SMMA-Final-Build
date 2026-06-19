@@ -15,7 +15,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 // Verify Google ID token by calling Google's tokeninfo endpoint
 async function verifyGoogleToken(idToken: string) {
   const response = await fetch(
-    `https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`
+    `https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`,
   );
 
   if (!response.ok) {
@@ -54,7 +54,7 @@ export const googleAuth = async (req: Request, res: Response) => {
       // Check if user already exists with this Google ID
       let result = await client.query(
         "SELECT * FROM users WHERE google_id = $1",
-        [googleUser.googleId]
+        [googleUser.googleId],
       );
 
       let user;
@@ -73,7 +73,7 @@ export const googleAuth = async (req: Request, res: Response) => {
           user = result.rows[0];
           await client.query(
             "UPDATE users SET google_id = $1, avatar_url = $2 WHERE id = $3",
-            [googleUser.googleId, googleUser.picture, user.id]
+            [googleUser.googleId, googleUser.picture, user.id],
           );
           user.google_id = googleUser.googleId;
           user.avatar_url = googleUser.picture;
@@ -87,7 +87,7 @@ export const googleAuth = async (req: Request, res: Response) => {
           while (true) {
             const existing = await client.query(
               "SELECT id FROM users WHERE username = $1",
-              [finalUsername]
+              [finalUsername],
             );
             if (existing.rows.length === 0) break;
             finalUsername = `${username}_${counter}`;
@@ -103,7 +103,7 @@ export const googleAuth = async (req: Request, res: Response) => {
               googleUser.email,
               googleUser.googleId,
               googleUser.picture,
-            ]
+            ],
           );
           user = newUser.rows[0];
         }
@@ -118,7 +118,7 @@ export const googleAuth = async (req: Request, res: Response) => {
           role: user.role,
         },
         JWT_SECRET,
-        { expiresIn: "24h" }
+        { expiresIn: "24h" },
       );
 
       res.json({

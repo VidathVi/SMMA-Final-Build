@@ -20,7 +20,6 @@ export default function PersonalProfile({ user, onUpdate }) {
     }
   };
 
-
   return (
     <div className="profile-section">
       <h1 className="page-title">Personal Profile</h1>
@@ -31,7 +30,11 @@ export default function PersonalProfile({ user, onUpdate }) {
         <div className="left-column">
           <h3 className="section-title">Basic Info</h3>
           <div className="avatar-wrapper">
-            <img src={user.avatar || "/default-avatar.png"} alt="Profile" className="avatar-lg" />
+            <img
+              src={user.avatar || "/default-avatar.png"}
+              alt="Profile"
+              className="avatar-lg"
+            />
             <button
               className="camera-btn"
               onClick={() => fileInputRef.current.click()}
@@ -117,7 +120,10 @@ export default function PersonalProfile({ user, onUpdate }) {
               </div>
               <div className="form-col">
                 <label>Preferred working language</label>
-                <div className="language-group" style={{ backgroundColor: 'var(--input-bg)' }}>
+                <div
+                  className="language-group"
+                  style={{ backgroundColor: "var(--input-bg)" }}
+                >
                   {["Sinhala", "Tamil", "English"].map((lang) => (
                     <button
                       key={lang}
@@ -145,8 +151,7 @@ export default function PersonalProfile({ user, onUpdate }) {
                   <option>(GMT+1) Europe</option>
                 </select>
               </div>
-              <div className="form-col">
-              </div>
+              <div className="form-col"></div>
             </div>
           </div>
 

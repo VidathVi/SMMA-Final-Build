@@ -17,7 +17,9 @@ export default function CalendarPage() {
     {
       id: "1",
       title: "Spring Campaign Launch",
-      date: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
+      date: new Date(
+        new Date().setDate(new Date().getDate() + 2),
+      ).toISOString(),
       platform: "instagram",
       status: "scheduled",
       author: "Sarah J.",
@@ -25,7 +27,9 @@ export default function CalendarPage() {
     {
       id: "2",
       title: "Product Announcement",
-      date: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
+      date: new Date(
+        new Date().setDate(new Date().getDate() + 2),
+      ).toISOString(),
       platform: "twitter",
       status: "scheduled",
       author: "Admin User",
@@ -33,7 +37,9 @@ export default function CalendarPage() {
     {
       id: "3",
       title: "Weekly Update Video",
-      date: new Date(new Date().setDate(new Date().getDate() + 5)).toISOString(),
+      date: new Date(
+        new Date().setDate(new Date().getDate() + 5),
+      ).toISOString(),
       platform: "youtube",
       status: "draft",
       author: "Media Team",
@@ -41,7 +47,9 @@ export default function CalendarPage() {
     {
       id: "4",
       title: "B2B Outreach Strategy",
-      date: new Date(new Date().setDate(new Date().getDate() - 1)).toISOString(),
+      date: new Date(
+        new Date().setDate(new Date().getDate() - 1),
+      ).toISOString(),
       platform: "linkedin",
       status: "published",
       author: "Sales Lead",
@@ -57,7 +65,9 @@ export default function CalendarPage() {
     {
       id: "6",
       title: "Behind the Scenes Story",
-      date: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString(),
+      date: new Date(
+        new Date().setDate(new Date().getDate() + 10),
+      ).toISOString(),
       platform: "instagram",
       status: "scheduled",
       author: "Admin",
@@ -65,7 +75,9 @@ export default function CalendarPage() {
     {
       id: "7",
       title: "Summer Collection Reels",
-      date: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
+      date: new Date(
+        new Date().setDate(new Date().getDate() + 1),
+      ).toISOString(),
       platform: "instagram",
       status: "scheduled",
       author: "Admin",
@@ -73,7 +85,9 @@ export default function CalendarPage() {
     {
       id: "8",
       title: "Annual Report Highlights",
-      date: new Date(new Date().setDate(new Date().getDate() + 11)).toISOString(),
+      date: new Date(
+        new Date().setDate(new Date().getDate() + 11),
+      ).toISOString(),
       platform: "facebook",
       status: "draft",
       author: "Admin",
@@ -81,7 +95,9 @@ export default function CalendarPage() {
     {
       id: "9",
       title: "CEO Interview-Teaser",
-      date: new Date(new Date().setDate(new Date().getDate() + 12)).toISOString(),
+      date: new Date(
+        new Date().setDate(new Date().getDate() + 12),
+      ).toISOString(),
       platform: "linkedin",
       status: "scheduled",
       author: "Admin",
@@ -97,7 +113,6 @@ export default function CalendarPage() {
     <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
       <Navbar />
       <div className="flex-1 max-w-7xl mx-auto space-y-8 p-6 w-full">
-
         {/* Page Header matching Dashboard */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -105,8 +120,12 @@ export default function CalendarPage() {
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
         >
           <div>
-            <h1 className="text-3xl font-heading font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 tracking-tight">Content Calendar</h1>
-            <p className="text-sm text-slate-400 mt-1">Manage and view your scheduled posts across all platforms.</p>
+            <h1 className="text-3xl font-heading font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 tracking-tight">
+              Content Calendar
+            </h1>
+            <p className="text-sm text-slate-400 mt-1">
+              Manage and view your scheduled posts across all platforms.
+            </p>
           </div>
           <div className="flex items-center space-x-3">
             <motion.button
@@ -122,7 +141,9 @@ export default function CalendarPage() {
               ) : (
                 <Plus className="w-4 h-4 mr-2 relative z-10" />
               )}
-              <span className="relative z-10">{isGenerating ? "Creating..." : "Schedule Post"}</span>
+              <span className="relative z-10">
+                {isGenerating ? "Creating..." : "Schedule Post"}
+              </span>
             </motion.button>
           </div>
         </motion.div>

@@ -27,7 +27,15 @@ export const connectPlatform = async (req: AuthRequest, res: Response) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const { platform, accessToken, refreshToken, tokenExpiresAt, platformUserId, platformUsername, scopes } = req.body;
+    const {
+      platform,
+      accessToken,
+      refreshToken,
+      tokenExpiresAt,
+      platformUserId,
+      platformUsername,
+      scopes,
+    } = req.body;
 
     if (!platform || !accessToken) {
       return res.status(400).json({
@@ -49,7 +57,7 @@ export const connectPlatform = async (req: AuthRequest, res: Response) => {
       tokenExpiresAt ? new Date(tokenExpiresAt) : null,
       platformUserId || null,
       platformUsername || null,
-      scopes || null
+      scopes || null,
     );
 
     res.status(200).json({
@@ -214,8 +222,12 @@ export const refreshToken = async (req: AuthRequest, res: Response) => {
     // If no accessToken provided and it's a Meta platform, use Graph API refresh
     if (!accessToken && (platform === "facebook" || platform === "instagram")) {
       try {
-        const { refreshMetaToken } = await import("../services/metaGraph.service");
-        const refreshed = await refreshMetaToken(userId, platform as SocialPlatform);
+        const { refreshMetaToken } =
+          await import("../services/metaGraph.service");
+        const refreshed = await refreshMetaToken(
+          userId,
+          platform as SocialPlatform,
+        );
 
         return res.json({
           message: `${platform} token refreshed via Meta Graph API`,
@@ -236,7 +248,7 @@ export const refreshToken = async (req: AuthRequest, res: Response) => {
       userId,
       platform as SocialPlatform,
       accessToken,
-      tokenExpiresAt ? new Date(tokenExpiresAt) : null
+      tokenExpiresAt ? new Date(tokenExpiresAt) : null,
     );
 
     if (!token) {
@@ -254,4 +266,3 @@ export const refreshToken = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-

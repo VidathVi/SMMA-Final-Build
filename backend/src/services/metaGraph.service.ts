@@ -42,7 +42,7 @@ async function graphApiRequest<T>(
   endpoint: string,
   accessToken: string,
   method: "GET" | "POST" | "DELETE" = "GET",
-  body?: Record<string, any>
+  body?: Record<string, any>,
 ): Promise<T> {
   const url = endpoint.startsWith("http")
     ? endpoint
@@ -69,7 +69,7 @@ async function graphApiRequest<T>(
     const errorType = data?.error?.type || "UnknownError";
     const errorCode = data?.error?.code || response.status;
     throw new Error(
-      `Meta Graph API Error [${errorType}] (${errorCode}): ${errorMessage}`
+      `Meta Graph API Error [${errorType}] (${errorCode}): ${errorMessage}`,
     );
   }
 
@@ -81,7 +81,7 @@ async function graphApiRequest<T>(
 export async function exchangeForLongLivedToken(
   shortLivedToken: string,
   appId: string,
-  appSecret: string
+  appSecret: string,
 ): Promise<MetaTokenExchangeResult> {
   const params = new URLSearchParams({
     grant_type: "fb_exchange_token",
@@ -91,13 +91,13 @@ export async function exchangeForLongLivedToken(
   });
 
   const response = await fetch(
-    `${GRAPH_API_BASE}/oauth/access_token?${params.toString()}`
+    `${GRAPH_API_BASE}/oauth/access_token?${params.toString()}`,
   );
   const data = await response.json();
 
   if (!response.ok) {
     throw new Error(
-      `Token exchange failed: ${data?.error?.message || response.statusText}`
+      `Token exchange failed: ${data?.error?.message || response.statusText}`,
     );
   }
 
@@ -111,14 +111,14 @@ export async function exchangeForLongLivedToken(
 
 export async function refreshMetaToken(
   userId: number,
-  platform: SocialPlatform
+  platform: SocialPlatform,
 ): Promise<{ accessToken: string; expiresAt: Date | null }> {
   const appId = process.env.META_APP_ID;
   const appSecret = process.env.META_APP_SECRET;
 
   if (!appId || !appSecret) {
     throw new Error(
-      "META_APP_ID and META_APP_SECRET must be set in environment variables"
+      "META_APP_ID and META_APP_SECRET must be set in environment variables",
     );
   }
 
@@ -139,7 +139,7 @@ export async function refreshMetaToken(
   const result = await exchangeForLongLivedToken(
     currentAccessToken,
     appId,
-    appSecret
+    appSecret,
   );
 
   // Calculate new expiry
@@ -171,7 +171,7 @@ export function isTokenExpiringSoon(expiresAt: string | null): boolean {
 
 export async function getValidAccessToken(
   userId: number,
-  platform: SocialPlatform
+  platform: SocialPlatform,
 ): Promise<string> {
   const storedToken = await getRawTokenByPlatform(userId, platform);
   if (!storedToken) {
@@ -189,7 +189,7 @@ export async function getValidAccessToken(
     } catch (error) {
       console.warn(
         `Failed to refresh ${platform} token for user ${userId}, using existing token:`,
-        error
+        error,
       );
       // Fall back to existing token
     }
@@ -201,18 +201,18 @@ export async function getValidAccessToken(
 // ─── Get User Profile ───────────────────────────────────────────────────
 
 export async function getMetaUserProfile(
-  accessToken: string
+  accessToken: string,
 ): Promise<MetaUserProfile> {
   return graphApiRequest<MetaUserProfile>(
     "/me?fields=id,name,email,picture",
-    accessToken
+    accessToken,
   );
 }
 
 // ─── Get User Pages ─────────────────────────────────────────────────────
 
 export async function getMetaUserPages(
-  accessToken: string
+  accessToken: string,
 ): Promise<MetaPageInfo[]> {
   const result = await graphApiRequest<{
     data: MetaPageInfo[];
@@ -226,7 +226,7 @@ export async function publishToFacebookPage(
   pageId: string,
   pageAccessToken: string,
   message: string,
-  mediaUrl?: string
+  mediaUrl?: string,
 ): Promise<MetaPublishResult> {
   if (mediaUrl) {
     // Photo post
@@ -234,7 +234,7 @@ export async function publishToFacebookPage(
       `/${pageId}/photos`,
       pageAccessToken,
       "POST",
-      { message, url: mediaUrl }
+      { message, url: mediaUrl },
     );
   }
 
@@ -243,7 +243,7 @@ export async function publishToFacebookPage(
     `/${pageId}/feed`,
     pageAccessToken,
     "POST",
-    { message }
+    { message },
   );
 }
 
@@ -254,7 +254,7 @@ export async function publishVideoToFacebookPage(
   pageAccessToken: string,
   videoUrl: string,
   description: string,
-  title?: string
+  title?: string,
 ): Promise<MetaPublishResult> {
   return graphApiRequest<MetaPublishResult>(
     `/${pageId}/videos`,
@@ -264,7 +264,7 @@ export async function publishVideoToFacebookPage(
       file_url: videoUrl,
       description,
       title: title || "",
-    }
+    },
   );
 }
 
@@ -277,7 +277,7 @@ export async function createInstagramMediaContainer(
     caption: string;
     imageUrl?: string;
     videoUrl?: string;
-  }
+  },
 ): Promise<string> {
   const body: Record<string, any> = { caption: options.caption };
 
@@ -292,7 +292,7 @@ export async function createInstagramMediaContainer(
     `/${igUserId}/media`,
     accessToken,
     "POST",
-    body
+    body,
   );
 
   return result.id;
@@ -303,13 +303,13 @@ export async function createInstagramMediaContainer(
 export async function publishInstagramMedia(
   igUserId: string,
   accessToken: string,
-  containerId: string
+  containerId: string,
 ): Promise<MetaPublishResult> {
   return graphApiRequest<MetaPublishResult>(
     `/${igUserId}/media_publish`,
     accessToken,
     "POST",
-    { creation_id: containerId }
+    { creation_id: containerId },
   );
 }
 
@@ -321,7 +321,7 @@ export async function schedulePostToFacebookPage(
   pageAccessToken: string,
   message: string,
   scheduledPublishTime: number,
-  mediaUrl?: string
+  mediaUrl?: string,
 ): Promise<MetaPublishResult> {
   if (mediaUrl) {
     return graphApiRequest<MetaPublishResult>(
@@ -333,7 +333,7 @@ export async function schedulePostToFacebookPage(
         url: mediaUrl,
         published: false,
         scheduled_publish_time: scheduledPublishTime,
-      }
+      },
     );
   }
 
@@ -345,6 +345,6 @@ export async function schedulePostToFacebookPage(
       message,
       published: false,
       scheduled_publish_time: scheduledPublishTime,
-    }
+    },
   );
 }

@@ -9,7 +9,8 @@ export const roleMiddleware = (allowedRoles: string[]) => {
 
     if (!allowedRoles.includes(req.user.role)) {
       return res.status(403).json({
-        message: "Forbidden: You do not have permission to access this resource",
+        message:
+          "Forbidden: You do not have permission to access this resource",
       });
     }
 

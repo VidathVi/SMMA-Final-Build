@@ -7,14 +7,14 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const pathname = usePathname();
-  const hideSearchBar = pathname === '/calendar' || pathname === '/geo-studio';
+  const hideSearchBar = pathname === "/calendar" || pathname === "/geo-studio";
   const [isAiLoading, setIsAiLoading] = useState(false);
 
   // User Profile
   const [userProfile, setUserProfile] = useState({
     fullName: "Jane Doe",
     avatar: "/default-avatar.png",
-    workflowRole: "Admin"
+    workflowRole: "Admin",
   });
 
   useEffect(() => {
@@ -40,7 +40,6 @@ export default function Header() {
       window.removeEventListener("storage_user_profile", loadProfile);
       window.removeEventListener("storage", handleStorageEvent);
     };
-
   }, []);
 
   const triggerAi = () => {
@@ -50,7 +49,6 @@ export default function Header() {
 
   return (
     <header className="h-20 bg-[#0A0A3C]/80 backdrop-blur-2xl border-b border-[#1E3C6D] flex items-center justify-between px-6 shrink-0 shadow-lg z-20 sticky top-0 transition-all">
-
       {/* Search / Command Palette Taser */}
       <div className="flex-1 max-w-lg">
         {!hideSearchBar && (
@@ -79,7 +77,6 @@ export default function Header() {
 
       {/* Right Side Actions */}
       <div className="flex items-center space-x-3 sm:space-x-5">
-
         {/* GEO AI Toggle */}
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -111,7 +108,10 @@ export default function Header() {
         </div>
 
         {/* User Profile */}
-        <a href="/personal-profile" className="pl-4 border-l border-white/10 flex items-center space-x-3 cursor-pointer group">
+        <a
+          href="/personal-profile"
+          className="pl-4 border-l border-white/10 flex items-center space-x-3 cursor-pointer group"
+        >
           <div className="hidden md:flex flex-col items-end mr-2">
             <span className="text-sm font-bold text-slate-200 group-hover:text-blue-400 transition-colors">
               {userProfile.fullName}
@@ -121,7 +121,8 @@ export default function Header() {
             </span>
           </div>
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-slate-800 flex items-center justify-center text-white font-extrabold shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:scale-105 transition-transform overflow-hidden relative">
-            {userProfile.avatar && userProfile.avatar !== "/default-avatar.png" ? (
+            {userProfile.avatar &&
+            userProfile.avatar !== "/default-avatar.png" ? (
               <img
                 src={userProfile.avatar}
                 alt="Profile"
@@ -131,14 +132,13 @@ export default function Header() {
               <span className="text-sm drop-shadow-md">
                 {userProfile.fullName
                   ? userProfile.fullName
-                    .split(" ")
-                    .filter(Boolean)
-                    .map((n) => n[0])
-                    .join("")
-                    .toUpperCase()
-                    .slice(0, 2)
+                      .split(" ")
+                      .filter(Boolean)
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()
+                      .slice(0, 2)
                   : "JD"}
-
               </span>
             )}
           </div>

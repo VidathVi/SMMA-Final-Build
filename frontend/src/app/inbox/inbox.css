@@ -10,7 +10,7 @@
   background-color: transparent;
   color: white;
   padding: 20px;
-  border-right: 1px solid rgba(255,255,255,0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logo {
@@ -25,16 +25,16 @@
   padding: 8px;
   margin-bottom: 15px;
   border-radius: 6px;
-  background-color: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: white;
 }
 
 .tabs button {
   margin-right: 5px;
   padding: 6px 10px;
-  background-color: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #94a3b8;
   border-radius: 5px;
   cursor: pointer;
@@ -45,12 +45,12 @@
 }
 
 .chat-item {
-  background-color: rgba(255,255,255,0.05);
+  background-color: rgba(255, 255, 255, 0.05);
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 6px;
   cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   color: white;
 }
 
@@ -67,7 +67,7 @@
 }
 
 .chat-item:hover {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .chat-area {
@@ -82,17 +82,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(255,255,255,0.05);
+  background-color: rgba(255, 255, 255, 0.05);
   color: white;
   padding: 10px;
   border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.chat-header h3 { margin: 0; }
+.chat-header h3 {
+  margin: 0;
+}
 
 .chat-header .actions button {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   color: white;
   border: none;
   padding: 6px 12px;
@@ -104,13 +106,13 @@
 .messages {
   flex: 1;
   margin-top: 20px;
-  background-color: rgba(255,255,255,0.02);
+  background-color: rgba(255, 255, 255, 0.02);
   padding: 15px;
   border-radius: 6px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .message-bubble {
@@ -121,10 +123,10 @@
 }
 
 .message-bubble.received {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   color: white;
   align-self: flex-start;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .message-bubble.sent {
@@ -147,8 +149,8 @@
   flex: 1;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
   color: white;
 }
 
@@ -168,7 +170,7 @@
 }
 
 .chat-item.active {
-  background-color: rgba(255,255,255,0.15);
+  background-color: rgba(255, 255, 255, 0.15);
   outline: 1px solid #3b82f6;
 }
 

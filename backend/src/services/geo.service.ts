@@ -1,4 +1,4 @@
-const FASTAPI_URL = process.env.FASTAPI_URL || 'http://localhost:8000';
+const FASTAPI_URL = process.env.FASTAPI_URL || "http://localhost:8000";
 
 /**
  * Reusable HTTP client for communicating with the internal Python GEO Service
@@ -10,10 +10,10 @@ export const callFastAPI = async (endpoint: string, body: any) => {
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const response = await fetch(`${FASTAPI_URL}${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-      signal: controller.signal
+      signal: controller.signal,
     });
 
     clearTimeout(timeoutId);

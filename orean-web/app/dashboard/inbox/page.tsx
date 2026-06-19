@@ -2,7 +2,14 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, MoreHorizontal, Send, MessageSquare, MessageCircle, Star } from "lucide-react";
+import {
+  Search,
+  MoreHorizontal,
+  Send,
+  MessageSquare,
+  MessageCircle,
+  Star,
+} from "lucide-react";
 
 const initialChats = [
   {
@@ -22,7 +29,10 @@ const initialChats = [
     avatar: "NA",
     messages: [
       { from: "them", text: "The design looks amazing! How can I order this?" },
-      { from: "me", text: "Thank you! You can place your order through our website or send us a DM." }
+      {
+        from: "me",
+        text: "Thank you! You can place your order through our website or send us a DM.",
+      },
     ],
   },
   {
@@ -31,10 +41,16 @@ const initialChats = [
     type: "review",
     avatar: "KA",
     messages: [
-      { from: "them", text: "⭐️⭐️⭐️⭐️⭐️ The product quality is excellent. Highly recommended!" },
-      { from: "me", text: "Thank you so much for your feedback! We appreciate your support." }
+      {
+        from: "them",
+        text: "⭐️⭐️⭐️⭐️⭐️ The product quality is excellent. Highly recommended!",
+      },
+      {
+        from: "me",
+        text: "Thank you so much for your feedback! We appreciate your support.",
+      },
     ],
-  }
+  },
 ];
 
 export default function InboxPage() {
@@ -46,8 +62,13 @@ export default function InboxPage() {
 
   const selectedChat = chats.find((chat) => chat.id === selectedChatId) || null;
 
-  const filteredChats = (activeTab === "all" ? chats : chats.filter((chat) => chat.type === activeTab))
-    .filter(chat => chat.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredChats = (
+    activeTab === "all"
+      ? chats
+      : chats.filter((chat) => chat.type === activeTab)
+  ).filter((chat) =>
+    chat.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   const sendMessage = () => {
     if (!selectedChatId) return;
@@ -63,8 +84,8 @@ export default function InboxPage() {
                 { from: "me", text: inputValue.trim() },
               ],
             }
-          : chat
-      )
+          : chat,
+      ),
     );
     setInputValue("");
   };
@@ -79,8 +100,12 @@ export default function InboxPage() {
   return (
     <div className="max-w-7xl mx-auto p-6 h-[calc(100vh-5rem)]">
       <div className="mb-6">
-        <h1 className="text-3xl font-heading font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 tracking-tight">Unified Inbox</h1>
-        <p className="text-sm text-slate-400 mt-1">Manage all your conversations in one place.</p>
+        <h1 className="text-3xl font-heading font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 tracking-tight">
+          Unified Inbox
+        </h1>
+        <p className="text-sm text-slate-400 mt-1">
+          Manage all your conversations in one place.
+        </p>
       </div>
 
       <div className="flex gap-6 h-[calc(100%-5rem)]">
@@ -125,7 +150,9 @@ export default function InboxPage() {
                 whileHover={{ backgroundColor: "rgba(255,255,255,0.08)" }}
                 onClick={() => setSelectedChatId(chat.id)}
                 className={`p-4 cursor-pointer border-b border-white/5 flex items-start gap-3 transition-colors ${
-                  selectedChatId === chat.id ? "bg-white/10 border-l-2 border-l-blue-500" : ""
+                  selectedChatId === chat.id
+                    ? "bg-white/10 border-l-2 border-l-blue-500"
+                    : ""
                 }`}
               >
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-xs font-bold text-white shrink-0 shadow-lg">
@@ -133,12 +160,18 @@ export default function InboxPage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-bold text-white truncate">{chat.name}</h4>
-                    <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
-                      chat.type === "private" ? "bg-blue-500/20 text-blue-300" :
-                      chat.type === "comment" ? "bg-amber-500/20 text-amber-300" :
-                      "bg-emerald-500/20 text-emerald-300"
-                    }`}>
+                    <h4 className="text-sm font-bold text-white truncate">
+                      {chat.name}
+                    </h4>
+                    <span
+                      className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                        chat.type === "private"
+                          ? "bg-blue-500/20 text-blue-300"
+                          : chat.type === "comment"
+                            ? "bg-amber-500/20 text-amber-300"
+                            : "bg-emerald-500/20 text-emerald-300"
+                      }`}
+                    >
                       {chat.type}
                     </span>
                   </div>
@@ -162,8 +195,18 @@ export default function InboxPage() {
                 </div>
               )}
               <div>
-                <h3 className="text-sm font-bold text-white">{selectedChat ? selectedChat.name : "Select a chat"}</h3>
-                {selectedChat && <p className="text-[11px] text-slate-400">{selectedChat.type === "private" ? "Private Chat" : selectedChat.type === "comment" ? "Post Comment" : "Review"}</p>}
+                <h3 className="text-sm font-bold text-white">
+                  {selectedChat ? selectedChat.name : "Select a chat"}
+                </h3>
+                {selectedChat && (
+                  <p className="text-[11px] text-slate-400">
+                    {selectedChat.type === "private"
+                      ? "Private Chat"
+                      : selectedChat.type === "comment"
+                        ? "Post Comment"
+                        : "Review"}
+                  </p>
+                )}
               </div>
             </div>
             {selectedChat && (
@@ -202,15 +245,19 @@ export default function InboxPage() {
                       {msg.text}
                     </div>
                   </motion.div>
-                )
+                ),
               )
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-center py-20">
                 <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
                   <MessageSquare className="w-8 h-8 text-slate-500" />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">No chat selected</h3>
-                <p className="text-sm text-slate-400">Select a conversation from the left to start messaging.</p>
+                <h3 className="text-lg font-bold text-white mb-1">
+                  No chat selected
+                </h3>
+                <p className="text-sm text-slate-400">
+                  Select a conversation from the left to start messaging.
+                </p>
               </div>
             )}
           </div>
@@ -223,7 +270,11 @@ export default function InboxPage() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                placeholder={selectedChat ? "Type your message here..." : "Select a chat first"}
+                placeholder={
+                  selectedChat
+                    ? "Type your message here..."
+                    : "Select a chat first"
+                }
                 disabled={!selectedChatId}
                 className="flex-1 px-4 py-3 bg-black/20 border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all disabled:opacity-50"
               />

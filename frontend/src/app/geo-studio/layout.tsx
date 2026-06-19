@@ -1,5 +1,3 @@
-
-
 export default function GeoStudioLayout({
   children,
 }: Readonly<{

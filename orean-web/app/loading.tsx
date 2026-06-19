@@ -5,7 +5,7 @@ export default function Loading() {
     <div className="flex min-h-screen w-full flex-col items-center justify-center bg-[#0a0f1c] relative overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none" />
-      
+
       <div className="relative z-10 flex flex-col items-center space-y-6">
         <div className="relative flex items-center justify-center">
           {/* Outer glowing ring */}

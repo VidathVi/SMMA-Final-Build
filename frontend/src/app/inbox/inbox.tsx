@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Facebook, Instagram, MessageCircle, Linkedin, Youtube, Twitter } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  MessageCircle,
+  Linkedin,
+  Youtube,
+  Twitter,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import "./inbox.css";
 
@@ -25,7 +32,10 @@ const initialChats = [
     color: "#E1306C",
     messages: [
       { from: "them", text: "The design looks amazing! How can I order this?" },
-      { from: "me", text: "Thank you! You can place your order through our website or send us a DM." }
+      {
+        from: "me",
+        text: "Thank you! You can place your order through our website or send us a DM.",
+      },
     ],
   },
   {
@@ -35,8 +45,14 @@ const initialChats = [
     icon: MessageCircle,
     color: "#25D366",
     messages: [
-      { from: "them", text: "⭐️⭐️⭐️⭐️⭐️ The product quality is excellent. Highly recommended!" },
-      { from: "me", text: "Thank you so much for your feedback! We appreciate your support." }
+      {
+        from: "them",
+        text: "⭐️⭐️⭐️⭐️⭐️ The product quality is excellent. Highly recommended!",
+      },
+      {
+        from: "me",
+        text: "Thank you so much for your feedback! We appreciate your support.",
+      },
     ],
   },
   {
@@ -47,8 +63,8 @@ const initialChats = [
     color: "#0A66C2",
     messages: [
       { from: "them", text: "I would like to discuss a business opportunity." },
-      { from: "me", text: "Hi! I'd love to connect and chat about this." }
-    ]
+      { from: "me", text: "Hi! I'd love to connect and chat about this." },
+    ],
   },
   {
     id: 5,
@@ -56,9 +72,7 @@ const initialChats = [
     type: "comment",
     icon: Youtube,
     color: "#FF0000",
-    messages: [
-      { from: "them", text: "Great video! Subscribed." },
-    ]
+    messages: [{ from: "them", text: "Great video! Subscribed." }],
   },
   {
     id: 6,
@@ -66,10 +80,8 @@ const initialChats = [
     type: "private",
     icon: Twitter,
     color: "#E2E8F0",
-    messages: [
-      { from: "them", text: "Hey! Just saw your latest tweet." },
-    ]
-  }
+    messages: [{ from: "them", text: "Hey! Just saw your latest tweet." }],
+  },
 ];
 
 export default function Inbox() {
@@ -78,8 +90,7 @@ export default function Inbox() {
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("all");
 
-  const selectedChat =
-    chats.find((chat) => chat.id === selectedChatId) || null;
+  const selectedChat = chats.find((chat) => chat.id === selectedChatId) || null;
 
   const filteredChats =
     activeTab === "all"
@@ -94,14 +105,14 @@ export default function Inbox() {
       prev.map((chat) =>
         chat.id === selectedChatId
           ? {
-            ...chat,
-            messages: [
-              ...chat.messages,
-              { from: "me", text: inputValue.trim() },
-            ],
-          }
-          : chat
-      )
+              ...chat,
+              messages: [
+                ...chat.messages,
+                { from: "me", text: inputValue.trim() },
+              ],
+            }
+          : chat,
+      ),
     );
 
     setInputValue("");
@@ -110,7 +121,7 @@ export default function Inbox() {
   return (
     <div className="inbox-container">
       {/* Sidebar */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4 }}
@@ -157,19 +168,25 @@ export default function Inbox() {
               className={`chat-item ${selectedChatId === chat.id ? "active" : ""}`}
               onClick={() => setSelectedChatId(chat.id)}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  marginBottom: "4px",
+                }}
+              >
                 <chat.icon size={20} color={chat.color} />
                 <h4>{chat.name}</h4>
               </div>
               <p>{chat.messages[chat.messages.length - 1].text}</p>
             </div>
-
           ))}
         </div>
       </motion.div>
 
       {/* Chat Area */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4, delay: 0.2 }}
@@ -193,7 +210,7 @@ export default function Inbox() {
                 >
                   {msg.text}
                 </div>
-              )
+              ),
             )
           ) : (
             <p>Select a chat to view messages.</p>
@@ -207,7 +224,9 @@ export default function Inbox() {
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Type your message here..."
           />
-          <button onClick={sendMessage} disabled={!selectedChatId}>Send</button>
+          <button onClick={sendMessage} disabled={!selectedChatId}>
+            Send
+          </button>
         </div>
       </motion.div>
     </div>

@@ -10,7 +10,7 @@ export default function DashboardLayout({
     <div className="flex h-screen overflow-hidden">
       {/* Left Sidebar Global Navigation */}
       <Sidebar />
-      
+
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header />

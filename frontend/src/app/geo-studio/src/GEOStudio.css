@@ -8,7 +8,7 @@
   --geo-neon-blue: #00d2ff;
   --geo-neon-purple: #9d50bb;
   --geo-glass-blur: blur(12px);
-  --geo-font-family: 'Inter', sans-serif;
+  --geo-font-family: "Inter", sans-serif;
 }
 
 .geo-studio-container {
@@ -45,8 +45,6 @@
   --geo-glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-
-
 .geo-studio-main {
   display: grid;
   flex: 1;
@@ -63,7 +61,7 @@
   width: 100%;
 }
 
-.geo-studio-main.layout-single>.slide-up {
+.geo-studio-main.layout-single > .slide-up {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -104,12 +102,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
   pointer-events: none;
 }
-
 
 @media (max-width: 1100px) {
   .geo-studio-main {

@@ -5,7 +5,8 @@ export const handleMetaWebhook = (req: Request, res: Response) => {
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
 
-  const VERIFY_TOKEN = process.env.META_WEBHOOK_VERIFY_TOKEN || "orean360_webhook_secret";
+  const VERIFY_TOKEN =
+    process.env.META_WEBHOOK_VERIFY_TOKEN || "orean360_webhook_secret";
 
   if (mode && token) {
     if (mode === "subscribe" && token === VERIFY_TOKEN) {
@@ -38,7 +39,10 @@ export const handleWhatsAppWebhook = (req: Request, res: Response) => {
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
 
-  const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || process.env.META_WEBHOOK_VERIFY_TOKEN || "orean360_webhook_secret";
+  const VERIFY_TOKEN =
+    process.env.WHATSAPP_VERIFY_TOKEN ||
+    process.env.META_WEBHOOK_VERIFY_TOKEN ||
+    "orean360_webhook_secret";
 
   if (mode && token) {
     if (mode === "subscribe" && token === VERIFY_TOKEN) {
@@ -63,7 +67,10 @@ export const receiveWhatsAppWebhook = (req: Request, res: Response) => {
       body.entry[0].changes[0].value.messages &&
       body.entry[0].changes[0].value.messages[0]
     ) {
-      console.log("Received WhatsApp Message:", JSON.stringify(body.entry[0].changes[0].value.messages[0], null, 2));
+      console.log(
+        "Received WhatsApp Message:",
+        JSON.stringify(body.entry[0].changes[0].value.messages[0], null, 2),
+      );
     }
     res.status(200).send("EVENT_RECEIVED");
   } else {

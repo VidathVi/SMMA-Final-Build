@@ -85,7 +85,9 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
     let hashedPassword: string | undefined;
     if (password) {
       if (password.length < 6) {
-        return res.status(400).json({ message: "Password must be at least 6 characters" });
+        return res
+          .status(400)
+          .json({ message: "Password must be at least 6 characters" });
       }
       hashedPassword = await bcrypt.hash(password, 10);
     }

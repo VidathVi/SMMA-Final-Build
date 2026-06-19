@@ -38,9 +38,12 @@ export const registerUser = async (req: Request, res: Response) => {
 
   try {
     const client = await pool.connect();
-    
+
     // Check if user exists
-    const existing = await client.query("SELECT * FROM users WHERE username = $1", [username]);
+    const existing = await client.query(
+      "SELECT * FROM users WHERE username = $1",
+      [username],
+    );
     if (existing.rows.length > 0) {
       client.release();
       return res.status(409).json({ message: "Username already exists" });
@@ -53,9 +56,9 @@ export const registerUser = async (req: Request, res: Response) => {
     // Insert user
     const newUser = await client.query(
       "INSERT INTO users (username, password_hash, auth_provider) VALUES ($1, $2, 'local') RETURNING id, username, role",
-      [username, hash]
+      [username, hash],
     );
-    
+
     client.release();
 
     res.status(201).json({
@@ -77,7 +80,10 @@ export const loginUser = async (req: Request, res: Response) => {
 
   try {
     const client = await pool.connect();
-    const result = await client.query("SELECT * FROM users WHERE username = $1", [username]);
+    const result = await client.query(
+      "SELECT * FROM users WHERE username = $1",
+      [username],
+    );
     client.release();
 
     if (result.rows.length === 0) {
@@ -88,8 +94,9 @@ export const loginUser = async (req: Request, res: Response) => {
 
     // If user signed up with Google, they can't use password login
     if (user.auth_provider === "google" && !user.password_hash) {
-      return res.status(401).json({ 
-        message: "This account uses Google sign-in. Please use 'Continue with Google' instead." 
+      return res.status(401).json({
+        message:
+          "This account uses Google sign-in. Please use 'Continue with Google' instead.",
       });
     }
 
@@ -101,9 +108,14 @@ export const loginUser = async (req: Request, res: Response) => {
 
     // Generate token
     const token = jwt.sign(
-      { id: user.id, username: user.username, email: user.email, role: user.role },
+      {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
       JWT_SECRET,
-      { expiresIn: "24h" }
+      { expiresIn: "24h" },
     );
 
     res.json({
@@ -129,7 +141,7 @@ export const getSocialConnections = async (req: any, res: Response) => {
     const client = await pool.connect();
     const result = await client.query(
       "SELECT id, platform, platform_username, profile_url, connected_at FROM social_connections WHERE user_id = $1 ORDER BY platform",
-      [req.user.id]
+      [req.user.id],
     );
     client.release();
 
@@ -143,7 +155,14 @@ export const getSocialConnections = async (req: any, res: Response) => {
 export const connectSocial = async (req: any, res: Response) => {
   const { platform, platform_username, profile_url } = req.body;
 
-  const validPlatforms = ["instagram", "facebook", "twitter", "linkedin", "youtube", "tiktok"];
+  const validPlatforms = [
+    "instagram",
+    "facebook",
+    "twitter",
+    "linkedin",
+    "youtube",
+    "tiktok",
+  ];
   if (!platform || !validPlatforms.includes(platform)) {
     return res.status(400).json({ message: "Invalid platform" });
   }
@@ -162,7 +181,7 @@ export const connectSocial = async (req: any, res: Response) => {
        ON CONFLICT (user_id, platform) 
        DO UPDATE SET platform_username = $3, profile_url = $4, connected_at = CURRENT_TIMESTAMP
        RETURNING id, platform, platform_username, profile_url, connected_at`,
-      [req.user.id, platform, platform_username, profile_url || null]
+      [req.user.id, platform, platform_username, profile_url || null],
     );
 
     client.release();
@@ -184,7 +203,7 @@ export const disconnectSocial = async (req: any, res: Response) => {
     const client = await pool.connect();
     await client.query(
       "DELETE FROM social_connections WHERE user_id = $1 AND platform = $2",
-      [req.user.id, platform]
+      [req.user.id, platform],
     );
     client.release();
 

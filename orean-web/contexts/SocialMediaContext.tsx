@@ -16,9 +16,15 @@ interface SocialMediaContextProps {
   refreshConnections: () => Promise<void>;
 }
 
-const SocialMediaContext = createContext<SocialMediaContextProps | undefined>(undefined);
+const SocialMediaContext = createContext<SocialMediaContextProps | undefined>(
+  undefined,
+);
 
-export const SocialMediaProvider = ({ children }: { children: React.ReactNode }) => {
+export const SocialMediaProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [connections, setConnections] = useState<SocialConnectionType[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,11 +36,11 @@ export const SocialMediaProvider = ({ children }: { children: React.ReactNode })
         setLoading(false);
         return;
       }
-      
+
       // Assuming backend runs on 8080 or process.env.NEXT_PUBLIC_API_URL
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
       const res = await fetch(`${apiUrl}/api/auth/connections`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
         const data = await res.json();
@@ -52,7 +58,9 @@ export const SocialMediaProvider = ({ children }: { children: React.ReactNode })
   }, []);
 
   return (
-    <SocialMediaContext.Provider value={{ connections, loading, refreshConnections }}>
+    <SocialMediaContext.Provider
+      value={{ connections, loading, refreshConnections }}
+    >
       {children}
     </SocialMediaContext.Provider>
   );
@@ -60,6 +68,7 @@ export const SocialMediaProvider = ({ children }: { children: React.ReactNode })
 
 export const useSocialMedia = () => {
   const ctx = useContext(SocialMediaContext);
-  if (!ctx) throw new Error("useSocialMedia must be used within SocialMediaProvider");
+  if (!ctx)
+    throw new Error("useSocialMedia must be used within SocialMediaProvider");
   return ctx;
 };

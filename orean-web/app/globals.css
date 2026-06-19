@@ -6,8 +6,6 @@
   --foreground: #171717;
 }
 
- 
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -22,9 +20,9 @@ body {
 }
 
 @layer utilities {
-   .reverse-spin{
-    animation:  spin 1.5s linear infinite reverse;
-   }
+  .reverse-spin {
+    animation: spin 1.5s linear infinite reverse;
+  }
 }
 
 @keyframes gradientMove {
@@ -42,5 +40,3 @@ body {
 .animate-gradient {
   animation: gradientMove 12s ease infinite;
 }
-
- 

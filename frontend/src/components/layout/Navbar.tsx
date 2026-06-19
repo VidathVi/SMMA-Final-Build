@@ -19,7 +19,7 @@ import {
   Bell,
   Globe,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
 } from "lucide-react";
 
 export default function Navbar() {
@@ -31,7 +31,7 @@ export default function Navbar() {
   const [userProfile, setUserProfile] = useState({
     fullName: "Jane Doe",
     avatar: "/default-avatar.png",
-    workflowRole: "Admin"
+    workflowRole: "Admin",
   });
 
   useEffect(() => {
@@ -57,9 +57,7 @@ export default function Navbar() {
       window.removeEventListener("storage_user_profile", loadProfile);
       window.removeEventListener("storage", handleStorageEvent);
     };
-
   }, []);
-
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftScroll, setShowLeftScroll] = useState(false);
@@ -67,7 +65,8 @@ export default function Navbar() {
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollContainerRef.current;
       setShowLeftScroll(scrollLeft > 0);
       setShowRightScroll(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
     }
@@ -84,7 +83,7 @@ export default function Navbar() {
       const scrollAmount = 250;
       scrollContainerRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   };
@@ -129,7 +128,10 @@ export default function Navbar() {
           <Orbit className="w-7 h-7 text-blue-400 mr-3 drop-shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
         </motion.div>
         <span className="font-heading font-extrabold text-2xl tracking-tight text-white relative z-10 drop-shadow-md hidden sm:block">
-          Orean<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">360</span>
+          Orean
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">
+            360
+          </span>
         </span>
       </div>
 
@@ -151,7 +153,9 @@ export default function Navbar() {
         >
           <ul className="flex items-center gap-2">
             {navItems.map((item) => {
-              const isActive = pathname === item.href || (pathname?.startsWith(item.href + "/") && item.href !== "/");
+              const isActive =
+                pathname === item.href ||
+                (pathname?.startsWith(item.href + "/") && item.href !== "/");
               const isLoading = isNavigating === item.name;
 
               return (
@@ -161,10 +165,11 @@ export default function Navbar() {
                     onClick={(e: React.MouseEvent) => handleNavClick(item, e)}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`flex items-center px-4 py-2.5 rounded-xl text-sm font-bold transition-all relative overflow-hidden group whitespace-nowrap ${isActive
-                      ? "bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/10"
-                      : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
-                      }`}
+                    className={`flex items-center px-4 py-2.5 rounded-xl text-sm font-bold transition-all relative overflow-hidden group whitespace-nowrap ${
+                      isActive
+                        ? "bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/10"
+                        : "text-slate-400 hover:bg-white/5 hover:text-white border border-transparent"
+                    }`}
                   >
                     {isActive && (
                       <motion.div
@@ -177,9 +182,13 @@ export default function Navbar() {
                       {isLoading ? (
                         <Loader2 className="w-4 h-4 mr-2 text-blue-400 animate-spin" />
                       ) : (
-                        <item.icon className={`w-4 h-4 mr-2 transition-colors flex-shrink-0 ${isActive ? "text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.5)]" : "group-hover:text-blue-400"}`} />
+                        <item.icon
+                          className={`w-4 h-4 mr-2 transition-colors flex-shrink-0 ${isActive ? "text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.5)]" : "group-hover:text-blue-400"}`}
+                        />
                       )}
-                      <span className="tracking-wide hidden md:block lg:block xl:block">{item.name}</span>
+                      <span className="tracking-wide hidden md:block lg:block xl:block">
+                        {item.name}
+                      </span>
                     </div>
                   </motion.a>
                 </li>
@@ -211,7 +220,10 @@ export default function Navbar() {
         </motion.button>
 
         {/* User Profile */}
-        <a href="/personal-profile" className="pl-4 border-l border-white/10 flex items-center space-x-3 cursor-pointer group">
+        <a
+          href="/personal-profile"
+          className="pl-4 border-l border-white/10 flex items-center space-x-3 cursor-pointer group"
+        >
           <div className="hidden md:flex flex-col items-end mr-2">
             <span className="text-sm font-bold text-slate-200 group-hover:text-blue-400 transition-colors">
               {userProfile.fullName}
@@ -221,11 +233,12 @@ export default function Navbar() {
             </span>
           </div>
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 border-2 border-slate-800 flex items-center justify-center text-white font-extrabold shadow-[0_0_15px_rgba(59,130,246,0.4)] group-hover:scale-105 transition-transform overflow-hidden relative">
-            {userProfile.avatar && userProfile.avatar !== "/default-avatar.png" ? (
-              <img 
-                src={userProfile.avatar} 
-                alt="Profile" 
-                className="w-full h-full object-cover transition-transform group-hover:scale-110" 
+            {userProfile.avatar &&
+            userProfile.avatar !== "/default-avatar.png" ? (
+              <img
+                src={userProfile.avatar}
+                alt="Profile"
+                className="w-full h-full object-cover transition-transform group-hover:scale-110"
               />
             ) : (
               <span className="text-sm drop-shadow-md">
@@ -238,12 +251,10 @@ export default function Navbar() {
                       .toUpperCase()
                       .slice(0, 2)
                   : "JD"}
-
               </span>
             )}
           </div>
         </a>
-
       </div>
     </nav>
   );

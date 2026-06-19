@@ -21,7 +21,8 @@ const WHATSAPP_API_VERSION = "v19.0";
 const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
 const WHATSAPP_BUSINESS_ACCOUNT_ID = process.env.WHATSAPP_BUSINESS_ACCOUNT_ID;
 const WHATSAPP_ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
-const WHATSAPP_VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "orean360_whatsapp_verify";
+const WHATSAPP_VERIFY_TOKEN =
+  process.env.WHATSAPP_VERIFY_TOKEN || "orean360_whatsapp_verify";
 const WHATSAPP_API_BASE = `https://graph.facebook.com/${WHATSAPP_API_VERSION}`;
 
 // Generate QR code for WhatsApp Business linking
@@ -41,7 +42,7 @@ export const generateWhatsAppQR = async (req: Request, res: Response) => {
             Authorization: `Bearer ${WHATSAPP_ACCESS_TOKEN}`,
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       return res.json({
@@ -94,10 +95,11 @@ export const getWhatsAppStatus = async (req: AuthRequest, res: Response) => {
       `${WHATSAPP_API_BASE}/${WHATSAPP_PHONE_NUMBER_ID}`,
       {
         params: {
-          fields: "verified_name,code_verification_status,display_phone_number,quality_rating",
+          fields:
+            "verified_name,code_verification_status,display_phone_number,quality_rating",
           access_token: WHATSAPP_ACCESS_TOKEN,
         },
-      }
+      },
     );
 
     // Check if user has a WhatsApp connection stored
@@ -105,7 +107,7 @@ export const getWhatsAppStatus = async (req: AuthRequest, res: Response) => {
     try {
       const result = await client.query(
         "SELECT * FROM social_tokens WHERE user_id = $1 AND platform = 'whatsapp'",
-        [userId]
+        [userId],
       );
 
       res.json({
@@ -155,7 +157,9 @@ export const sendWhatsAppMessage = async (req: Request, res: Response) => {
         text: { body: message },
       };
     } else {
-      return res.status(400).json({ message: "Message or template name required" });
+      return res
+        .status(400)
+        .json({ message: "Message or template name required" });
     }
 
     const response = await axios.post(
@@ -166,7 +170,7 @@ export const sendWhatsAppMessage = async (req: Request, res: Response) => {
           Authorization: `Bearer ${WHATSAPP_ACCESS_TOKEN}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     res.json({
@@ -262,7 +266,12 @@ export const connectWhatsApp = async (req: AuthRequest, res: Response) => {
          VALUES ($1, 'whatsapp', $2, $3, $4)
          ON CONFLICT (user_id, platform)
          DO UPDATE SET access_token = $2, platform_user_id = $3, platform_username = $4, updated_at = CURRENT_TIMESTAMP`,
-        [userId, WHATSAPP_ACCESS_TOKEN || "configured", phoneNumber, displayName || phoneNumber]
+        [
+          userId,
+          WHATSAPP_ACCESS_TOKEN || "configured",
+          phoneNumber,
+          displayName || phoneNumber,
+        ],
       );
 
       await client.query(
@@ -270,7 +279,7 @@ export const connectWhatsApp = async (req: AuthRequest, res: Response) => {
          VALUES ($1, 'whatsapp', $2, $3)
          ON CONFLICT (user_id, platform)
          DO UPDATE SET platform_username = $2, profile_url = $3, connected_at = CURRENT_TIMESTAMP`,
-        [userId, displayName || phoneNumber, `https://wa.me/${phoneNumber}`]
+        [userId, displayName || phoneNumber, `https://wa.me/${phoneNumber}`],
       );
     } finally {
       client.release();
@@ -293,11 +302,11 @@ export const disconnectWhatsApp = async (req: AuthRequest, res: Response) => {
     try {
       await client.query(
         "DELETE FROM social_tokens WHERE user_id = $1 AND platform = 'whatsapp'",
-        [userId]
+        [userId],
       );
       await client.query(
         "DELETE FROM social_connections WHERE user_id = $1 AND platform = 'whatsapp'",
-        [userId]
+        [userId],
       );
     } finally {
       client.release();

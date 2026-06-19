@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Orean 360 - Social Media Management Platform",
-  description: "Unified social media management, publishing, and analytics platform",
+  description:
+    "Unified social media management, publishing, and analytics platform",
 };
 
 export default function RootLayout({

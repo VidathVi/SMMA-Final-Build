@@ -1,5 +1,5 @@
-import React from 'react';
-import './GlassCard.css';
+import React from "react";
+import "./GlassCard.css";
 
 /**
  * Reusable GlassCard component with glassmorphism effects.
@@ -7,12 +7,12 @@ import './GlassCard.css';
  * @param {React.ReactNode} props.children - Content to be rendered inside the card.
  * @param {string} props.className - Additional CSS classes.
  */
-const GlassCard = ({ children, className = '', ...props }) => {
-    return (
-        <div className={`glass-card glass-effect ${className}`} {...props}>
-            {children}
-        </div>
-    );
+const GlassCard = ({ children, className = "", ...props }) => {
+  return (
+    <div className={`glass-card glass-effect ${className}`} {...props}>
+      {children}
+    </div>
+  );
 };
 
 export default GlassCard;

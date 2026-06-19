@@ -14,7 +14,12 @@ const router = Router();
 router.get("/", authMiddleware, roleMiddleware(["admin", "manager"]), getUsers);
 
 // PUT update user role — Admin only
-router.put("/:id/role", authMiddleware, roleMiddleware(["admin"]), changeUserRole);
+router.put(
+  "/:id/role",
+  authMiddleware,
+  roleMiddleware(["admin"]),
+  changeUserRole,
+);
 
 // DELETE user — Admin only
 router.delete("/:id", authMiddleware, roleMiddleware(["admin"]), removeUser);

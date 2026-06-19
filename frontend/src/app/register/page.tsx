@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Gem, Loader2, User, Lock, AlertCircle, CheckCircle } from "lucide-react";
+import {
+  Gem,
+  Loader2,
+  User,
+  Lock,
+  AlertCircle,
+  CheckCircle,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -53,20 +60,20 @@ export default function Register() {
       {/* Animated Deep Space Background */}
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
       <div className="absolute inset-0 bg-gradient-to-br from-[#1e1b4b] via-[#0f172a] to-[#1e1b4b] animate-[gradientFlow_15s_ease_infinite] bg-[length:200%_200%]"></div>
-      
+
       {/* Glowing Orbs */}
-      <motion.div 
+      <motion.div
         animate={{ scale: [1, 1.2, 1], rotate: [0, -90, 0] }}
         transition={{ duration: 18, repeat: Infinity }}
         className="absolute -top-[10%] -right-[10%] w-[500px] h-[500px] rounded-full bg-purple-600/20 blur-[100px]"
       />
-      <motion.div 
+      <motion.div
         animate={{ scale: [1, 1.3, 1], rotate: [0, 90, 0] }}
         transition={{ duration: 22, repeat: Infinity, delay: 1 }}
         className="absolute -bottom-[10%] -left-[10%] w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-[120px]"
       />
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95, y: -20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -79,14 +86,18 @@ export default function Register() {
               <div className="absolute inset-0 bg-purple-500/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
               <User className="w-8 h-8 text-purple-400 drop-shadow-[0_0_10px_rgba(192,132,252,0.8)] relative z-10" />
             </div>
-            <h1 className="text-3xl font-heading font-extrabold text-white tracking-tight">Create Account</h1>
-            <p className="text-sm text-slate-400 mt-2">Join the future of Orean<span className="text-blue-400">360</span></p>
+            <h1 className="text-3xl font-heading font-extrabold text-white tracking-tight">
+              Create Account
+            </h1>
+            <p className="text-sm text-slate-400 mt-2">
+              Join the future of Orean<span className="text-blue-400">360</span>
+            </p>
           </div>
 
           {/* Form */}
           <div className="p-8 pt-6">
             {success ? (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="py-12 flex flex-col items-center justify-center text-center space-y-4"
@@ -95,13 +106,16 @@ export default function Register() {
                   <CheckCircle className="w-8 h-8 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-1">Registration Complete</h3>
-                  <p className="text-sm text-slate-400">Redirecting to login...</p>
+                  <h3 className="text-xl font-bold text-white mb-1">
+                    Registration Complete
+                  </h3>
+                  <p className="text-sm text-slate-400">
+                    Redirecting to login...
+                  </p>
                 </div>
               </motion.div>
             ) : (
               <form onSubmit={handleRegister} className="space-y-5">
-                
                 {error && (
                   <div className="bg-rose-500/10 border border-rose-500/20 text-rose-400 px-4 py-3 rounded-xl flex items-center text-sm">
                     <AlertCircle className="w-4 h-4 mr-2 shrink-0 bg-rose-500/20 rounded-full" />
@@ -110,7 +124,9 @@ export default function Register() {
                 )}
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-300 ml-1">Username</label>
+                  <label className="text-sm font-semibold text-slate-300 ml-1">
+                    Username
+                  </label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <User className="h-5 w-5 text-slate-400 group-focus-within:text-purple-400 transition-colors" />
@@ -127,7 +143,9 @@ export default function Register() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-300 ml-1">Password</label>
+                  <label className="text-sm font-semibold text-slate-300 ml-1">
+                    Password
+                  </label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-blue-400 transition-colors" />
@@ -144,7 +162,9 @@ export default function Register() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-300 ml-1">Confirm Password</label>
+                  <label className="text-sm font-semibold text-slate-300 ml-1">
+                    Confirm Password
+                  </label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-indigo-400 transition-colors" />
@@ -171,7 +191,9 @@ export default function Register() {
                   {isLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin relative z-10" />
                   ) : (
-                    <span className="relative z-10 tracking-wide text-[15px]">Sign Up</span>
+                    <span className="relative z-10 tracking-wide text-[15px]">
+                      Sign Up
+                    </span>
                   )}
                 </motion.button>
               </form>
@@ -181,7 +203,10 @@ export default function Register() {
               <div className="mt-8 text-center border-t border-white/5 pt-6">
                 <p className="text-sm font-medium text-slate-400">
                   Already have an account?{" "}
-                  <Link href="/login" className="text-purple-400 hover:text-white transition-colors font-bold drop-shadow-sm">
+                  <Link
+                    href="/login"
+                    className="text-purple-400 hover:text-white transition-colors font-bold drop-shadow-sm"
+                  >
                     Sign in here
                   </Link>
                 </p>

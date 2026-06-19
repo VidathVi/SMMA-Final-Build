@@ -18,7 +18,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "orean360_super_secret_key";
 export const authMiddleware = (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers.authorization;

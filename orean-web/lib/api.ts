@@ -13,14 +13,18 @@ export async function fetchApi(endpoint: string, options: FetchOptions = {}) {
 
   if (requireAuth) {
     // Both token and orean360_token are supported based on user legacy
-    const token = localStorage.getItem("token") || localStorage.getItem("orean360_token");
+    const token =
+      localStorage.getItem("token") || localStorage.getItem("orean360_token");
     if (token) {
       finalHeaders.set("Authorization", `Bearer ${token}`);
     }
   }
 
   // Ensure JSON content type by default unless it's FormData
-  if (!finalHeaders.has("Content-Type") && !(options.body instanceof FormData)) {
+  if (
+    !finalHeaders.has("Content-Type") &&
+    !(options.body instanceof FormData)
+  ) {
     finalHeaders.set("Content-Type", "application/json");
   }
 
@@ -35,7 +39,7 @@ export async function fetchApi(endpoint: string, options: FetchOptions = {}) {
     // Attempt Auto-Logout or Session Refresh here in the future
     console.warn("Unauthorized access - token may be expired");
     if (typeof window !== "undefined") {
-        // window.location.href = "/login"; // Optional: Force logout
+      // window.location.href = "/login"; // Optional: Force logout
     }
   }
 

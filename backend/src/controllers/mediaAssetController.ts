@@ -28,7 +28,14 @@ export const uploadMedia = async (req: AuthRequest, res: Response) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const multerReq = req as Request & { file?: { originalname: string; mimetype: string; size: number; buffer: Buffer } };
+    const multerReq = req as Request & {
+      file?: {
+        originalname: string;
+        mimetype: string;
+        size: number;
+        buffer: Buffer;
+      };
+    };
     if (!multerReq.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
@@ -38,7 +45,8 @@ export const uploadMedia = async (req: AuthRequest, res: Response) => {
     const fileUrl = `uploads/${userId}/${fileName}`;
     const mediaType = getMediaTypeFromMime(file.mimetype);
 
-    const { altText, tags, campaignId, width, height, durationSeconds } = req.body;
+    const { altText, tags, campaignId, width, height, durationSeconds } =
+      req.body;
 
     const asset = await createMediaAsset(
       userId,
@@ -54,7 +62,7 @@ export const uploadMedia = async (req: AuthRequest, res: Response) => {
       durationSeconds ? parseFloat(durationSeconds) : null,
       altText || null,
       tags || null,
-      campaignId || null
+      campaignId || null,
     );
 
     return res.status(201).json({
@@ -75,7 +83,9 @@ export const uploadMedia = async (req: AuthRequest, res: Response) => {
     });
   } catch (error: any) {
     console.error("Upload Media Error:", error);
-    return res.status(500).json({ message: "Upload failed", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Upload failed", error: error.message });
   }
 };
 
@@ -185,7 +195,7 @@ export const updateMedia = async (req: AuthRequest, res: Response) => {
       Number(id),
       altText ?? null,
       tags ?? null,
-      campaignId ?? null
+      campaignId ?? null,
     );
 
     res.json({
