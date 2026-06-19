@@ -1,8 +1,0 @@
-src/server.ts(22,1): error TS2304: Cannot find name 'dotenv'.
-src/server.ts(27,9): error TS2304: Cannot find name 'cors'.
-src/server.ts(43,22): error TS2304: Cannot find name 'authRoutes'.
-src/server.ts(59,25): error TS2304: Cannot find name 'youtubeRoutes'.
-src/server.ts(60,22): error TS2552: Cannot find name 'metaRoutes'. Did you mean 'taskRoutes'?
-src/server.ts(61,26): error TS2304: Cannot find name 'whatsappRoutes'.
-src/server.ts(62,26): error TS2304: Cannot find name 'linkedinRoutes'.
-src/server.ts(63,24): error TS2304: Cannot find name 'tiktokRoutes'.
