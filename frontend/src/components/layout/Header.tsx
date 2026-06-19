@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 export default function Header() {
   const pathname = usePathname();
-  const hideSearchBar = pathname === "/calendar" || pathname === "/geo-studio";
+  const hideSearchBar = pathname === "/calendar";
   const [isAiLoading, setIsAiLoading] = useState(false);
 
   // User Profile

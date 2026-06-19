@@ -20,7 +20,6 @@ import {
   ChevronRight,
   Megaphone,
   Upload,
-  Globe,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -36,7 +35,6 @@ export default function Sidebar() {
     { name: "Unified Inbox", href: "/inbox", icon: MessageSquare },
     { name: "Analytics", href: "#", icon: BarChart3 },
     { name: "Publish Post", href: "/create-post", icon: Upload },
-    { name: "GEO Studio", href: "/geo-studio", icon: Globe },
   ];
 
   const handleNavClick = (item: any, e: React.MouseEvent) => {

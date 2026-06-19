@@ -15,7 +15,6 @@ import {
   CheckCircle,
   Gem,
   Loader2,
-  Map,
   PenTool,
 } from "lucide-react";
 
@@ -27,7 +26,6 @@ export default function Sidebar() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Publisher", href: "/dashboard/publisher", icon: PenTool },
-    { name: "Geo Engine", href: "/dashboard/geo-engine", icon: Map },
     { name: "Campaigns", href: "/dashboard/campaigns", icon: Calendar },
     { name: "Workflows", href: "/dashboard/workflows", icon: Workflow },
     { name: "Approvals", href: "/dashboard/approvals", icon: CheckCircle },
