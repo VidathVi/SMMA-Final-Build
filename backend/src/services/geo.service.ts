@@ -1,17 +1,26 @@
-const FASTAPI_URL = process.env.FASTAPI_URL || "http://localhost:8000";
+const GEO_ENGINE_URL = process.env.GEO_ENGINE_URL || "http://localhost:8000/v1/chat/completions";
+const MODAL_API_KEY = process.env.MODAL_API_KEY || "";
 
 /**
- * Reusable HTTP client for communicating with the internal Python GEO Service
+ * Reusable HTTP client for communicating with the Modal vLLM GEO Service
  */
-export const callFastAPI = async (endpoint: string, body: any) => {
+export const callGeoEngine = async (body: any) => {
   try {
-    // Implement a 5-second timeout so the UI doesn't hang if FastAPI is unreachable
+    // Increase timeout since LLM generation might take longer than 5 seconds
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 seconds
 
-    const response = await fetch(`${FASTAPI_URL}${endpoint}`, {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (MODAL_API_KEY) {
+      headers["Authorization"] = `Bearer ${MODAL_API_KEY}`;
+    }
+
+    const response = await fetch(GEO_ENGINE_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(body),
       signal: controller.signal,
     });
@@ -19,7 +28,8 @@ export const callFastAPI = async (endpoint: string, body: any) => {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      throw new Error(`FastAPI Error: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Modal vLLM Error: ${response.statusText} - ${errorText}`);
     }
 
     return await response.json();
