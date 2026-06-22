@@ -17,14 +17,63 @@ import {
   FaWhatsapp,
   FaYoutube,
   FaTelegramPlane,
+  FaMagic,
+  FaTimes,
+  FaSpinner,
 } from "react-icons/fa";
 
 export default function PublisherPage() {
   const [selectedPlatform, setSelectedPlatform] =
     useState<Platform>("facebook");
-  const [postCaption, setPostCaption] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sit amet quam convallis sem volutpat fringilla.",
-  );
+  const [postCaption, setPostCaption] = useState("");
+
+  // GEO Engine State
+  const [showGeoModal, setShowGeoModal] = useState(false);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [geoTopic, setGeoTopic] = useState("");
+  const [geoTone, setGeoTone] = useState("Professional");
+  const [geoAudience, setGeoAudience] = useState("");
+  const [geoGoal, setGeoGoal] = useState("Engagement");
+  const [geoError, setGeoError] = useState("");
+
+  const handleGeoGenerate = async () => {
+    try {
+      setGeoLoading(true);
+      setGeoError("");
+      const token = localStorage.getItem("token"); // if auth is used
+      
+      const res = await fetch("http://localhost:8080/api/geo/generate-caption", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          topic: geoTopic,
+          platform: selectedPlatform,
+          tone: geoTone,
+          targetAudience: geoAudience,
+          goal: geoGoal,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.status === "success" && data.data) {
+        const generated = data.data;
+        const hashtagsStr = generated.hashtags && Array.isArray(generated.hashtags) 
+          ? generated.hashtags.join(" ") 
+          : "";
+        setPostCaption(`${generated.caption}\n\n${hashtagsStr}\n\n[Alt-Text: ${generated.altText}]`);
+        setShowGeoModal(false);
+      } else {
+        setGeoError(data.message || "Failed to generate");
+      }
+    } catch (err: any) {
+      setGeoError(err.message || "Something went wrong.");
+    } finally {
+      setGeoLoading(false);
+    }
+  };
 
   const [mediaFiles, setMediaFiles] = useState<
     { file: File; url: string; type: "image" | "video" }[]
@@ -106,8 +155,16 @@ export default function PublisherPage() {
         <div className="flex-1 flex flex-col gap-6">
           {/* Create Post Header & Inputs */}
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-            <h2 className="text-xl font-semibold text-white">Create Post</h2>
-            <br />
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-white">Create Post</h2>
+              <button 
+                onClick={() => setShowGeoModal(true)}
+                className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all shadow-lg hover:shadow-purple-500/30"
+              >
+                <FaMagic className="text-yellow-300" />
+                Auto-Generate with GEO
+              </button>
+            </div>
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2 text-sm text-gray-400 ml-4">
@@ -359,6 +416,105 @@ export default function PublisherPage() {
           </div>
         </div>
       </main>
+
+
+      {/* GEO Engine Modal */}
+      {showGeoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+          <div className="bg-[#1a1b26] border border-white/10 p-6 rounded-2xl shadow-2xl max-w-lg w-full relative">
+            <button 
+              onClick={() => setShowGeoModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <FaTimes />
+            </button>
+            
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-lg">
+                <FaMagic className="text-white w-5 h-5" />
+              </div>
+              <h3 className="text-xl font-bold text-white">AI Content Generator</h3>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">What is this post about?</label>
+                <input 
+                  type="text"
+                  value={geoTopic}
+                  onChange={(e) => setGeoTopic(e.target.value)}
+                  placeholder="e.g. A new summer sale for our clothing brand"
+                  className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Tone</label>
+                  <select 
+                    value={geoTone}
+                    onChange={(e) => setGeoTone(e.target.value)}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option>Professional</option>
+                    <option>Casual</option>
+                    <option>Humorous</option>
+                    <option>Urgent</option>
+                    <option>Inspirational</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Goal</label>
+                  <select 
+                    value={geoGoal}
+                    onChange={(e) => setGeoGoal(e.target.value)}
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  >
+                    <option>Engagement</option>
+                    <option>Conversion / Sales</option>
+                    <option>Brand Awareness</option>
+                    <option>Education</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Target Audience</label>
+                <input 
+                  type="text"
+                  value={geoAudience}
+                  onChange={(e) => setGeoAudience(e.target.value)}
+                  placeholder="e.g. Young professionals 20-30"
+                  className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+
+              {geoError && (
+                <div className="text-red-400 text-sm bg-red-400/10 p-3 rounded-xl border border-red-400/20">
+                  {geoError}
+                </div>
+              )}
+
+              <button 
+                onClick={handleGeoGenerate}
+                disabled={geoLoading || !geoTopic}
+                className="w-full mt-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+              >
+                {geoLoading ? (
+                  <>
+                    <FaSpinner className="animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    Generate Metadata
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
