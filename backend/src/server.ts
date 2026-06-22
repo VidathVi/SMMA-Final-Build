@@ -26,6 +26,7 @@ import { validate } from "./middleware/validate";
 import { z } from "zod";
 import { errorHandler } from "./middleware/error-handler";
 import webhookRoutes from "./routes/webhook";
+import { authMiddleware } from "./middleware/authMiddleware";
 
 // V2 route imports (new modules)
 import approvalRoutes from "./routes/approval.routes";
@@ -69,17 +70,17 @@ app.use("/api/media", mediaAssetRoutes);
 app.use("/api/meta", metaGraphRoutes);
 
 // ─── V1 Routes (Campaign/Post/Status/Task Management) ──────────────────
-app.use("/api/campaigns", campaignRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/statuses", statusRoutes);
-app.use("/api/tasks", taskRoutes);
-app.use("/api/calendar", calendarRoutes);
+app.use("/api/campaigns", authMiddleware, campaignRoutes);
+app.use("/api/posts", authMiddleware, postRoutes);
+app.use("/api/statuses", authMiddleware, statusRoutes);
+app.use("/api/tasks", authMiddleware, taskRoutes);
+app.use("/api/calendar", authMiddleware, calendarRoutes);
 
 // ─── V2 Routes (New Modules) ────────────────────────────────────────────
-app.use("/api/approvals", approvalRoutes);
-app.use("/api/analytics", analyticsRoutes);
-app.use("/api/workflows", workflowRoutes);
-app.use("/api/inbox", inboxRoutes);
+app.use("/api/approvals", authMiddleware, approvalRoutes);
+app.use("/api/analytics", authMiddleware, analyticsRoutes);
+app.use("/api/workflows", authMiddleware, workflowRoutes);
+app.use("/api/inbox", authMiddleware, inboxRoutes);
 
 // Social Media API Routes
 app.use("/api/youtube", youtubeRoutes);
@@ -95,6 +96,7 @@ const campaignPostsSchema = z.object({
 });
 app.get(
   "/api/campaigns/:campaignId/posts",
+  authMiddleware,
   validate(campaignPostsSchema),
   postController.getByCampaign,
 );
