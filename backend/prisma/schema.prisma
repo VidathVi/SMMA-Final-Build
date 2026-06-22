@@ -31,8 +31,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  createdCampaigns Campaign[]
-  assignedPosts    Post[]
+  createdCampaigns  Campaign[]
+  assignedPosts     Post[]
+  approvalComments  ApprovalComment[]
+  uploadedAssets    MediaAsset[]
+  createdWorkflows  WorkflowDefinition[]
 
   @@map("users")
 }
@@ -96,5 +99,151 @@ model Post {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
+  // ─── New fields for publishing pipeline ───
+  platforms    String[]   @default([])
+  hashtags     String?
+  altText      String?
+  scheduledAt  DateTime?
+  publishedAt  DateTime?
+
+  approvalComments ApprovalComment[]
+  publishLogs      PublishLog[]
+  mediaAssets      MediaAsset[]
+
   @@map("posts")
+}
+
+// ─── Approval Comments ─────────────────────────────────────────────────
+
+model ApprovalComment {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  content   String
+  action    String?  // "approve", "request_changes", or null for plain comments
+  createdAt DateTime @default(now())
+
+  @@map("approval_comments")
+}
+
+// ─── Media Assets ──────────────────────────────────────────────────────
+
+model MediaAsset {
+  id            String   @id @default(uuid())
+  filename      String
+  originalName  String
+  mimeType      String
+  size          Int
+  url           String
+  thumbnailUrl  String?
+  altText       String?
+  tags          String[] @default([])
+  uploadedById  String
+  uploadedBy    User     @relation(fields: [uploadedById], references: [id])
+  postId        String?
+  post          Post?    @relation(fields: [postId], references: [id], onDelete: SetNull)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Transcoding status
+  transcodingStatus String @default("pending") // pending, processing, completed, failed
+  transcodedUrls    Json?  // { "tiktok": "url", "instagram_reels": "url", ... }
+
+  @@map("media_assets")
+}
+
+// ─── Inbox Messages ────────────────────────────────────────────────────
+
+model InboxMessage {
+  id              String   @id @default(uuid())
+  platform        String   // instagram, facebook, twitter, etc.
+  messageType     String   // private, comment, review
+  senderName      String
+  senderAvatar    String?
+  content         String
+  isRead          Boolean  @default(false)
+  externalId      String?  // ID from the social platform
+  parentMessageId String?  // For threading
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  replies InboxReply[]
+
+  @@map("inbox_messages")
+}
+
+model InboxReply {
+  id        String       @id @default(uuid())
+  messageId String
+  message   InboxMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  content   String
+  direction String       @default("outbound") // inbound or outbound
+  createdAt DateTime     @default(now())
+
+  @@map("inbox_replies")
+}
+
+// ─── Workflow Definitions ──────────────────────────────────────────────
+
+model WorkflowDefinition {
+  id          String         @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean        @default(true)
+  createdById String
+  createdBy   User           @relation(fields: [createdById], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  nodes WorkflowNode[]
+
+  @@map("workflow_definitions")
+}
+
+model WorkflowNode {
+  id           String             @id @default(uuid())
+  workflowId   String
+  workflow     WorkflowDefinition @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  type         String             // trigger, action, condition, approval
+  label        String
+  config       Json?              // Node-specific configuration
+  positionX    Float              @default(0)
+  positionY    Float              @default(0)
+  nextNodeIds  String[]           @default([])
+  createdAt    DateTime           @default(now())
+
+  @@map("workflow_nodes")
+}
+
+// ─── Publish Logs (Execution Auditing) ─────────────────────────────────
+
+model PublishLog {
+  id            String   @id @default(uuid())
+  postId        String
+  post          Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  platform      String
+  status        String   // success, failed, rate_limited, pending
+  responseCode  Int?
+  responseBody  String?
+  errorMessage  String?
+  attemptNumber Int      @default(1)
+  publishedAt   DateTime @default(now())
+
+  @@map("publish_logs")
+}
+
+// ─── Analytics Snapshots ───────────────────────────────────────────────
+
+model AnalyticsSnapshot {
+  id            String   @id @default(uuid())
+  platform      String
+  metricType    String   // followers, engagement, reach, impressions
+  value         Float
+  date          DateTime
+  metadata      Json?    // Extra context (campaign ID, post ID, etc.)
+  createdAt     DateTime @default(now())
+
+  @@map("analytics_snapshots")
 }

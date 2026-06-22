@@ -27,6 +27,16 @@ import { z } from "zod";
 import { errorHandler } from "./middleware/error-handler";
 import webhookRoutes from "./routes/webhook";
 
+// V2 route imports (new modules)
+import approvalRoutes from "./routes/approval.routes";
+import analyticsRoutes from "./routes/analytics.routes";
+import workflowRoutes from "./routes/workflow.routes";
+import inboxRoutes from "./routes/inbox.routes";
+
+// Queue & Worker imports
+import { startPublishWorker } from "./services/queue.service";
+import { startTranscodingWorker } from "./services/transcoding.service";
+
 dotenv.config();
 
 const app = express();
@@ -65,6 +75,12 @@ app.use("/api/statuses", statusRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/calendar", calendarRoutes);
 
+// ─── V2 Routes (New Modules) ────────────────────────────────────────────
+app.use("/api/approvals", approvalRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/workflows", workflowRoutes);
+app.use("/api/inbox", inboxRoutes);
+
 // Social Media API Routes
 app.use("/api/youtube", youtubeRoutes);
 app.use("/api/meta", metaRoutes);
@@ -99,7 +115,9 @@ app.get("/api/health", async (req: Request, res: Response) => {
   }
 });
 
-// Global Error Handler
+// ─── Error Handler (must be last middleware) ─────────────────────────────
+app.use(errorHandler);
+
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("Unhandled Error:", err);
   res
@@ -107,21 +125,28 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     .json({ status: "error", message: err.message || "Internal Server Error" });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-
-// ─── Error Handler (must be last) ───────────────────────────────────────
-app.use(errorHandler);
+// ─── Start Server & Workers ─────────────────────────────────────────────
 
 pool
   .connect()
   .then((client) => {
     console.log("Connected to PostgreSQL Database");
     client.release();
+
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
+
+    // Start background workers if Redis is configured
+    if (process.env.REDIS_URL || process.env.ENABLE_WORKERS === "true") {
+      try {
+        startPublishWorker();
+        startTranscodingWorker();
+        console.log("Background workers initialized");
+      } catch (err) {
+        console.warn("Workers not started (Redis may not be available):", (err as Error).message);
+      }
+    }
   })
   .catch((err) => {
     console.error("Database connection error:", err);

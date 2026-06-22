@@ -9,13 +9,15 @@ import {
   Settings,
   MessageSquare,
   BarChart3,
-  Calendar,
+  CalendarDays,
   Workflow,
   FolderSearch,
   CheckCircle,
   Gem,
   Loader2,
   PenTool,
+  Sparkles,
+  FolderKanban,
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -26,12 +28,14 @@ export default function Sidebar() {
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Publisher", href: "/dashboard/publisher", icon: PenTool },
-    { name: "Campaigns", href: "/dashboard/campaigns", icon: Calendar },
+    { name: "Campaigns", href: "/dashboard/campaigns", icon: FolderKanban },
+    { name: "Calendar", href: "/dashboard/calendar", icon: CalendarDays },
     { name: "Workflows", href: "/dashboard/workflows", icon: Workflow },
     { name: "Approvals", href: "/dashboard/approvals", icon: CheckCircle },
     { name: "Unified Inbox", href: "/dashboard/inbox", icon: MessageSquare },
     { name: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
     { name: "Assets", href: "/dashboard/assets", icon: FolderSearch },
+    { name: "GEO Engine", href: "/dashboard/geo-engine", icon: Sparkles },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ];
 
