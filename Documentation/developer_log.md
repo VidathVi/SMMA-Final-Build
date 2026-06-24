@@ -19,6 +19,9 @@ This document serves as a persistent, running log of all activities, structural 
   - **Meta:** App ID and App Secret configured; OAuth redirect flow verified using the automatically allowed development `localhost` setup.
   - **LinkedIn:** Client ID and Client Secret configured and page links established.
   - **WhatsApp & TikTok:** Config and setup deferred to a later iteration.
+- **Documentation Restructuring and Cleanup**: Checked all files in the `Documentation/` directory for identical duplicates (by verifying file SHA256 hashes):
+  - Removed 6 duplicate files located across `Design details/` and `Design and plannig files(important)/`.
+  - Renamed 5 extensionless markdown files to append the `.md` suffix (e.g., `walkthrough_1` to `walkthrough_1.md`) to align file naming and formatting.
 
 ### [2026-06-23] Cloud Database & Message Broker Selection
 **Author:** AI Coding Assistant
