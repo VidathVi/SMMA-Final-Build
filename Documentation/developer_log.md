@@ -6,6 +6,28 @@ This document serves as a persistent, running log of all activities, structural 
 
 ## 📅 Timeline & Activity Log
 
+### [2026-06-24] Managed Services Setup, Redis SSL/TLS & Platform Credentials Documentation
+**Author:** AI Coding Assistant
+**Components Involved:** `backend/src/services/queue.service.ts`, `backend/.env`, Database, `Documentation/api_keys_setup.md`
+
+- **Database Initialization**: Successfully applied the Prisma schema to the Neon PostgreSQL instance (`prisma migrate dev`) and executed the seed script. The database is now populated with the default configuration (4 roles, 5 campaign statuses, 3 post statuses, and the initial admin user).
+- **Aiven Valkey/Redis Integration**: Confirmed deployment of the message broker using Aiven's Valkey instance named `smma-redis`.
+- **SSL/TLS Client Support**: Updated the `parseRedisUrl` function inside `queue.service.ts` to inspect the connection protocol. If `rediss://` (secure Redis connection) is supplied, it now dynamically injects the `tls: {}` option into the ioredis options. This ensures a successful SSL handshake with Aiven.
+- **Integration Credentials Documentation**: Authored a detailed step-by-step setup guide ([api_keys_setup.md](file:///c:/Users/dassa/Documents/GitHub/SMMA-Final-Build/Documentation/api_keys_setup.md)) explaining how to obtain credentials, configure redirect URIs, and handle tokens for Google, YouTube, Meta, WhatsApp, LinkedIn, and TikTok.
+- **Platform Credentials Integration**: Populated active credentials in the `backend/.env` file:
+  - **Google & YouTube:** Client ID, Client Secret, and YouTube Data API Key successfully configured.
+  - **Meta:** App ID and App Secret configured; OAuth redirect flow verified using the automatically allowed development `localhost` setup.
+  - **LinkedIn:** Client ID and Client Secret configured and page links established.
+  - **WhatsApp & TikTok:** Config and setup deferred to a later iteration.
+
+### [2026-06-23] Cloud Database & Message Broker Selection
+**Author:** AI Coding Assistant
+**Components Involved:** Cloud Infrastructure, `backend/prisma/schema.prisma`, `backend/src/services/queue.service.ts`
+
+- **Database Decision (Neon PostgreSQL)**: Selected **Neon** for managing the serverless PostgreSQL instances. Chosen for its automatic scaling, direct Prisma support, and database branching features (which allow staging and production to run isolated branches easily).
+- **Message Broker Decision (Aiven Redis)**: Selected **Aiven Redis** (Free Tier: 1GB RAM) to run the BullMQ task queues. 
+  - *Rationale*: BullMQ workers poll Redis continuously. A serverless pay-per-request Redis (like Upstash) would quickly exhaust its daily command limit. Aiven provides a standard always-on Redis container with no daily command limit, ensuring 24/7 background worker execution on the free tier.
+
 ### [2026-06-23] GEO Engine Microservice Integration (Backend & Frontend)
 **Author:** AI Coding Assistant
 **Components Involved:** `backend/src/services/geo.service.ts`, `backend/src/controllers/geo.controller.ts`, `backend/.env`, `orean-web/app/dashboard/publisher/page.tsx`
