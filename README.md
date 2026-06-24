@@ -1,16 +1,50 @@
-# React + Vite
+# SMMA — Social Media Management Automation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the SMMA platform repository! This project is a comprehensive social media management tool featuring auto-publishing, content workflows, media transcoding, analytics tracking, unified inbox streams, and AI-driven content generation.
 
-Currently, two official plugins are available:
+## 📁 Repository Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **[backend/](file:///c:/Users/dassa/Documents/GitHub/SMMA-Final-Build/backend)**: Express backend with Prisma ORM (PostgreSQL), BullMQ background worker queues, FFmpeg video transcoding, and integrations.
+- **[orean-web/](file:///c:/Users/dassa/Documents/GitHub/SMMA-Final-Build/orean-web)**: Next.js 16 frontend application designed with responsive dashboards, interactive graphs, and advanced planning calendars.
+- **[Documentation/](file:///c:/Users/dassa/Documents/GitHub/SMMA-Final-Build/Documentation)**: Architectural specifications, migration strategies, and developer walkthroughs.
 
-## React Compiler
+## 📝 Developer Activity Log & Project History
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+To maintain clear accountability and track progress on all features, backend services, and UI integrations:
+- Refer to **[Documentation/developer_log.md](file:///c:/Users/dassa/Documents/GitHub/SMMA-Final-Build/Documentation/developer_log.md)** for a chronological record of all changes, migrations, and features implemented.
+- Refer to **[Documentation/walkthrough.md](file:///c:/Users/dassa/Documents/GitHub/SMMA-Final-Build/Documentation/walkthrough.md)** for the latest walkthrough details on the GEO Engine Microservice integration.
 
-## Expanding the ESLint configuration
+## 🛠️ Quick Start
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Backend
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Configure environment variables in `.env` (referencing `.env.example`).
+4. Run migrations:
+   ```bash
+   npx prisma migrate dev
+   ```
+5. Launch the development server:
+   ```bash
+   npm run dev
+   ```
+
+### Frontend
+1. Navigate to the webapp directory:
+   ```bash
+   cd orean-web
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Run the Next.js dev server:
+   ```bash
+   npm run dev
+   ```

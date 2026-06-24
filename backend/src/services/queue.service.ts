@@ -10,12 +10,19 @@ const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
 function parseRedisUrl(url: string) {
   try {
     const parsed = new URL(url);
-    return {
+    const options: any = {
       host: parsed.hostname || "localhost",
       port: parseInt(parsed.port) || 6379,
       password: parsed.password || undefined,
       maxRetriesPerRequest: null as null,
     };
+    
+    // Enable SSL/TLS support if connecting via rediss:// protocol
+    if (parsed.protocol === "rediss:") {
+      options.tls = {};
+    }
+    
+    return options;
   } catch {
     return {
       host: "localhost",
