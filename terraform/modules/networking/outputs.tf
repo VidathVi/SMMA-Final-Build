@@ -6,9 +6,10 @@ output "subnet_id" {
   value = google_compute_subnetwork.vpc.id
 }
 
-output "secondary_range_names" {
-  value = [
-    google_compute_subnetwork.vpc.secondary_ip_range[0].range_name,
-    google_compute_subnetwork.vpc.secondary_ip_range[1].range_name,
-  ]
+output "pod_range_name" {
+  value = "gke-pods-range"
+}
+
+output "service_range_name" {
+  value = "gke-services-range"
 }
