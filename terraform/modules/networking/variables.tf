@@ -1,0 +1,16 @@
+variable "project_id" {
+  type        = string
+  description = "The ID of the project to deploy resources to"
+}
+
+variable "region" {
+  type        = string
+  description = "The region to deploy resources to"
+  default     = "asia-southeast1"
+}
+
+variable "environment" {
+  type        = string
+  description = "The environment to deploy resources to"
+  default     = "staging"
+}
