@@ -1,0 +1,21 @@
+{{- if .Values.keda.enabled -}}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "orean-worker.fullname" . }}
+  labels:
+    {{- include "orean-worker.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "orean-worker.fullname" . }}
+  minReplicaCount: {{ .Values.keda.minReplicaCount }}
+  maxReplicaCount: {{ .Values.keda.maxReplicaCount }}
+  triggers:
+    - type: redis
+      metadata:
+        listName: {{ .Values.keda.queueName | quote }}
+        listLength: {{ .Values.keda.listLength | quote }}
+        addressFromEnv: REDIS_URL
+{{- end }}

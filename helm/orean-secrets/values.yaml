@@ -1,0 +1,28 @@
+# Placeholder values for secrets and configs. Overridden in pipelines.
+secrets:
+  databaseUrl: "postgresql://neondb_owner:dummy@ep-dummy.aws.neon.tech/neondb?sslmode=require"
+  redisUrl: "rediss://default:dummy@valkey-dummy.aivencloud.com:24856"
+  jwtSecret: "change-me-in-production-jwt-secret-key"
+  modalApiKey: "placeholder-modal-api-key"
+  geoEngineUrl: "https://geo.orean.org"
+  google:
+    clientId: "google-client-id-placeholder"
+    clientSecret: "google-client-secret-placeholder"
+  meta:
+    appId: "meta-app-id-placeholder"
+    appSecret: "meta-app-secret-placeholder"
+  youtube:
+    clientId: "youtube-client-id-placeholder"
+    clientSecret: "youtube-client-secret-placeholder"
+  linkedin:
+    clientId: "linkedin-client-id-placeholder"
+    clientSecret: "linkedin-client-secret-placeholder"
+  tiktok:
+    clientKey: "tiktok-client-key-placeholder"
+    clientSecret: "tiktok-client-secret-placeholder"
+
+configs:
+  port: "8080"
+  nodeEnv: "production"
+  frontendUrl: "https://orean.org"
+  enableWorkers: "false"

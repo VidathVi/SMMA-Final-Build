@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: orean-config
+  namespace: orean
+  labels:
+    {{- include "orean-secrets.labels" . | nindent 4 }}
+data:
+  PORT: {{ .Values.configs.port | quote }}
+  NODE_ENV: {{ .Values.configs.nodeEnv | quote }}
+  FRONTEND_URL: {{ .Values.configs.frontendUrl | quote }}
+  ENABLE_WORKERS: {{ .Values.configs.enableWorkers | quote }}

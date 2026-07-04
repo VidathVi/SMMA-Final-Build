@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "orean-backend.fullname" . }}
+  labels:
+    {{- include "orean-backend.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "orean-backend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "orean-backend.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: orean-secrets
+            - configMapRef:
+                name: orean-config
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probes.readiness.path }}
+              port: {{ .Values.probes.readiness.port }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.probes.liveness.path }}
+              port: {{ .Values.probes.liveness.port }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+        

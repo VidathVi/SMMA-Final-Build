@@ -1,0 +1,6 @@
+apiVersion: v2
+name: orean-secrets
+description: Secrets and Shared Configs for Orean SMMA platform
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

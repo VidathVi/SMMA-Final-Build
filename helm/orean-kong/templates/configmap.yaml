@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "orean-kong.fullname" . }}-config
+  labels:
+    {{- include "orean-kong.labels" . | nindent 4 }}
+data:
+  kong.yml: |
+    _format_version: "3.0"
+    services:
+      - name: backend-service
+        url: http://{{ .Values.upstream.backend.host }}:{{ .Values.upstream.backend.port }}
+        routes:
+          - name: backend-route
+            paths:
+              - /api
+            strip_path: false
+        plugins:
+          - name: jwt
+      - name: frontend-service
+        url: http://{{ .Values.upstream.frontend.host }}:{{ .Values.upstream.frontend.port }}
+        routes:
+          - name: frontend-route
+            paths:
+              - /
+            strip_path: false
+    plugins:
+      - name: rate-limiting
+        config:
+          minute: 100
+          policy: local

@@ -1,0 +1,24 @@
+replicaCount: 1
+image:
+  repository: kong
+  tag: "3.9"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  proxyPort: 8000
+  adminPort: 8001
+domainName: orean.org
+upstream:
+  backend:
+    host: orean-backend
+    port: 8080
+  frontend:
+    host: orean-frontend
+    port: 3000
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi

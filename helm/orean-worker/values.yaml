@@ -1,0 +1,18 @@
+replicaCount: 1
+image:
+  repository: asia-southeast1-docker.pkg.dev/smma-final-build/orean-images/orean-backend
+  tag: latest
+  pullPolicy: IfNotPresent
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 300m
+    memory: 512Mi
+keda:
+  enabled: true
+  minReplicaCount: 0
+  maxReplicaCount: 5
+  queueName: "bull:post-scheduler"
+  listLength: "5"

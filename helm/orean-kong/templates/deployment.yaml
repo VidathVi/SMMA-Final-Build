@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "orean-kong.fullname" . }}
+  labels:
+    {{- include "orean-kong.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "orean-kong.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "orean-kong.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: KONG_DATABASE
+              value: "off"
+            - name: KONG_DECLARATIVE_CONFIG
+              value: "/kong/kong.yml"
+            - name: KONG_PROXY_LISTEN
+              value: "0.0.0.0:{{ .Values.service.proxyPort }}"
+            - name: KONG_PROXY_ACCESS_LOG
+              value: "/dev/stdout"
+            - name: KONG_ADMIN_LISTEN
+              value: "0.0.0.0:{{ .Values.service.adminPort }}"
+          ports:
+            - name: proxy
+              containerPort: {{ .Values.service.proxyPort }}
+              protocol: TCP
+            - name: admin
+              containerPort: {{ .Values.service.adminPort }}
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.service.proxyPort }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.service.proxyPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - name: kong-config-volume
+              mountPath: /kong
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: kong-config-volume
+          configMap:
+            name: {{ include "orean-kong.fullname" . }}-config

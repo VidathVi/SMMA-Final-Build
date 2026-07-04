@@ -1,18 +1,18 @@
 replicaCount: 2
 image:
-  repository: asia-southeast1-docker.pkg.dev/smma-final-build/orean-images/orean-backend
+  repository: asia-southeast1-docker.pkg.dev/smma-final-build/orean-images/orean-frontend
   tag: latest
   pullPolicy: IfNotPresent
 service:
   type: ClusterIP
-  port: 8080
+  port: 3000
 resources:
   requests:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 100m
+    memory: 256Mi
   limits:
-    cpu: 500m
-    memory: 1Gi
+    cpu: 300m
+    memory: 512Mi
 autoscaling:
   enabled: true
   minReplicas: 2
@@ -20,8 +20,8 @@ autoscaling:
   targetCPUUtilizationPercentage: 70
 probes:
   readiness:
-    path: /health
-    port: 8080
+    path: /
+    port: 3000
   liveness:
-    path: /health
-    port: 8080
+    path: /
+    port: 3000

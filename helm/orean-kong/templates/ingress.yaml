@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "orean-kong.fullname" . }}-ingress
+  labels:
+    {{- include "orean-kong.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "orean-cert"
+spec:
+  rules:
+    - host: {{ .Values.domainName }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "orean-kong.fullname" . }}
+                port:
+                  number: {{ .Values.service.proxyPort }}
+    - host: api.{{ .Values.domainName }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "orean-kong.fullname" . }}
+                port:
+                  number: {{ .Values.service.proxyPort }}
+  tls:
+    - hosts:
+        - {{ .Values.domainName }}
+        - api.{{ .Values.domainName }}
+      secretName: orean-tls
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: orean-cert
+  labels:
+    {{- include "orean-kong.labels" . | nindent 4 }}
+spec:
+  domains:
+    - {{ .Values.domainName }}
+    - api.{{ .Values.domainName }}

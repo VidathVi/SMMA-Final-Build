@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "orean-frontend.fullname" . }}
+  labels:
+    {{- include "orean-frontend.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "orean-frontend.selectorLabels" . | nindent 4 }}
