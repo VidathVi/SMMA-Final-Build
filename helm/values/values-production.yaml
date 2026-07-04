@@ -1,0 +1,13 @@
+orean-backend:
+  replicaCount: 2
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+
+orean-frontend:
+  replicaCount: 2
+
+orean-worker:
+  keda:
+    maxReplicaCount: 10
