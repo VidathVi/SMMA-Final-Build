@@ -1,0 +1,113 @@
+name: Deploy Production
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy-production:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Authenticate to Google Cloud
+              uses: google-github-actions/auth@v2
+              with:
+                  credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+            - name: Set up Cloud SDK
+              uses: google-github-actions/setup-gcloud@v2
+
+            - name: Configure Docker for Artifact Registry
+              run: |
+                  gcloud auth configure-docker asia-southeast1-docker.pkg.dev --quiet
+
+            - name: Build and Push Backend Image
+              run: |
+                  docker build -t asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-backend:${{ github.sha }} ./backend
+                  docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-backend:${{ github.sha }}
+
+            - name: Build and Push Frontend Image
+              run: |
+                  docker build \
+                    --build-arg NEXT_PUBLIC_API_URL=https://api.orean360.com \
+                    -t asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend:${{ github.sha }} ./orean-web
+                  docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend:${{ github.sha }}
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - name: Run Prisma Migrations
+              env:
+                  DATABASE_URL: ${{ secrets.DATABASE_URL_PRODUCTION }}
+              run: |
+                  cd backend
+                  npm ci
+                  npx prisma migrate deploy
+
+            - name: Get GKE Credentials
+              uses: google-github-actions/get-gke-credentials@v2
+              with:
+                  cluster_name: orean-production
+                  location: asia-southeast1
+
+            - name: Install Helm
+              uses: azure/setup-helm@v4
+
+            - name: Deploy Secrets Chart
+              run: |
+                  helm upgrade --install orean-secrets ./helm/orean-secrets \
+                    --namespace orean --create-namespace \
+                    --set secrets.databaseUrl="${{ secrets.DATABASE_URL_PRODUCTION }}" \
+                    --set secrets.redisUrl="${{ secrets.REDIS_URL_PRODUCTION }}" \
+                    --set secrets.jwtSecret="${{ secrets.JWT_SECRET }}" \
+                    --set secrets.modalApiKey="${{ secrets.MODAL_API_KEY }}" \
+                    --set secrets.geoEngineUrl="${{ secrets.GEO_ENGINE_URL }}" \
+                    --set secrets.google.clientId="${{ secrets.GOOGLE_CLIENT_ID }}" \
+                    --set secrets.google.clientSecret="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+                    --set secrets.meta.appId="${{ secrets.META_APP_ID }}" \
+                    --set secrets.meta.appSecret="${{ secrets.META_APP_SECRET }}" \
+                    --set secrets.youtube.clientId="${{ secrets.YOUTUBE_CLIENT_ID }}" \
+                    --set secrets.youtube.clientSecret="${{ secrets.YOUTUBE_CLIENT_SECRET }}" \
+                    --set secrets.linkedin.clientId="${{ secrets.LINKEDIN_CLIENT_ID }}" \
+                    --set secrets.linkedin.clientSecret="${{ secrets.LINKEDIN_CLIENT_SECRET }}" \
+                    --set secrets.tiktok.clientKey="${{ secrets.TIKTOK_CLIENT_KEY }}" \
+                    --set secrets.tiktok.clientSecret="${{ secrets.TIKTOK_CLIENT_SECRET }}"
+
+            - name: Deploy Backend Chart
+              run: |
+                  helm upgrade --install orean-backend ./helm/orean-backend \
+                    --namespace orean \
+                    -f ./helm/values/values-production.yaml \
+                    --set image.repository=asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-backend \
+                    --set image.tag=${{ github.sha }}
+
+            - name: Deploy Worker Chart
+              run: |
+                  helm upgrade --install orean-worker ./helm/orean-worker \
+                    --namespace orean \
+                    -f ./helm/values/values-production.yaml \
+                    --set image.repository=asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-backend \
+                    --set image.tag=${{ github.sha }}
+
+            - name: Deploy Frontend Chart
+              run: |
+                  helm upgrade --install orean-frontend ./helm/orean-frontend \
+                    --namespace orean \
+                    -f ./helm/values/values-production.yaml \
+                    --set image.repository=asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend \
+                    --set image.tag=${{ github.sha }}
+
+            - name: Deploy Kong Chart
+              run: |
+                  helm upgrade --install orean-kong ./helm/orean-kong \
+                    --namespace orean \
+                    -f ./helm/values/values-production.yaml
+
+            - name: Verify Deployment
+              run: |
+                  kubectl rollout status deployment/orean-backend -n orean --timeout=300s
