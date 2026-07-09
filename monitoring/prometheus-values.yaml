@@ -1,0 +1,55 @@
+# Custom values for kube-prometheus-stack Helm chart (Section 9.1)
+grafana:
+  adminPassword: "AdminSecretPass123!" # Exposing a default strong password (should be updated or managed via secret)
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "gce"
+      networking.gke.io/managed-certificates: "grafana-cert"
+    hosts:
+      - grafana.orean360.com
+    path: /
+    pathType: Prefix
+
+alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ["alertname", "cluster", "service"]
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: "slack-notifications"
+      routes:
+        - match:
+            alertname: Watchdog
+          receiver: "null"
+    receivers:
+      - name: "null"
+      - name: "slack-notifications"
+        slack_configs:
+          - channel: "#alerts"
+            # API URL should be updated with the actual repository secret in production
+            api_url: "https://hooks.slack.com/services/YOUR_WORKSPACE_ID/YOUR_CHANNEL_ID/YOUR_SECRET_KEY"
+            send_resolved: true
+            title: "[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}"
+            text: >-
+              *Alert:* {{ .CommonAnnotations.summary }}
+              *Description:* {{ .CommonAnnotations.description }}
+              *Severity:* {{ .CommonLabels.severity }}
+      - name: "email-notifications"
+        email_configs:
+          - to: "admin@orean360.com"
+            from: "alertmanager@orean360.com"
+            smarthost: "smtp.gmail.com:587"
+            auth_username: "alertmanager@orean360.com"
+            auth_identity: "alertmanager@orean360.com"
+            auth_password: "smtp-password-placeholder"
+            send_resolved: true
+
+prometheus:
+  prometheusSpec:
+    # Set to false to allow Prometheus to discover ServiceMonitors in all namespaces,
+    # rather than only those that match the release label.
+    serviceMonitorSelectorNilUsesHelmValues: false
