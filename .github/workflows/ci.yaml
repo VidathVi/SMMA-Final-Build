@@ -1,6 +1,9 @@
 on:
     pull_request:
-        branches: dev, staging, main
+        branches:
+            - dev
+            - staging
+            - main
 
 jobs:
     lint-and-typecheck:
@@ -8,16 +11,30 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-            - run: cd backend && npm ci
-            - run: cd backend && pnx tsc --noEmit
-            - run: cd orean-web && npm ci
-            - run: cd orean-web && npm run lint
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+
+            - name: Install backend dependencies
+              run: cd backend && npm ci
+
+            - name: Type check backend
+              run: cd backend && npm run tsc --noEmit
+
+            - name: Install frontend dependencies
+              run: cd orean-web && npm ci
+
+            - name: Lint frontend
+              run: cd orean-web && npm run lint
 
     dcoker-build-test:
         runs-on: ubuntu-latest
         steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
             - name: Build backend
               run: docker build ./backend -t test-backend.
+
             - name: Build frontend
               run: docker build ./orean-web -t test-frontend.
