@@ -32,7 +32,7 @@ jobs:
             - name: Build and Push Frontend Image
               run: |
                   docker build \
-                    --build-arg NEXT_PUBLIC_API_URL=https://api.orean360.com \
+                    --build-arg NEXT_PUBLIC_API_URL=https://api.orean.studio \
                     -t asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend:${{ github.sha }} ./orean-web
                   docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend:${{ github.sha }}
 

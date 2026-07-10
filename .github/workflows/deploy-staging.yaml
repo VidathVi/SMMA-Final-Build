@@ -30,13 +30,6 @@ jobs:
           docker build -t asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-backend:${{ github.sha }} ./backend
           docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-backend:${{ github.sha }}
 
-      - name: Build and Push Frontend Image
-        run: |
-          docker build \
-            --build-arg NEXT_PUBLIC_API_URL=https://staging-api.orean360.com \
-            -t asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend:${{ github.sha }} ./orean-web
-          docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend:${{ github.sha }}
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -58,6 +51,18 @@ jobs:
             --platform=managed \
             --allow-unauthenticated \
             --set-env-vars="DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }},REDIS_URL=${{ secrets.REDIS_URL_STAGING }}"
+
+      - name: Get Backend URL
+        run: |
+          BACKEND_URL=$(gcloud run services describe orean-backend-staging --platform=managed --region=asia-southeast1 --format="value(status.url)")
+          echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
+
+      - name: Build and Push Frontend Image
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL=${{ env.BACKEND_URL }} \
+            -t asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend:${{ github.sha }} ./orean-web
+          docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orean-images/orean-frontend:${{ github.sha }}
 
       - name: Deploy Frontend to Cloud Run
         run: |

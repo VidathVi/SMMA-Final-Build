@@ -4,7 +4,7 @@ secrets:
   redisUrl: "rediss://default:dummy@valkey-dummy.aivencloud.com:24856"
   jwtSecret: "change-me-in-production-jwt-secret-key"
   modalApiKey: "placeholder-modal-api-key"
-  geoEngineUrl: "https://geo.orean.org"
+  geoEngineUrl: "https://geo.orean.studio"
   google:
     clientId: "google-client-id-placeholder"
     clientSecret: "google-client-secret-placeholder"
@@ -24,5 +24,5 @@ secrets:
 configs:
   port: "8080"
   nodeEnv: "production"
-  frontendUrl: "https://orean.org"
+  frontendUrl: "https://orean.studio"
   enableWorkers: "false"

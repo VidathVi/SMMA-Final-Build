@@ -7,7 +7,7 @@ service:
   type: ClusterIP
   proxyPort: 8000
   adminPort: 8001
-domainName: orean.org
+domainName: orean.studio
 upstream:
   backend:
     host: orean-backend
