@@ -15,7 +15,7 @@ output "artifact_registry_url" {
 
 output "cloud_run_url" {
   description = "The URL of the cloud run"
-  value       = module.cloud-run[0].service_url
+  value       = one(module.cloud-run[*].service_url)
 }
 
 
