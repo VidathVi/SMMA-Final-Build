@@ -40,7 +40,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL_STAGING }}
         run: |
           cd backend
-          npm ci
+          npm install
           npx prisma migrate deploy
 
       - name: Deploy Backend to Cloud Run
