@@ -101,7 +101,7 @@ app.get(
   postController.getByCampaign,
 );
 
-app.get("/api/health", async (req: Request, res: Response) => {
+app.get(["/health", "/api/health"], async (req: Request, res: Response) => {
   try {
     const result = await pool.query("SELECT NOW()");
     res.json({
