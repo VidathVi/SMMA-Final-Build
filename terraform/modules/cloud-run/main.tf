@@ -1,10 +1,10 @@
 resource "google_cloud_run_v2_service" "backend" {
-  name     = "orean-backend"
+  name     = "orean-backend-staging"
   location = var.region
 
   template {
     containers {
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/orean-images/backend:latest"
+      image = "gcr.io/cloudrun/hello"
 
       env {
         name  = "DATABASE_URL"
@@ -29,15 +29,21 @@ resource "google_cloud_run_v2_service" "backend" {
       max_instance_count = 2
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      template[0].containers[0].image
+    ]
+  }
 }
 
 resource "google_cloud_run_v2_service" "frontend" {
-  name     = "orean-frontend"
+  name     = "orean-frontend-staging"
   location = var.region
 
   template {
     containers {
-      image = "${var.region}-docker.pkg.dev/${var.project_id}/orean-images/frontend:latest"
+      image = "gcr.io/cloudrun/hello"
 
       env {
         name  = "NEXT_PUBLIC_API_URL"
@@ -56,6 +62,12 @@ resource "google_cloud_run_v2_service" "frontend" {
       min_instance_count = 0
       max_instance_count = 2
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      template[0].containers[0].image
+    ]
   }
 }
 
