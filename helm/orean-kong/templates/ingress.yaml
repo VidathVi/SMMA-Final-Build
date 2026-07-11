@@ -29,11 +29,6 @@ spec:
                 name: {{ include "orean-kong.fullname" . }}
                 port:
                   number: {{ .Values.service.proxyPort }}
-  tls:
-    - hosts:
-        - {{ .Values.domainName }}
-        - api.{{ .Values.domainName }}
-      secretName: orean-tls
 ---
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
