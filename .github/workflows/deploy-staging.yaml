@@ -33,34 +33,31 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
-      - name: Wake up Staging Database
+      - name: Install backend deps
         run: |
-          python -c '
-          import socket, time, sys
-          host = "ep-still-hall-aoaf4cco-pooler.c-2.ap-southeast-1.aws.neon.tech"
-          port = 5432
-          print("Checking database connection...")
-          for i in range(15):
-              try:
-                  s = socket.create_connection((host, port), timeout=3)
-                  print("Database is awake and reachable!")
-                  s.close()
-                  sys.exit(0)
-              except Exception as e:
-                  print(f"Database connection attempt {i+1} failed: {e}. Retrying in 3 seconds...")
-                  time.sleep(3)
-          print("Could not connect to database host after 15 attempts.")
-          sys.exit(1)
-          '
+          cd backend
+          npm ci
+
+      - name: Wait for staging DB (using DATABASE_URL_STAGING)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_STAGING }}
+        run: |
+          cd backend
+          for i in {1..20}; do
+            echo "DB check attempt $i..."
+            npx prisma db execute --stdin --schema=prisma/schema.prisma <<< "SELECT 1;" && exit 0
+            sleep 5
+          done
+          echo "Database not reachable after retries"
+          exit 1
 
       - name: Run Prisma Migrations
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL_STAGING }}
         run: |
           cd backend
-          npm install
           npx prisma migrate deploy
 
       - name: Deploy Backend to Cloud Run
