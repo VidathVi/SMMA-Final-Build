@@ -148,7 +148,7 @@ export default function AnalyticsPage() {
             Track performance across all your platforms.
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-1">
+        <div className="flex items-center gap-2 bg-[#0c142c] border border-blue-900/30 rounded-xl p-1">
           {dateRanges.map((range) => (
             <button
               key={range.value}
@@ -173,7 +173,7 @@ export default function AnalyticsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl relative overflow-hidden group"
+            className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 p-6 rounded-2xl relative overflow-hidden group"
           >
             <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full blur-3xl opacity-20 ${kpi.bg}`}></div>
             <div className="flex items-center justify-between mb-3">
@@ -197,7 +197,7 @@ export default function AnalyticsPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="lg:col-span-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+          className="lg:col-span-2 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6"
         >
           <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <BarChart3 className="w-5 h-5 text-blue-400" />
@@ -249,7 +249,7 @@ export default function AnalyticsPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.4 }}
-          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+          className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6"
         >
           <h2 className="text-lg font-bold text-white mb-4">Platform Breakdown</h2>
           <ResponsiveContainer width="100%" height={200}>
@@ -297,7 +297,7 @@ export default function AnalyticsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+        className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6"
       >
         <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-emerald-400" />

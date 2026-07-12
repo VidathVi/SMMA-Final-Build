@@ -51,7 +51,7 @@ function SettingsSidebar({
   ];
 
   return (
-    <div className="w-64 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shrink-0 h-fit">
+    <div className="w-64 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-4 shrink-0 h-fit">
       <nav className="space-y-1">
         {menuItems.map((item) => (
           <motion.button
@@ -130,7 +130,7 @@ function PersonalProfile() {
         </p>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-8">
         <div className="flex gap-12">
           {/* Avatar */}
           <div className="shrink-0 text-center">
@@ -320,7 +320,7 @@ function OrganizationProfile() {
         </p>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-8">
         <div className="flex gap-12">
           <div className="shrink-0 text-center">
             <h3 className="text-sm font-bold text-slate-300 mb-4">
@@ -447,7 +447,7 @@ function OrganizationProfile() {
 
       {/* Team & Roles */}
       <h3 className="text-lg font-bold text-white">Team & Roles</h3>
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 space-y-4">
         <div className="flex justify-between items-center">
           <div>
             <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
@@ -677,7 +677,7 @@ function ConnectedAccounts() {
       </div>
 
       {/* Stats bar */}
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center border border-white/10">
@@ -776,7 +776,7 @@ function ConnectedAccounts() {
                       href={connection.profile_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-8 h-8 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                      className="w-8 h-8 bg-[#0c142c] border border-blue-900/30 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
@@ -882,7 +882,7 @@ function AIIntegrations() {
       </div>
 
       <h3 className="text-lg font-bold text-white">AI Usage & Preferences</h3>
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 space-y-6">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-8 space-y-6">
         <div className="grid grid-cols-2 gap-8">
           <div>
             <label className="text-sm font-medium text-slate-300 mb-2 block">
@@ -958,7 +958,7 @@ function AIIntegrations() {
       </div>
 
       <h3 className="text-lg font-bold text-white">Connected Platforms</h3>
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6">
         <div className="grid grid-cols-2 gap-4">
           {platforms.map((p) => (
             <div
@@ -1019,7 +1019,7 @@ function SecurityAccess() {
       </div>
 
       <h3 className="text-lg font-bold text-white">Login & Security</h3>
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 space-y-4">
         <div>
           <label className="text-sm font-medium text-slate-300 mb-1.5 block">
             Work Email
@@ -1056,7 +1056,7 @@ function SecurityAccess() {
       </div>
 
       <h3 className="text-lg font-bold text-white">Active Sessions</h3>
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 space-y-4">
         <div className="flex items-center justify-between pb-4 border-b border-white/10">
           <div className="flex items-center gap-4">
             <Laptop className="w-6 h-6 text-blue-400" />
@@ -1095,7 +1095,7 @@ function SecurityAccess() {
       </div>
 
       <h3 className="text-lg font-bold text-white">AI Escalation Rules</h3>
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-4">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 space-y-4">
         <div className="flex items-center justify-between p-4 bg-black/20 border border-white/10 rounded-xl">
           <div>
             <p className="text-sm font-medium text-white">
@@ -1151,7 +1151,7 @@ function BillingPlan() {
         </p>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 space-y-6">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-8 space-y-6">
         <div className="flex justify-between items-start">
           <div>
             <h3 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
@@ -1221,7 +1221,7 @@ function DangerZone() {
         <p className="text-sm text-slate-400 mt-1">Proceed with caution</p>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 space-y-6">
+      <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-8 space-y-6">
         <div className="flex gap-4 items-center p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl">
           <AlertTriangle className="w-6 h-6 text-rose-400 shrink-0" />
           <div>

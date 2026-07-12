@@ -125,7 +125,7 @@ export default function CalendarPage() {
           >
             Today
           </button>
-          <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-1">
+          <div className="flex items-center gap-2 bg-[#0c142c] border border-blue-900/30 rounded-xl p-1">
             <button
               onClick={prevMonth}
               className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
@@ -150,7 +150,7 @@ export default function CalendarPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden"
+          className="flex-1 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl overflow-hidden"
         >
           {/* Day Headers */}
           <div className="grid grid-cols-7 border-b border-white/10 bg-white/5">
@@ -240,7 +240,7 @@ export default function CalendarPage() {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="w-80 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col overflow-hidden shrink-0"
+          className="w-80 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl flex flex-col overflow-hidden shrink-0"
         >
           <div className="p-4 border-b border-white/10 bg-white/5">
             <h2 className="text-sm font-bold text-white flex items-center gap-2">
@@ -267,7 +267,7 @@ export default function CalendarPage() {
                   key={post.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-white/5 border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all"
+                  className="bg-[#0c142c] border border-blue-900/30 rounded-xl p-4 hover:border-white/20 transition-all"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <span
