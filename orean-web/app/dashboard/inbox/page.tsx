@@ -110,7 +110,7 @@ export default function InboxPage() {
 
       <div className="flex gap-6 h-[calc(100%-5rem)]">
         {/* Chat List Sidebar */}
-        <div className="w-80 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col overflow-hidden shrink-0">
+        <div className="w-80 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl flex flex-col overflow-hidden shrink-0">
           {/* Search */}
           <div className="p-4 border-b border-white/5">
             <div className="relative">
@@ -185,7 +185,7 @@ export default function InboxPage() {
         </div>
 
         {/* Chat Area */}
-        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col overflow-hidden">
+        <div className="flex-1 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl flex flex-col overflow-hidden">
           {/* Chat Header */}
           <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
             <div className="flex items-center gap-3">

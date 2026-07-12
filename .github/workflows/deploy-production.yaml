@@ -46,7 +46,7 @@ jobs:
                   DATABASE_URL: ${{ secrets.DATABASE_URL_PRODUCTION }}
               run: |
                   cd backend
-                  npm ci
+                  npm install
                   npx prisma migrate deploy
 
             - name: Get GKE Credentials

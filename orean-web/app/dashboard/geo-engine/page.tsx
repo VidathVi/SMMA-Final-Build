@@ -158,7 +158,7 @@ export default function GeoEnginePage() {
           className="space-y-6"
         >
           {/* Topic Input */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+          <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6">
             <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
               <Wand2 className="w-5 h-5 text-purple-400" />
               Generate Content
@@ -224,7 +224,7 @@ export default function GeoEnginePage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-3"
+              className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 space-y-3"
             >
               <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">
                 AI Actions
@@ -235,7 +235,7 @@ export default function GeoEnginePage() {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleOptimize}
                   disabled={optimizing}
-                  className="py-3 px-3 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-white hover:bg-white/10 transition-all flex flex-col items-center gap-2"
+                  className="py-3 px-3 bg-[#0c142c] border border-blue-900/30 rounded-xl text-xs font-bold text-white hover:bg-white/10 transition-all flex flex-col items-center gap-2"
                 >
                   {optimizing ? <Loader2 className="w-5 h-5 animate-spin text-blue-400" /> : <RefreshCw className="w-5 h-5 text-blue-400" />}
                   Optimize
@@ -245,7 +245,7 @@ export default function GeoEnginePage() {
                   whileTap={{ scale: 0.98 }}
                   onClick={handlePredict}
                   disabled={predicting}
-                  className="py-3 px-3 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-white hover:bg-white/10 transition-all flex flex-col items-center gap-2"
+                  className="py-3 px-3 bg-[#0c142c] border border-blue-900/30 rounded-xl text-xs font-bold text-white hover:bg-white/10 transition-all flex flex-col items-center gap-2"
                 >
                   {predicting ? <Loader2 className="w-5 h-5 animate-spin text-emerald-400" /> : <BarChart3 className="w-5 h-5 text-emerald-400" />}
                   Predict
@@ -254,7 +254,7 @@ export default function GeoEnginePage() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleDetectLanguage}
-                  className="py-3 px-3 bg-white/5 border border-white/10 rounded-xl text-xs font-bold text-white hover:bg-white/10 transition-all flex flex-col items-center gap-2"
+                  className="py-3 px-3 bg-[#0c142c] border border-blue-900/30 rounded-xl text-xs font-bold text-white hover:bg-white/10 transition-all flex flex-col items-center gap-2"
                 >
                   <Languages className="w-5 h-5 text-purple-400" />
                   Language
@@ -275,7 +275,7 @@ export default function GeoEnginePage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+              className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6"
             >
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -300,7 +300,7 @@ export default function GeoEnginePage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+              className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6"
             >
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -325,7 +325,7 @@ export default function GeoEnginePage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+              className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6"
             >
               <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4 text-emerald-400" />
@@ -368,7 +368,7 @@ export default function GeoEnginePage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+              className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6"
             >
               <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                 <Globe className="w-4 h-4 text-purple-400" />
@@ -380,7 +380,7 @@ export default function GeoEnginePage() {
 
           {/* Empty state */}
           {!generatedCaption && (
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-12 text-center">
+            <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-12 text-center">
               <Sparkles className="w-12 h-12 text-slate-500 mx-auto mb-4" />
               <h3 className="text-lg font-bold text-white mb-2">AI-Powered Content</h3>
               <p className="text-sm text-slate-400">

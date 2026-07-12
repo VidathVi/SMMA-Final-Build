@@ -159,7 +159,7 @@ export default function WorkflowsPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-2xl mx-auto bg-white/5 border border-white/10 rounded-2xl p-8 mt-8"
+            className="max-w-2xl mx-auto bg-[#223c8f] border border-blue-800/25 rounded-2xl p-8 mt-8"
           >
             <h4 className="text-sm font-bold text-slate-300 mb-6 uppercase tracking-wider">Example Pipeline</h4>
             <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -186,7 +186,7 @@ export default function WorkflowsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all group"
+              className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 hover:border-white/20 transition-all group"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">

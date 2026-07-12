@@ -154,7 +154,7 @@ export default function PublisherPage() {
         {/* Main Content Area - Create Post */}
         <div className="flex-1 flex flex-col gap-6">
           {/* Create Post Header & Inputs */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 shadow-xl relative overflow-hidden">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold text-white">Create Post</h2>
               <button 
@@ -260,7 +260,7 @@ export default function PublisherPage() {
           </div>
 
           {/* Content Uploader */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 min-h-48 flex flex-col justify-center">
+          <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 min-h-48 flex flex-col justify-center">
             <div className="flex flex-wrap gap-4 items-center">
               {/* Media Previews */}
               {mediaFiles.map((media, index) => (
@@ -342,7 +342,7 @@ export default function PublisherPage() {
           </div>
 
           {/* Posting Schedule */}
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 mt-auto">
+          <div className="bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6 mt-auto">
             <div className="mb-4">
               <h3 className="text-lg font-semibold text-white">
                 Posting Schedule
@@ -399,7 +399,7 @@ export default function PublisherPage() {
         </div>
 
         {/* Preview Section */}
-        <div className="hidden lg:block w-80 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+        <div className="hidden lg:block w-80 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-white">Preview</h3>
           </div>

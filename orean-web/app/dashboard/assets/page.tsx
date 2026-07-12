@@ -208,11 +208,11 @@ export default function AssetsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by name or tag..."
-            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500/50 transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#0c142c] border border-blue-900/30 rounded-xl text-sm text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500/50 transition-all"
           />
         </div>
 
-        <div className="flex gap-1 bg-white/5 border border-white/10 rounded-xl p-1">
+        <div className="flex gap-1 bg-[#0c142c] border border-blue-900/30 rounded-xl p-1">
           {[
             { id: "all", label: "All" },
             { id: "images", label: "Images" },
@@ -232,7 +232,7 @@ export default function AssetsPage() {
           ))}
         </div>
 
-        <div className="flex gap-1 bg-white/5 border border-white/10 rounded-xl p-1">
+        <div className="flex gap-1 bg-[#0c142c] border border-blue-900/30 rounded-xl p-1">
           <button
             onClick={() => setViewMode("grid")}
             className={`p-2 rounded-lg transition-all ${viewMode === "grid" ? "bg-white/10 text-white" : "text-slate-400"}`}
@@ -267,7 +267,7 @@ export default function AssetsPage() {
                 transition={{ delay: idx * 0.03 }}
                 whileHover={{ y: -4 }}
                 onClick={() => setSelectedAsset(asset)}
-                className="bg-white/5 border border-white/10 rounded-xl overflow-hidden cursor-pointer group hover:border-white/20 transition-all"
+                className="bg-[#0c142c] border border-blue-900/30 rounded-xl overflow-hidden cursor-pointer group hover:border-white/20 transition-all"
               >
                 <div className="aspect-square bg-black/20 flex items-center justify-center relative">
                   {asset.url ? (
@@ -326,7 +326,7 @@ export default function AssetsPage() {
           })}
         </div>
       ) : (
-        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden divide-y divide-white/5">
+        <div className="bg-[#223c8f] border border-blue-800/25 rounded-2xl overflow-hidden divide-y divide-white/5">
           {filteredAssets.map((asset) => {
             const FileIcon = getFileIcon(asset.mimeType);
             return (

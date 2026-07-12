@@ -159,7 +159,7 @@ export default function ApprovalsPage() {
 
       <div className="flex gap-6 h-[calc(100%-10rem)]">
         {/* Approvals List */}
-        <div className="w-96 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col overflow-hidden shrink-0">
+        <div className="w-96 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl flex flex-col overflow-hidden shrink-0">
           <div className="p-4 border-b border-white/10 bg-white/5">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-bold text-white flex items-center gap-2">
@@ -227,7 +227,7 @@ export default function ApprovalsPage() {
         </div>
 
         {/* Detail / Comment Panel */}
-        <div className="flex-1 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col overflow-hidden">
+        <div className="flex-1 bg-gradient-to-br from-[#223c8f] to-[#3657b8] border border-blue-800/25 rounded-2xl flex flex-col overflow-hidden">
           {selectedPost ? (
             <>
               {/* Post Preview */}

@@ -1,4 +1,4 @@
-/* @import url('path/to/file.css'); */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lobster&family=Pacifico&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -39,4 +39,38 @@ body {
 
 .animate-gradient {
   animation: gradientMove 12s ease infinite;
+}
+
+
+.font-andora {
+  font-family: 'Bukhari Script', 'BukhariScript', 'Bukhari', 'Radicals', 'Radicals Bold', 'Radicals-Bold', 'Andora Script', 'Andora', 'Dancing Script', cursive;
+  -webkit-text-stroke: 0.5px currentColor;
+}
+
+/* Custom Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Sidebar scrollbar styling */
+.bg-\[\#1a2536\] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.bg-\[\#1a2536\] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
