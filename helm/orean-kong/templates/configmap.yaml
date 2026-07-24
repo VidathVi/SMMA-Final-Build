@@ -12,8 +12,10 @@ data:
         url: http://{{ .Values.upstream.backend.host }}:{{ .Values.upstream.backend.port }}
         routes:
           - name: backend-route
+            hosts:
+              - api.{{ .Values.domainName }}
             paths:
-              - /api
+              - /
             strip_path: false
         plugins:
           - name: cors
@@ -38,6 +40,8 @@ data:
         url: http://{{ .Values.upstream.frontend.host }}:{{ .Values.upstream.frontend.port }}
         routes:
           - name: frontend-route
+            hosts:
+              - {{ .Values.domainName }}
             paths:
               - /
             strip_path: false
