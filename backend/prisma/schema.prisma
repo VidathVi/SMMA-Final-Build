@@ -23,13 +23,15 @@ model Role {
 // ─── User ──────────────────────────────────────────────────────────────
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String
-  roleId    String
-  role      Role     @relation(fields: [roleId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String?
+  password_hash String?
+  auth_provider String   @default("local")
+  roleId        String?
+  role          Role?    @relation(fields: [roleId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   createdCampaigns  Campaign[]
   assignedPosts     Post[]
@@ -38,6 +40,19 @@ model User {
   createdWorkflows  WorkflowDefinition[]
 
   @@map("users")
+}
+
+// ─── Verification Code ─────────────────────────────────────────────────
+
+model VerificationCode {
+  id        String   @id @default(uuid())
+  email     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, code])
+  @@map("verification_codes")
 }
 
 // ─── Campaign Status (Extensible) ──────────────────────────────────────

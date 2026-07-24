@@ -36,13 +36,16 @@ const GOOGLE_CLIENT_ID =
 
 export default function Register() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [code, setCode] = useState("");
+  const [isCodeSent, setIsCodeSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [googleMessage, setGoogleMessage] = useState("");
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -102,10 +105,52 @@ export default function Register() {
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendCode = async () => {
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      return;
+    }
+    
+    if (!email) {
+      setError("Email is required");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/send-verification`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to send code");
+      }
+
+      setIsCodeSent(true);
+      setError(""); // clear error on success
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to send code");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!isCodeSent) {
+      handleSendCode();
+      return;
+    }
+    
+    if (!code) {
+      setError("Verification code is required");
       return;
     }
 
@@ -116,7 +161,7 @@ export default function Register() {
       const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password, code }),
       });
 
       const data = await response.json();
@@ -181,14 +226,18 @@ export default function Register() {
                 type="button"
                 disabled={isGoogleLoading}
                 onClick={() => {
-                  const googleBtn = document.querySelector<HTMLDivElement>(
-                    "#google-signup-btn div[role='button']",
-                  );
-                  if (googleBtn) {
-                    googleBtn.click();
-                  } else if (window.google) {
-                    window.google.accounts.id.prompt();
-                  }
+                  setGoogleMessage("Since the webapp is still in testing, this only works if you are a developer");
+                  setTimeout(() => {
+                    setGoogleMessage("");
+                    const googleBtn = document.querySelector<HTMLDivElement>(
+                      "#google-signup-btn div[role='button']",
+                    );
+                    if (googleBtn) {
+                      googleBtn.click();
+                    } else if (window.google) {
+                      window.google.accounts.id.prompt();
+                    }
+                  }, 5000);
                 }}
                 className="w-full mt-8 py-3 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-3 shadow-sm cursor-pointer"
               >
@@ -233,24 +282,38 @@ export default function Register() {
 
               {/* Form */}
               <form onSubmit={handleRegister} className="space-y-4">
+                {googleMessage && (
+                  <div className="bg-blue-50 border border-blue-200 text-blue-600 px-4 py-3 rounded-xl flex items-center text-sm">
+                    <AlertCircle className="w-4 h-4 mr-2 shrink-0 text-blue-500" />
+                    {googleMessage}
+                  </div>
+                )}
                 {error && (
                   <div className="bg-rose-50 border border-rose-200 text-rose-600 px-4 py-3 rounded-xl flex items-center text-sm">
                     <AlertCircle className="w-4 h-4 mr-2 shrink-0 text-rose-500" />
                     {error}
                   </div>
                 )}
+                
+                {isCodeSent && (
+                  <div className="bg-emerald-50 border border-emerald-200 text-emerald-600 px-4 py-3 rounded-xl flex items-center text-sm">
+                    <CheckCircle className="w-4 h-4 mr-2 shrink-0 text-emerald-500" />
+                    Verification code sent to your email!
+                  </div>
+                )}
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-400 tracking-wide uppercase">
-                    Username
+                    Email
                   </label>
                   <input
-                    type="text"
+                    type="email"
                     required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="block w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1a2536]/20 focus:border-[#1a2536] transition-all text-slate-800 placeholder-slate-400 text-sm"
-                    placeholder="Choose a username"
+                    disabled={isCodeSent}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1a2536]/20 focus:border-[#1a2536] transition-all text-slate-800 placeholder-slate-400 text-sm disabled:opacity-50"
+                    placeholder="mail@abc.com"
                   />
                 </div>
 
@@ -261,9 +324,10 @@ export default function Register() {
                   <input
                     type="password"
                     required
+                    disabled={isCodeSent}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1a2536]/20 focus:border-[#1a2536] transition-all text-slate-800 placeholder-slate-400 text-sm"
+                    className="block w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1a2536]/20 focus:border-[#1a2536] transition-all text-slate-800 placeholder-slate-400 text-sm disabled:opacity-50"
                     placeholder="Create a password"
                   />
                 </div>
@@ -275,12 +339,34 @@ export default function Register() {
                   <input
                     type="password"
                     required
+                    disabled={isCodeSent}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="block w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1a2536]/20 focus:border-[#1a2536] transition-all text-slate-800 placeholder-slate-400 text-sm"
+                    className="block w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1a2536]/20 focus:border-[#1a2536] transition-all text-slate-800 placeholder-slate-400 text-sm disabled:opacity-50"
                     placeholder="Confirm password"
                   />
                 </div>
+
+                {isCodeSent && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="space-y-1.5 pt-2"
+                  >
+                    <label className="text-xs font-bold text-slate-400 tracking-wide uppercase">
+                      Verification Code
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                      className="block w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1a2536]/20 focus:border-[#1a2536] transition-all text-slate-800 placeholder-slate-400 text-sm text-center tracking-[0.5em] font-bold"
+                      placeholder="123456"
+                      maxLength={6}
+                    />
+                  </motion.div>
+                )}
 
                 {/* Register Button */}
                 <button
@@ -291,7 +377,9 @@ export default function Register() {
                   {isLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
-                    <span className="tracking-wide">Sign Up</span>
+                    <span className="tracking-wide">
+                      {isCodeSent ? "Verify & Register" : "Send Verification Code"}
+                    </span>
                   )}
                 </button>
               </form>

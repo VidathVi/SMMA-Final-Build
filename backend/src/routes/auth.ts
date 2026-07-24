@@ -6,12 +6,14 @@ import {
   getSocialConnections,
   connectSocial,
   disconnectSocial,
+  sendVerificationCode,
 } from "../controllers/auth";
 import { googleAuth } from "../controllers/googleAuth";
 
 const router = Router();
 
 // Auth routes
+router.post("/send-verification", sendVerificationCode as any);
 router.post("/register", registerUser as any);
 router.post("/login", loginUser as any);
 router.post("/google", googleAuth as any);

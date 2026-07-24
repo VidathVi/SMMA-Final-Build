@@ -30,11 +30,12 @@ const GOOGLE_CLIENT_ID =
 
 export default function Login() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+  const [googleMessage, setGoogleMessage] = useState("");
 
   useEffect(() => {
     // Load Google Identity Services script
@@ -104,7 +105,7 @@ export default function Login() {
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
@@ -152,14 +153,18 @@ export default function Login() {
             type="button"
             disabled={isGoogleLoading}
             onClick={() => {
-              const googleBtn = document.querySelector<HTMLDivElement>(
-                "#google-signin-btn div[role='button']",
-              );
-              if (googleBtn) {
-                googleBtn.click();
-              } else if (window.google) {
-                window.google.accounts.id.prompt();
-              }
+              setGoogleMessage("Since the webapp is still in testing, this only works if you are a developer");
+              setTimeout(() => {
+                setGoogleMessage("");
+                const googleBtn = document.querySelector<HTMLDivElement>(
+                  "#google-signin-btn div[role='button']",
+                );
+                if (googleBtn) {
+                  googleBtn.click();
+                } else if (window.google) {
+                  window.google.accounts.id.prompt();
+                }
+              }, 5000);
             }}
             className="w-full mt-8 py-3 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-3 shadow-sm cursor-pointer"
           >
@@ -204,6 +209,12 @@ export default function Login() {
 
           {/* Form */}
           <form onSubmit={handleLogin} className="space-y-4">
+            {googleMessage && (
+              <div className="bg-blue-50 border border-blue-200 text-blue-600 px-4 py-3 rounded-xl flex items-center text-sm">
+                <AlertCircle className="w-4 h-4 mr-2 shrink-0 text-blue-500" />
+                {googleMessage}
+              </div>
+            )}
             {error && (
               <div className="bg-rose-550/10 border border-rose-200 text-rose-600 px-4 py-3 rounded-xl flex items-center text-sm">
                 <AlertCircle className="w-4 h-4 mr-2 shrink-0 text-rose-500" />
@@ -216,10 +227,10 @@ export default function Login() {
                 Email
               </label>
               <input
-                type="text"
+                type="email"
                 required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="block w-full px-4 py-3 border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1a2536]/20 focus:border-[#1a2536] transition-all text-slate-800 placeholder-slate-400 text-sm"
                 placeholder="mail@abc.com"
               />

@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Pool } from "pg";
 import dotenv from "dotenv";
+import { PrismaClient } from "@prisma/client";
+import { sendVerificationEmail } from "../utils/email";
 
 dotenv.config();
 
@@ -10,6 +12,7 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "orean360_super_secret_key";
 
 // JWT Auth Middleware
@@ -29,41 +32,87 @@ export const authMiddleware = (req: any, res: Response, next: Function) => {
   }
 };
 
-export const registerUser = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+export const sendVerificationCode = async (req: Request, res: Response) => {
+  const { email } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ message: "Username and password required" });
+  if (!email) {
+    return res.status(400).json({ message: "Email required" });
   }
 
   try {
-    const client = await pool.connect();
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      return res.status(409).json({ message: "Email already registered" });
+    }
 
-    // Check if user exists
-    const existing = await client.query(
-      "SELECT * FROM users WHERE username = $1",
-      [username],
-    );
-    if (existing.rows.length > 0) {
-      client.release();
-      return res.status(409).json({ message: "Username already exists" });
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Store code
+    await prisma.verificationCode.deleteMany({ where: { email } });
+    await prisma.verificationCode.create({
+      data: { email, code, expiresAt },
+    });
+
+    // Send email
+    const sent = await sendVerificationEmail(email, code);
+    if (!sent) {
+      return res.status(500).json({ message: "Failed to send verification email" });
+    }
+
+    res.json({ message: "Verification code sent successfully" });
+  } catch (error) {
+    console.error("Send Code Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const registerUser = async (req: Request, res: Response) => {
+  const { email, password, code } = req.body;
+
+  if (!email || !password || !code) {
+    return res.status(400).json({ message: "Email, password, and verification code required" });
+  }
+
+  try {
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({ message: "Email already exists" });
+    }
+
+    // Verify code
+    const verification = await prisma.verificationCode.findFirst({
+      where: { email, code },
+    });
+
+    if (!verification) {
+      return res.status(400).json({ message: "Invalid verification code" });
+    }
+
+    if (verification.expiresAt < new Date()) {
+      return res.status(400).json({ message: "Verification code expired" });
     }
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    // Insert user
-    const newUser = await client.query(
-      "INSERT INTO users (username, password_hash, auth_provider) VALUES ($1, $2, 'local') RETURNING id, username, role",
-      [username, hash],
-    );
+    // Get a default role if exists, otherwise create or just omit (schema has roleId as optional now?)
+    // Wait, the previous schema had roleId optional. Let's create user.
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        password_hash: hash,
+        auth_provider: "local",
+      },
+    });
 
-    client.release();
+    // Clean up used code
+    await prisma.verificationCode.deleteMany({ where: { email } });
 
     res.status(201).json({
       message: "User registered successfully",
-      user: newUser.rows[0],
+      user: { id: newUser.id, email: newUser.email },
     });
   } catch (error) {
     console.error("Register Error:", error);
@@ -72,25 +121,18 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).json({ message: "Username and password required" });
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password required" });
   }
 
   try {
-    const client = await pool.connect();
-    const result = await client.query(
-      "SELECT * FROM users WHERE username = $1",
-      [username],
-    );
-    client.release();
+    const user = await prisma.user.findUnique({ where: { email } });
 
-    if (result.rows.length === 0) {
+    if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-
-    const user = result.rows[0];
 
     // If user signed up with Google, they can't use password login
     if (user.auth_provider === "google" && !user.password_hash) {
@@ -98,6 +140,10 @@ export const loginUser = async (req: Request, res: Response) => {
         message:
           "This account uses Google sign-in. Please use 'Continue with Google' instead.",
       });
+    }
+
+    if (!user.password_hash) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password_hash);
@@ -110,12 +156,11 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = jwt.sign(
       {
         id: user.id,
-        username: user.username,
         email: user.email,
-        role: user.role,
+        role: user.roleId,
       },
       JWT_SECRET,
-      { expiresIn: "24h" },
+      { expiresIn: "24h" }
     );
 
     res.json({
@@ -123,10 +168,8 @@ export const loginUser = async (req: Request, res: Response) => {
       token,
       user: {
         id: user.id,
-        username: user.username,
         email: user.email,
-        role: user.role,
-        avatar_url: user.avatar_url,
+        role: user.roleId,
       },
     });
   } catch (error) {
