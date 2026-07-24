@@ -15,6 +15,25 @@ data:
             paths:
               - /api
             strip_path: false
+        plugins:
+          - name: cors
+            config:
+              origins:
+                - https://{{ .Values.domainName }}
+              methods:
+                - GET
+                - POST
+                - PUT
+                - PATCH
+                - DELETE
+                - OPTIONS
+              headers:
+                - Content-Type
+                - Authorization
+                - Accept
+              credentials: true
+              max_age: 3600
+              preflight_continue: false
       - name: frontend-service
         url: http://{{ .Values.upstream.frontend.host }}:{{ .Values.upstream.frontend.port }}
         routes:
