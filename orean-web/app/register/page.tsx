@@ -46,6 +46,7 @@ export default function Register() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [googleMessage, setGoogleMessage] = useState("");
+  const [countdown, setCountdown] = useState<number | null>(null);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -226,18 +227,30 @@ export default function Register() {
                 type="button"
                 disabled={isGoogleLoading}
                 onClick={() => {
-                  setGoogleMessage("Since the webapp is still in testing, this only works if you are a developer");
-                  setTimeout(() => {
-                    setGoogleMessage("");
-                    const googleBtn = document.querySelector<HTMLDivElement>(
-                      "#google-signup-btn div[role='button']",
-                    );
-                    if (googleBtn) {
-                      googleBtn.click();
-                    } else if (window.google) {
-                      window.google.accounts.id.prompt();
+                  if (countdown !== null) return;
+                  let timeLeft = 5;
+                  setCountdown(timeLeft);
+                  setGoogleMessage(`Since the webapp is still in testing, this only works if you are a developer (Redirecting in ${timeLeft}...)`);
+                  
+                  const timer = setInterval(() => {
+                    timeLeft -= 1;
+                    if (timeLeft > 0) {
+                      setCountdown(timeLeft);
+                      setGoogleMessage(`Since the webapp is still in testing, this only works if you are a developer (Redirecting in ${timeLeft}...)`);
+                    } else {
+                      clearInterval(timer);
+                      setCountdown(null);
+                      setGoogleMessage("");
+                      const googleBtn = document.querySelector<HTMLDivElement>(
+                        "#google-signup-btn div[role='button']",
+                      );
+                      if (googleBtn) {
+                        googleBtn.click();
+                      } else if (window.google) {
+                        window.google.accounts.id.prompt();
+                      }
                     }
-                  }, 5000);
+                  }, 1000);
                 }}
                 className="w-full mt-8 py-3 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-3 shadow-sm cursor-pointer"
               >
