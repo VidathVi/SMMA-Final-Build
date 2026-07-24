@@ -36,8 +36,10 @@ export const sendVerificationEmail = async (email: string, code: string) => {
   try {
     const transporter = await createTransporter();
 
+    const fromEmail = process.env.SMTP_FROM_EMAIL || '"Orean360 Auth" <no-reply@orean360.com>';
+
     const info = await transporter.sendMail({
-      from: '"Orean360 Auth" <no-reply@orean360.com>',
+      from: fromEmail,
       to: email,
       subject: "Your Verification Code",
       text: `Your verification code is: ${code}. It expires in 10 minutes.`,
