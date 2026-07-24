@@ -76,7 +76,12 @@ jobs:
                     --set secrets.linkedin.clientId="${{ secrets.LINKEDIN_CLIENT_ID }}" \
                     --set secrets.linkedin.clientSecret="${{ secrets.LINKEDIN_CLIENT_SECRET }}" \
                     --set secrets.tiktok.clientKey="${{ secrets.TIKTOK_CLIENT_KEY }}" \
-                    --set secrets.tiktok.clientSecret="${{ secrets.TIKTOK_CLIENT_SECRET }}"
+                    --set secrets.tiktok.clientSecret="${{ secrets.TIKTOK_CLIENT_SECRET }}" \
+                    --set secrets.smtp.host="${{ secrets.SMTP_HOST }}" \
+                    --set secrets.smtp.port="${{ secrets.SMTP_PORT }}" \
+                    --set secrets.smtp.user="${{ secrets.SMTP_USER }}" \
+                    --set secrets.smtp.pass="${{ secrets.SMTP_PASS }}" \
+                    --set secrets.smtp.fromEmail="${{ secrets.SMTP_FROM_EMAIL }}"
 
             - name: Deploy Backend Chart
               run: |
