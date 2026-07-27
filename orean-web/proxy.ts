@@ -9,7 +9,7 @@ import type { NextRequest } from "next/server";
  * so this middleware primarily handles server-side redirects.
  * Client-side protection is handled by the root page.tsx redirect logic.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Public routes that don't require auth
