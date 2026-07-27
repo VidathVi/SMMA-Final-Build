@@ -50,7 +50,7 @@ jobs:
             --region=asia-southeast1 \
             --platform=managed \
             --allow-unauthenticated \
-            --set-env-vars="DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }},REDIS_URL=${{ secrets.REDIS_URL_STAGING }}"
+            --set-env-vars="DATABASE_URL=${{ secrets.DATABASE_URL_STAGING }},REDIS_URL=${{ secrets.REDIS_URL_STAGING }},JWT_SECRET=${{ secrets.JWT_SECRET }},GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }},GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }},ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }},FRONTEND_URL=${{ secrets.FRONTEND_URL_STAGING }},ENABLE_WORKERS=true"
 
       - name: Get Backend URL
         run: |

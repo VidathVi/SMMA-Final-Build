@@ -81,7 +81,8 @@ jobs:
                     --set secrets.smtp.port="${{ secrets.SMTP_PORT }}" \
                     --set secrets.smtp.user="${{ secrets.SMTP_USER }}" \
                     --set secrets.smtp.pass="${{ secrets.SMTP_PASS }}" \
-                    --set secrets.smtp.fromEmail="${{ secrets.SMTP_FROM_EMAIL }}"
+                    --set secrets.smtp.fromEmail="${{ secrets.SMTP_FROM_EMAIL }}" \
+                    --set secrets.encryptionKey="${{ secrets.ENCRYPTION_KEY }}"
 
             - name: Deploy Backend Chart
               run: |

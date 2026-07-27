@@ -12,9 +12,9 @@ export async function fetchApi(endpoint: string, options: FetchOptions = {}) {
   const finalHeaders = new Headers(headers);
 
   if (requireAuth) {
-    // Both token and orean360_token are supported based on user legacy
+    // Check orean360_token first (primary), then legacy "token" key
     const token =
-      localStorage.getItem("token") || localStorage.getItem("orean360_token");
+      localStorage.getItem("orean360_token") || localStorage.getItem("token");
     if (token) {
       finalHeaders.set("Authorization", `Bearer ${token}`);
     }

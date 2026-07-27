@@ -20,6 +20,13 @@ secrets:
   tiktok:
     clientKey: "tiktok-client-key-placeholder"
     clientSecret: "tiktok-client-secret-placeholder"
+  smtp:
+    host: ""
+    port: "587"
+    user: ""
+    pass: ""
+    fromEmail: "no-reply@orean.studio"
+  encryptionKey: "change-me-in-production-encryption-key-64-hex-chars-placeholder"
 
 configs:
   port: "8080"

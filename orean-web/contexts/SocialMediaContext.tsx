@@ -5,9 +5,9 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 export type SocialConnectionType = {
   id: number;
   platform: string;
-  platform_username: string;
-  profile_url: string;
-  connected_at: string;
+  platformUsername: string;
+  profileUrl: string;
+  connectedAt: string;
 };
 
 interface SocialMediaContextProps {
@@ -31,15 +31,15 @@ export const SocialMediaProvider = ({
   const refreshConnections = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
+      const token =
+        localStorage.getItem("orean360_token") || localStorage.getItem("token");
       if (!token) {
         setLoading(false);
         return;
       }
 
-      // Assuming backend runs on 8080 or process.env.NEXT_PUBLIC_API_URL
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-      const res = await fetch(`${apiUrl}/api/auth/connections`, {
+      const res = await fetch(`${apiUrl}/api/auth/social-connections`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {

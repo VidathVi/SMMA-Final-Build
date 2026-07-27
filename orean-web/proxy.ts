@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Next.js middleware for route protection.
+ * Next.js proxy for route protection.
  *
  * Checks for the orean360_token in cookies.
  * Note: The token is stored in localStorage on the client,

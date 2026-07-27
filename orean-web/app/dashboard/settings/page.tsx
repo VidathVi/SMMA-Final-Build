@@ -555,9 +555,9 @@ const SOCIAL_PLATFORMS = [
 interface SocialConnection {
   id: number;
   platform: string;
-  platform_username: string;
-  profile_url: string | null;
-  connected_at: string;
+  platformUsername: string;
+  profileUrl: string | null;
+  connectedAt: string;
 }
 
 function ConnectedAccounts() {
@@ -759,7 +759,7 @@ function ConnectedAccounts() {
                       <div className="flex items-center gap-1.5 mt-0.5">
                         <CheckCircle className="w-3 h-3 text-emerald-400" />
                         <span className="text-xs text-emerald-400 font-medium">
-                          {connection.platform_username}
+                          {connection.platformUsername}
                         </span>
                       </div>
                     ) : (
@@ -771,9 +771,9 @@ function ConnectedAccounts() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  {isConnected && connection.profile_url && (
+                  {isConnected && connection.profileUrl && (
                     <a
-                      href={connection.profile_url}
+                      href={connection.profileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-8 h-8 bg-[#0c142c] border border-blue-900/30 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
