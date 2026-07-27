@@ -6,7 +6,7 @@ export type MediaType = "image" | "video" | "gif" | "document";
 // ─── Media Asset Interface ──────────────────────────────────────────────
 export interface MediaAsset {
   id: number;
-  user_id: number;
+  user_id: string;
   file_name: string;
   original_name: string;
   mime_type: string;
@@ -26,7 +26,7 @@ export interface MediaAsset {
 
 // ─── Create a new media asset record ────────────────────────────────────
 export const createMediaAsset = async (
-  userId: number,
+  userId: string,
   fileName: string,
   originalName: string,
   mimeType: string,
@@ -71,7 +71,7 @@ export const createMediaAsset = async (
 
 // ─── Get all media assets for a user ────────────────────────────────────
 export const getMediaAssetsByUserId = async (
-  userId: number,
+  userId: string,
   mediaType?: MediaType,
 ): Promise<MediaAsset[]> => {
   let query = `SELECT * FROM media_assets WHERE user_id = $1`;
@@ -143,7 +143,7 @@ export const deleteMediaAsset = async (id: number): Promise<boolean> => {
 
 // ─── Delete all media assets for a user ─────────────────────────────────
 export const deleteMediaAssetsByUserId = async (
-  userId: number,
+  userId: string,
 ): Promise<number> => {
   const result = await pool.query(
     `DELETE FROM media_assets WHERE user_id = $1`,

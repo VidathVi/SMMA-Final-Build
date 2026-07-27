@@ -14,7 +14,7 @@ export type SocialPlatform =
 // ─── Social Token Interface ─────────────────────────────────────────────
 export interface SocialToken {
   id: number;
-  user_id: number;
+  user_id: string;
   platform: SocialPlatform;
   access_token: string;
   refresh_token: string | null;
@@ -30,7 +30,7 @@ export interface SocialToken {
 // ─── Upsert (insert or update) a token for a user + platform ────────────
 // Tokens are encrypted before storage and decrypted on retrieval.
 export const upsertSocialToken = async (
-  userId: number,
+  userId: string,
   platform: SocialPlatform,
   accessToken: string,
   refreshToken: string | null,
@@ -77,7 +77,7 @@ export const upsertSocialToken = async (
 // ─── Get all tokens for a user ──────────────────────────────────────────
 // Note: Sensitive token values are NOT returned here for security.
 export const getTokensByUserId = async (
-  userId: number,
+  userId: string,
 ): Promise<SocialToken[]> => {
   const result = await pool.query(
     `SELECT id, user_id, platform, platform_user_id, platform_username,
@@ -93,7 +93,7 @@ export const getTokensByUserId = async (
 
 // ─── Get a specific token by user + platform (with decrypted tokens) ────
 export const getTokenByPlatform = async (
-  userId: number,
+  userId: string,
   platform: SocialPlatform,
 ): Promise<SocialToken | undefined> => {
   const result = await pool.query(
@@ -113,7 +113,7 @@ export const getTokenByPlatform = async (
 
 // ─── Get the raw (encrypted) token row for internal refresh logic ───────
 export const getRawTokenByPlatform = async (
-  userId: number,
+  userId: string,
   platform: SocialPlatform,
 ): Promise<SocialToken | undefined> => {
   const result = await pool.query(
@@ -125,7 +125,7 @@ export const getRawTokenByPlatform = async (
 
 // ─── Deactivate a token (disconnect a platform) ─────────────────────────
 export const deactivateToken = async (
-  userId: number,
+  userId: string,
   platform: SocialPlatform,
 ): Promise<SocialToken | undefined> => {
   const result = await pool.query(
@@ -141,7 +141,7 @@ export const deactivateToken = async (
 
 // ─── Delete a token (fully remove connection) ───────────────────────────
 export const deleteToken = async (
-  userId: number,
+  userId: string,
   platform: SocialPlatform,
 ): Promise<boolean> => {
   const result = await pool.query(
@@ -155,7 +155,7 @@ export const deleteToken = async (
 // ─── Refresh: update the access token + new expiry ──────────────────────
 // Encrypts the new access token before persisting.
 export const refreshAccessToken = async (
-  userId: number,
+  userId: string,
   platform: SocialPlatform,
   newAccessToken: string,
   newExpiresAt: Date | null,

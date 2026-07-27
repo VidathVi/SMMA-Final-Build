@@ -110,7 +110,7 @@ export async function exchangeForLongLivedToken(
 // stored token, calling Meta's API, and persisting the new token.
 
 export async function refreshMetaToken(
-  userId: number,
+  userId: string,
   platform: SocialPlatform,
 ): Promise<{ accessToken: string; expiresAt: Date | null }> {
   const appId = process.env.META_APP_ID;
@@ -170,7 +170,7 @@ export function isTokenExpiringSoon(expiresAt: string | null): boolean {
 // Returns a valid access token, refreshing if close to expiry.
 
 export async function getValidAccessToken(
-  userId: number,
+  userId: string,
   platform: SocialPlatform,
 ): Promise<string> {
   const storedToken = await getRawTokenByPlatform(userId, platform);

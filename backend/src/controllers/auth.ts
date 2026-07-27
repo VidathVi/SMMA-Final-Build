@@ -1,21 +1,16 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { Pool } from "pg";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import { sendVerificationEmail } from "../utils/email";
 
 dotenv.config();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "orean360_super_secret_key";
 
-// JWT Auth Middleware
+// JWT Auth Middleware (used within auth routes)
 export const authMiddleware = (req: any, res: Response, next: Function) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -97,8 +92,6 @@ export const registerUser = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    // Get a default role if exists, otherwise create or just omit (schema has roleId as optional now?)
-    // Wait, the previous schema had roleId optional. Let's create user.
     const newUser = await prisma.user.create({
       data: {
         email,
@@ -178,17 +171,22 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-// Social Connections
+// Social Connections — now using Prisma with SocialConnection model
 export const getSocialConnections = async (req: any, res: Response) => {
   try {
-    const client = await pool.connect();
-    const result = await client.query(
-      "SELECT id, platform, platform_username, profile_url, connected_at FROM social_connections WHERE user_id = $1 ORDER BY platform",
-      [req.user.id],
-    );
-    client.release();
+    const connections = await prisma.socialConnection.findMany({
+      where: { userId: req.user.id },
+      orderBy: { platform: "asc" },
+      select: {
+        id: true,
+        platform: true,
+        platformUsername: true,
+        profileUrl: true,
+        connectedAt: true,
+      },
+    });
 
-    res.json({ connections: result.rows });
+    res.json({ connections });
   } catch (error) {
     console.error("Get Social Connections Error:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -215,23 +213,30 @@ export const connectSocial = async (req: any, res: Response) => {
   }
 
   try {
-    const client = await pool.connect();
-
     // Upsert: insert or update if exists
-    const result = await client.query(
-      `INSERT INTO social_connections (user_id, platform, platform_username, profile_url) 
-       VALUES ($1, $2, $3, $4) 
-       ON CONFLICT (user_id, platform) 
-       DO UPDATE SET platform_username = $3, profile_url = $4, connected_at = CURRENT_TIMESTAMP
-       RETURNING id, platform, platform_username, profile_url, connected_at`,
-      [req.user.id, platform, platform_username, profile_url || null],
-    );
-
-    client.release();
+    const connection = await prisma.socialConnection.upsert({
+      where: {
+        userId_platform: {
+          userId: req.user.id,
+          platform,
+        },
+      },
+      update: {
+        platformUsername: platform_username,
+        profileUrl: profile_url || null,
+        connectedAt: new Date(),
+      },
+      create: {
+        userId: req.user.id,
+        platform,
+        platformUsername: platform_username,
+        profileUrl: profile_url || null,
+      },
+    });
 
     res.json({
       message: `${platform} connected successfully`,
-      connection: result.rows[0],
+      connection,
     });
   } catch (error) {
     console.error("Connect Social Error:", error);
@@ -243,12 +248,12 @@ export const disconnectSocial = async (req: any, res: Response) => {
   const { platform } = req.params;
 
   try {
-    const client = await pool.connect();
-    await client.query(
-      "DELETE FROM social_connections WHERE user_id = $1 AND platform = $2",
-      [req.user.id, platform],
-    );
-    client.release();
+    await prisma.socialConnection.deleteMany({
+      where: {
+        userId: req.user.id,
+        platform,
+      },
+    });
 
     res.json({ message: `${platform} disconnected successfully` });
   } catch (error) {

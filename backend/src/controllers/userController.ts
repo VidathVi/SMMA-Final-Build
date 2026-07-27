@@ -23,7 +23,7 @@ export const getUsers = async (req: AuthRequest, res: Response) => {
 // UPDATE USER ROLE (Admin only)
 export const changeUserRole = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { role } = req.body;
 
     const validRoles = ["admin", "manager", "designer", "approver", "user"];
@@ -33,12 +33,12 @@ export const changeUserRole = async (req: AuthRequest, res: Response) => {
       });
     }
 
-    const user = await findUserById(Number(id));
+    const user = await findUserById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const updated = await updateUserRole(Number(id), role);
+    const updated = await updateUserRole(id, role);
     res.json({ message: "User role updated", user: updated });
   } catch (error: any) {
     console.error("Update Role Error:", error);
@@ -49,18 +49,18 @@ export const changeUserRole = async (req: AuthRequest, res: Response) => {
 // DELETE USER (Admin only)
 export const removeUser = async (req: AuthRequest, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
-    if (req.user && req.user.id === Number(id)) {
+    if (req.user && String(req.user.id) === id) {
       return res.status(400).json({ message: "You cannot delete yourself" });
     }
 
-    const user = await findUserById(Number(id));
+    const user = await findUserById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    await deleteUserById(Number(id));
+    await deleteUserById(id);
     res.json({ message: "User deleted successfully" });
   } catch (error: any) {
     console.error("Delete User Error:", error);

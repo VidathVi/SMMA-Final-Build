@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import geoRoutes from "./routes/geo.routes";
 import assetRoutes from "./routes/asset";
 import userRoutes from "./routes/user";
@@ -43,9 +43,23 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8080;
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:3000",
+  "https://orean.studio",
+  "https://www.orean.studio",
+  "http://localhost:3000",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      // Allow requests with no origin (e.g., mobile apps, curl, server-to-server)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
   }),
 );
@@ -67,7 +81,7 @@ app.use("/api/assets", assetRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/social-tokens", socialTokenRoutes);
 app.use("/api/media", mediaAssetRoutes);
-app.use("/api/meta", metaGraphRoutes);
+app.use("/api/meta-graph", metaGraphRoutes);
 
 // ─── V1 Routes (Campaign/Post/Status/Task Management) ──────────────────
 app.use("/api/campaigns", authMiddleware, campaignRoutes);
@@ -119,13 +133,6 @@ app.get(["/health", "/api/health"], async (req: Request, res: Response) => {
 
 // ─── Error Handler (must be last middleware) ─────────────────────────────
 app.use(errorHandler);
-
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error("Unhandled Error:", err);
-  res
-    .status(500)
-    .json({ status: "error", message: err.message || "Internal Server Error" });
-});
 
 // ─── Start Server & Workers ─────────────────────────────────────────────
 

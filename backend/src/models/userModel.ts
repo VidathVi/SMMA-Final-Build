@@ -1,93 +1,98 @@
-import pool from "../db/db";
+import { prisma } from "../lib/prisma";
 
 export interface User {
-  id: number;
-  name: string;
+  id: string;
+  name: string | null;
   email: string;
-  password: string;
-  role: string;
-  created_at?: string;
+  password_hash: string | null;
+  roleId: string | null;
+  createdAt?: Date;
 }
 
 // create user
 export const createUser = async (
   name: string,
   email: string,
-  password: string,
-  role: string,
+  password_hash: string,
+  roleId?: string,
 ): Promise<User> => {
-  const result = await pool.query(
-    "INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *",
-    [name, email, password, role],
-  );
-
-  return result.rows[0];
+  return prisma.user.create({
+    data: {
+      name,
+      email,
+      password_hash,
+      roleId: roleId || undefined,
+    },
+  });
 };
 
 // get user by email
 export const findUserByEmail = async (
   email: string,
-): Promise<User | undefined> => {
-  const result = await pool.query("SELECT * FROM users WHERE email = $1", [
-    email,
-  ]);
-
-  return result.rows[0];
+): Promise<User | null> => {
+  return prisma.user.findUnique({
+    where: { email },
+  });
 };
 
 // get user by id
-export const findUserById = async (id: number): Promise<User | undefined> => {
-  const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
-
-  return result.rows[0];
+export const findUserById = async (id: string): Promise<User | null> => {
+  return prisma.user.findUnique({
+    where: { id },
+  });
 };
 
 // get all users
 export const getAllUsers = async (): Promise<User[]> => {
-  const result = await pool.query(
-    "SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC",
-  );
-
-  return result.rows;
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      password_hash: true,
+      roleId: true,
+      createdAt: true,
+      auth_provider: true,
+      updatedAt: true,
+      googleId: true,
+      avatarUrl: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
 };
 
 // update user role
 export const updateUserRole = async (
-  id: number,
-  role: string,
-): Promise<User | undefined> => {
-  const result = await pool.query(
-    "UPDATE users SET role = $1 WHERE id = $2 RETURNING id, name, email, role",
-    [role, id],
-  );
-
-  return result.rows[0];
+  id: string,
+  roleId: string,
+): Promise<User | null> => {
+  return prisma.user.update({
+    where: { id },
+    data: { roleId },
+  });
 };
 
 // update user profile (name, password)
 export const updateUserProfile = async (
-  id: number,
+  id: string,
   name: string,
-  password?: string,
-): Promise<User | undefined> => {
-  if (password) {
-    const result = await pool.query(
-      "UPDATE users SET name = $1, password = $2 WHERE id = $3 RETURNING id, name, email, role",
-      [name, password, id],
-    );
-    return result.rows[0];
-  }
-
-  const result = await pool.query(
-    "UPDATE users SET name = $1 WHERE id = $2 RETURNING id, name, email, role",
-    [name, id],
-  );
-
-  return result.rows[0];
+  password_hash?: string,
+): Promise<User | null> => {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      name,
+      ...(password_hash ? { password_hash } : {}),
+    },
+  });
 };
 
 // delete user
-export const deleteUserById = async (id: number): Promise<boolean> => {
-  const result = await pool.query("DELETE FROM users WHERE id = $1", [id]);
-  return (result.rowCount ?? 0) > 0;
+export const deleteUserById = async (id: string): Promise<boolean> => {
+  try {
+    await prisma.user.delete({ where: { id } });
+    return true;
+  } catch {
+    return false;
+  }
 };
