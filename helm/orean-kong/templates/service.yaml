@@ -4,6 +4,8 @@ metadata:
   name: {{ include "orean-kong.fullname" . }}
   labels:
     {{- include "orean-kong.labels" . | nindent 4 }}
+  annotations:
+    cloud.google.com/backend-config: '{"ports": {"{{ .Values.service.proxyPort }}":"{{ include "orean-kong.fullname" . }}-hc"}}'
 spec:
   type: {{ .Values.service.type }}
   ports:

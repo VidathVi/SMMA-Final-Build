@@ -45,6 +45,17 @@ data:
             paths:
               - /
             strip_path: false
+      - name: healthcheck-service
+        url: http://localhost:8000
+        routes:
+          - name: healthcheck-route
+            paths:
+              - /healthz
+        plugins:
+          - name: request-termination
+            config:
+              status_code: 200
+              message: "OK"
     plugins:
       - name: rate-limiting
         config:

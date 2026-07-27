@@ -1,0 +1,11 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: {{ include "orean-kong.fullname" . }}-hc
+  labels:
+    {{- include "orean-kong.labels" . | nindent 4 }}
+spec:
+  healthCheck:
+    requestPath: /healthz
+    port: {{ .Values.service.proxyPort }}
+    type: HTTP

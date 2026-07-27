@@ -5,6 +5,8 @@ UI
 dist
 dist-ssr
 *.local
+error_files
+
 
 # Logs
 logs
